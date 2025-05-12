@@ -1,0 +1,95 @@
+<script>
+    console.log("📊 script intégré");
+</script>
+
+
+
+<h2>📊 Statistiques du lien</h2>
+<p>Affichage des 25 derniers clics enregistrés</p>
+
+<table class="tracker-table">
+    <thead>
+        <tr>
+            <th>DATE</th>
+            <th>PAYS</th>
+            <th>IP</th>
+            <th>APPAREIL</th>
+            <th>NAVIGATEUR</th>
+            <th>STATUT</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (clicks.length===0) { %>
+            <tr>
+                <td colspan="6" class="empty">Aucun clic pour ce lien.</td>
+            </tr>
+            <% } else { %>
+                <% clicks.forEach(click=> { %>
+                    <tr>
+                        <td>
+                            <%= click.date %>
+                        </td>
+                        <td>
+                            <img src="https://flagcdn.com/16x12/<%= click.countryCode.toLowerCase() %>.png" alt="" />
+                            <%= click.country || "?" %>
+                        </td>
+                        <td>
+                            <%= click.ip || "?" %>
+                        </td>
+                        <td>
+                            <%= click.device || "?" %>
+                        </td>
+                        <td>
+                            <%= click.browser || "?" %>
+                        </td>
+                        <td>
+                            <span class="status <%= click.blocked ? 'blocked' : 'valid' %>">
+                                <%= click.blocked ? "Bloqué" : "Valide" %>
+                            </span>
+                        </td>
+                    </tr>
+                    <% }) %>
+                        <% } %>
+    </tbody>
+</table>
+
+<!-- 🔍 Répartition des appareils -->
+<div class="device-section">
+    <h3>📱 Répartition des appareils</h3>
+    <div class="chart-container">
+        <canvas id="deviceChart" width="150" height="150" style="max-width: 250px;"></canvas>
+    </div>
+</div>
+
+<!-- 📊 Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = <%- JSON.stringify(Object.keys(deviceData || {})) %>;
+    const values = <%- JSON.stringify(Object.values(deviceData || {})) %>;
+
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Appareils',
+            data: values,
+            backgroundColor: ['#36A2EB', '#4BC0C0', '#9966FF', '#FF6384', '#FFCE56'],
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'doughnut',
+        data: data,
+        options: {
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    };
+
+    console.log("✅ Chart.js script chargé", data);
+    new Chart(document.getElementById('deviceChart'), config);
+</script>
+

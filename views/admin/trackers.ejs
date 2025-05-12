@@ -1,0 +1,64 @@
+<h1 class="trackers-title">📎 Liens Trackers</h1>
+
+<div class="trackers-header">
+  <span class="subtitle">Liste de tous les liens trackés</span>
+  <button class="btn-create" onclick="document.getElementById('trackerModal').style.display='block'">
+    + Créer un lien
+  </button>
+</div>
+
+<table class="tracker-table">
+  <thead>
+    <tr>
+      <th>ÉTAT</th>
+      <th>LIEN</th>
+      <th>LABEL</th>
+      <th>ACTION</th>
+      <th>STATS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (trackers.length === 0) { %>
+      <tr>
+        <td colspan="5" class="empty">Aucun lien trouvé.</td>
+      </tr>
+    <% } else { %>
+      <% trackers.forEach(tracker => { %>
+        <tr>
+          <td><%= tracker.active ? '🟢' : '🔴' %></td>
+          <td>/ <%= tracker.slug %></td>
+          <td><%= tracker.label %></td>
+          <td>
+            <form method="POST" action="/admin/trackers/<%= tracker.id %>/toggle">
+              <button type="submit" class="btn-toggle"><%= tracker.active ? 'Désactiver' : 'Activer' %></button>
+            </form>
+          </td>
+          <td>
+            <a href="/admin/trackers/<%= tracker.id %>/stats" class="btn-stats">📊 Voir</a>
+          </td>
+        </tr>
+      <% }) %>
+    <% } %>
+  </tbody>
+</table>
+
+<!-- 🪟 MODAL : création d’un lien -->
+<div id="trackerModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="document.getElementById('trackerModal').style.display='none'">&times;</span>
+    <h2>Créer un lien tracker</h2>
+    <form method="POST" action="/admin/trackers/create">
+      <input type="text" name="label" placeholder="Nom / Label du lien" required />
+      <button type="submit">Créer</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  window.addEventListener("click", function(event) {
+    const modal = document.getElementById("trackerModal");
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+</script>

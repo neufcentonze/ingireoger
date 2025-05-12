@@ -1,0 +1,18 @@
+<h1 class="admin-title">🛠️ Panneau de Fonctionnalités Admin</h1>
+
+<ul class="feature-list">
+  <% for (const feature in features) { 
+      const isActive = features[feature];
+  %>
+    <li class="feature-item">
+      <span class="status-icon <%= isActive ? 'on' : 'off' %>">
+        <%= isActive ? '🟢' : '🔴' %>
+      </span>
+      <span class="feature-name"><%= feature %></span>
+      <form method="POST" action="/admin/features/toggle">
+        <input type="hidden" name="feature" value="<%= feature %>" />
+        <button type="submit">Changer</button>
+      </form>
+    </li>
+  <% } %>
+</ul>

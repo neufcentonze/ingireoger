@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title || "Admin Panel" %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body style="display: flex; min-height: 100vh; margin: 0; background: #111; color: #fff;">
+
+  <!-- 🧭 Sidebar (affichée partout) -->
+  <%- include("sidebar", { active }) %>
+
+  <!-- 🧱 Contenu principal -->
+  <main style="flex-grow: 1; padding: 40px;">
+    <%- body %>
+  </main>
+
+</body>
+</html>

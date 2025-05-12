@@ -1,0 +1,284 @@
+body {
+  display: flex;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #111;
+  color: white;
+}
+
+.sidebar {
+  width: 240px;
+  background-color: #1e1e1e;
+  padding: 30px 20px;
+  height: 100vh;
+}
+
+.sidebar h2 {
+  color: #00cfff;
+  font-size: 1.4em;
+  margin-bottom: 20px;
+}
+
+.sidebar .highlight {
+  color: #00cfff;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 15px 0;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar li.active a {
+  font-weight: bold;
+  color: #00cfff;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 40px;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  max-width: 700px;
+  margin: auto;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.status-icon {
+  font-size: 1.3em;
+  margin-right: 12px;
+  width: 30px;
+  text-align: center;
+}
+
+.feature-name {
+  flex-grow: 1;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #eee;
+}
+
+button {
+  background-color: #00ffc3;
+  color: #000;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #00cfa5;
+}
+
+.admin-title {
+  text-align: center;
+  color: #00ffc3;
+  margin-bottom: 40px;
+  font-size: 2em;
+}
+
+.trackers-title {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #00ffc3;
+  text-align: center;
+}
+
+.trackers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.subtitle {
+  font-weight: bold;
+  color: #aaa;
+}
+
+.btn-create {
+  background: #6a5acd;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.btn-create:hover {
+  background: #5a49c2;
+}
+
+.tracker-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1f1f1f;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tracker-table th,
+.tracker-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #333;
+  text-align: left;
+  color: #eee;
+}
+
+.tracker-table th {
+  color: #ccc;
+  font-weight: bold;
+  font-size: 0.9em;
+  text-transform: uppercase;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-style: italic;
+}
+
+.btn-toggle,
+.btn-stats {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-toggle {
+  background-color: #00ffc3;
+  color: black;
+}
+
+.btn-toggle:hover {
+  background-color: #00cfa5;
+}
+
+.btn-stats {
+  background-color: #4444ff;
+  color: white;
+}
+
+.btn-stats:hover {
+  background-color: #2c2ccf;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  background-color: #1f1f1f;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  color: white;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 20px #00ffc3;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content input[type="text"] {
+  width: 90%;
+  padding: 10px;
+  margin: 15px 0;
+  border: none;
+  border-radius: 5px;
+}
+
+.modal-content button {
+  padding: 10px 20px;
+  background-color: #00ffc3;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #00cfa5;
+}
+
+.close {
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #999;
+}
+
+.close:hover {
+  color: white;
+}
+
+
+td {
+  padding: 8px;
+}
+
+td img {
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+
+.device-section {
+  margin-top: 40px;
+  max-width: 500px;
+}
+
+.chart-container {
+  margin: 0 auto;
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  max-width: 250px;
+  margin-left: 0;
+}
