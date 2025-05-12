@@ -1,6 +1,4 @@
-<aside class="sidebar 
-  <%= sidebarCollapsed ? 'sidebar--collapsed' : '' %> 
-  <%= isMobile ? 'hidden-mobile' : '' %>">
+<aside class="sidebar <%= isMobile || sidebarCollapsed ? 'sidebar--collapsed' : '' %>">
 
   <% const categories = [
     { name: 'Portefeuille', icon: '/images/sidebar/portefeuille.png', link: '/wallet' },
@@ -9,29 +7,28 @@
   ]; %>
 
   <% categories.forEach(cat => {
-    const cleanId = cat.name.replace(/\s+/g, '').toLowerCase(); // ex: "Portefeuille" => "portefeuille"
+    const cleanId = cat.name.replace(/\s+/g, '').toLowerCase();
   %>
 
     <div class="sidebar-section">
       <a
-        href="<%= isMobile || sidebarCollapsed ? cat.link : '#' %>"
-        id="toggle-<%= cleanId %>"
+        href="<%= (isMobile || sidebarCollapsed) ? cat.link : '#' %>"
         class="sidebar-toggle"
-        <%- (!isMobile && !sidebarCollapsed) ? `onclick="toggleSidebarSection('${cleanId}')"` : '' %>
+        data-id="<%= cleanId %>"
+        onclick="<%= (!isMobile && !sidebarCollapsed) ? `toggleSidebarSection('${cleanId}')` : '' %>"
       >
         <div class="sidebar-toggle-left">
           <img src="<%= cat.icon %>" alt="<%= cat.name %>" class="sidebar-icon" />
-          <% if (!sidebarCollapsed) { %>
+          <% if (!sidebarCollapsed && !isMobile) { %>
             <span class="sidebar-label"><%= cat.name %></span>
           <% } %>
         </div>
-
-        <% if (!sidebarCollapsed) { %>
+        <% if (!sidebarCollapsed && !isMobile) { %>
           <span class="sidebar-arrow">▾</span>
         <% } %>
       </a>
 
-      <% if (!sidebarCollapsed) { %>
+      <% if (!sidebarCollapsed && !isMobile) { %>
         <div class="sidebar-submenu" id="submenu-<%= cleanId %>">
           <% if (sidebarPages && sidebarPages[cat.name]) { %>
             <% sidebarPages[cat.name].forEach(page => { %>

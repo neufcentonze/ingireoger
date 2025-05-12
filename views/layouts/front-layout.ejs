@@ -35,19 +35,56 @@
 
     <!-- 🔧 JS pour sidebar -->
     <script>
-      // 1. Fonction globale, accessible via onclick=""
-      function toggleSidebarSection(name) {
-        const submenu = document.getElementById('submenu-' + name);
-        if (submenu) {
-          submenu.classList.toggle('open');
-        }
+      function isMobile() {
+        return window.innerWidth <= 768;
       }
 
-      // 2. Autres listeners dans DOMContentLoaded
       document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.querySelector('.sidebar');
         const toggleSidebarBtn = document.getElementById('toggleSidebar');
+
+        // 📱 au chargement : sidebar réduite
+        if (isMobile()) {
+          sidebar?.classList.add('sidebar--collapsed');
+        }
+
+        // ☰ Toggle button
         toggleSidebarBtn?.addEventListener('click', () => {
-          document.querySelector('.sidebar')?.classList.toggle('sidebar--collapsed');
+          if (isMobile()) {
+            sidebar?.classList.toggle('hidden-mobile');
+          } else {
+            sidebar?.classList.toggle('sidebar--collapsed');
+          }
+        });
+
+        // 📂 Gestion du clic sur une catégorie
+        document.querySelectorAll('.sidebar-toggle').forEach(el => {
+          el.addEventListener('click', (e) => {
+            const id = el.dataset.id;
+            const link = el.dataset.link;
+
+            if (isMobile()) {
+              window.location.href = link;
+              return;
+            }
+
+            if (sidebar.classList.contains('sidebar--collapsed')) {
+              // 🧠 Si sidebar réduite, on l'agrandit
+              sidebar.classList.remove('sidebar--collapsed');
+              // Puis on toggle l'ouverture du sous-menu après un petit délai
+              setTimeout(() => {
+                const submenu = document.getElementById('submenu-' + id);
+                submenu?.classList.toggle('open');
+              }, 150); // attendre que la sidebar s’ouvre (transition)
+            } else {
+              // Sidebar normale → juste toggle du sous-menu
+              const submenu = document.getElementById('submenu-' + id);
+              submenu?.classList.toggle('open');
+            }
+
+            // Annule la navigation par défaut
+            e.preventDefault();
+          });
         });
       });
     </script>
