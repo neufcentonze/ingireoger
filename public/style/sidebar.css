@@ -3,7 +3,8 @@
   width: 220px;
   background-color: #1a1a1a;
   padding: 16px;
-  height: calc(100vh - 80px); /* Hauteur = plein écran - header */
+  height: calc(100vh - 80px);
+  /* Hauteur = plein écran - header */
   position: sticky;
   top: 80px;
   flex-shrink: 0;
@@ -82,6 +83,10 @@
   transition: transform 0.2s ease;
 }
 
+.sidebar-arrow.rotated {
+  transform: rotate(180deg);
+}
+
 .sidebar-toggle.open .sidebar-arrow {
   transform: rotate(180deg);
 }
@@ -149,4 +154,10 @@
 .sidebar-toggle,
 .sidebar-submenu a {
   text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar.hidden-mobile {
+    display: none !important;
+  }
 }
