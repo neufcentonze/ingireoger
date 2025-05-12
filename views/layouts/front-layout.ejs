@@ -4,90 +4,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>
-    <%= title || "Djelo" %>
-  </title>
+  <title><%= title || "Djelo" %></title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="/style/main.css" />
   <link rel="stylesheet" href="/style/header.css" />
   <link rel="stylesheet" href="/style/sidebar.css" />
+  <% if (showFooter) { %>
+    <link rel="stylesheet" href="/style/footer.css" />
+  <% } %>
 </head>
-
+<script src="https://unpkg.com/lucide@latest"></script>
 <body>
-
   <!-- 🔝 HEADER -->
   <%- include('../partials/header') %>
 
-    <!-- 🧱 WRAPPER PRINCIPAL -->
-    <main class="main-wrapper">
-      <!-- 📂 SIDEBAR -->
-      <%- include('../partials/sidebar') %>
+  <!-- 🧱 WRAPPER PRINCIPAL -->
+  <main class="main-wrapper">
+    <!-- 📂 SIDEBAR -->
+    <%- include('../partials/sidebar') %>
 
-        <!-- 📦 CONTENU PRINCIPAL -->
-        <div class="main-content">
-          <%- body %>
-        </div>
-    </main>
+    <!-- 📦 CONTENU -->
+    <div class="main-content">
+      <%- body %>
 
-    <!-- ⬇️ FOOTER -->
-    <footer class="footer">
-      <p>&copy; 2025 - Tous droits réservés</p>
-    </footer>
+        <div style="height: 150vh; background: transparent;"></div>
 
-    <!-- 🔧 JS pour sidebar -->
-    <script>
-      function isMobile() {
-        return window.innerWidth <= 768;
+      <!-- 👇 Forcer le scroll sur mobile si nécessaire -->
+      <div style="height: 300px;"></div>
+    </div>
+  </main>
+
+  <!-- ⬇️ FOOTER UNIQUEMENT SUR PAGE ACCUEIL -->
+  <% if (showFooter) { %>
+    <%- include('../partials/footer') %>
+  <% } %>
+
+  <!-- 🔧 JS SIDEBAR + FOOTER -->
+  <script>
+    function isMobile() {
+      return window.innerWidth <= 768;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.querySelector('.sidebar');
+      const toggleSidebarBtn = document.getElementById('toggleSidebar');
+
+      // Sidebar réduite au chargement sur mobile
+      if (isMobile()) {
+        sidebar?.classList.add('sidebar--collapsed');
       }
 
-      document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.querySelector('.sidebar');
-        const toggleSidebarBtn = document.getElementById('toggleSidebar');
-
-        // 📱 au chargement : sidebar réduite
+      // Toggle sidebar
+      toggleSidebarBtn?.addEventListener('click', () => {
         if (isMobile()) {
-          sidebar?.classList.add('sidebar--collapsed');
+          sidebar?.classList.toggle('hidden-mobile');
+        } else {
+          sidebar?.classList.toggle('sidebar--collapsed');
         }
+      });
 
-        // ☰ Toggle button
-        toggleSidebarBtn?.addEventListener('click', () => {
+      // Toggle des sous-menus
+      document.querySelectorAll('.sidebar-toggle').forEach(el => {
+        el.addEventListener('click', (e) => {
+          const id = el.dataset.id;
+          const link = el.dataset.link;
+
           if (isMobile()) {
-            sidebar?.classList.toggle('hidden-mobile');
-          } else {
-            sidebar?.classList.toggle('sidebar--collapsed');
+            window.location.href = link;
+            return;
           }
-        });
 
-        // 📂 Gestion du clic sur une catégorie
-        document.querySelectorAll('.sidebar-toggle').forEach(el => {
-          el.addEventListener('click', (e) => {
-            const id = el.dataset.id;
-            const link = el.dataset.link;
+          if (sidebar.classList.contains('sidebar--collapsed')) {
+            sidebar.classList.remove('sidebar--collapsed');
+            setTimeout(() => {
+              document.getElementById('submenu-' + id)?.classList.toggle('open');
+            }, 150);
+          } else {
+            document.getElementById('submenu-' + id)?.classList.toggle('open');
+          }
 
-            if (isMobile()) {
-              window.location.href = link;
-              return;
-            }
-
-            if (sidebar.classList.contains('sidebar--collapsed')) {
-              // 🧠 Si sidebar réduite, on l'agrandit
-              sidebar.classList.remove('sidebar--collapsed');
-              // Puis on toggle l'ouverture du sous-menu après un petit délai
-              setTimeout(() => {
-                const submenu = document.getElementById('submenu-' + id);
-                submenu?.classList.toggle('open');
-              }, 150); // attendre que la sidebar s’ouvre (transition)
-            } else {
-              // Sidebar normale → juste toggle du sous-menu
-              const submenu = document.getElementById('submenu-' + id);
-              submenu?.classList.toggle('open');
-            }
-
-            // Annule la navigation par défaut
-            e.preventDefault();
-          });
+          e.preventDefault();
         });
       });
-    </script>
-</body>
 
+      // Footer visibility on scroll
+      const footer = document.querySelector('.footer-bloc');
+      if (footer) {
+        window.addEventListener('scroll', () => {
+          const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
+          footer.classList.toggle('visible', atBottom);
+        });
+      }
+    });
+  </script>
+  <script>
+  lucide.createIcons();
+</script>
+</body>
 </html>

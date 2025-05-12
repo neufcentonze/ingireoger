@@ -1,9 +1,10 @@
 <aside class="sidebar <%= isMobile || sidebarCollapsed ? 'sidebar--collapsed' : '' %>">
 
   <% const categories = [
-    { name: 'Portefeuille', icon: '/images/sidebar/portefeuille.png', link: '/wallet' },
-    { name: 'Progression',  icon: '/images/sidebar/progression.png',  link: '/progression' },
-    { name: 'Jeux',         icon: '/images/sidebar/jeux.png',         link: '/game' }
+    { name: 'Portefeuille', icon: 'wallet', link: '/wallet' },
+    { name: 'Progression',  icon: 'trending-up', link: '/progression' },
+    { name: 'Jeux',         icon: 'dice-5', link: '/game' },
+    { name: 'Promotion',    icon: 'megaphone', link: '/promotion' },
   ]; %>
 
   <% categories.forEach(cat => {
@@ -18,7 +19,7 @@
         onclick="<%= (!isMobile && !sidebarCollapsed) ? `toggleSidebarSection('${cleanId}')` : '' %>"
       >
         <div class="sidebar-toggle-left">
-          <img src="<%= cat.icon %>" alt="<%= cat.name %>" class="sidebar-icon" />
+          <i data-lucide="<%= cat.icon %>" class="sidebar-icon"></i>
           <% if (!sidebarCollapsed && !isMobile) { %>
             <span class="sidebar-label"><%= cat.name %></span>
           <% } %>

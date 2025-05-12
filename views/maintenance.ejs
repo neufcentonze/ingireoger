@@ -1,16 +1,77 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Site en maintenance</title>
-    <style>
-        body { text-align: center; padding-top: 100px; font-family: Arial; }
-        h1 { font-size: 3em; color: #555; }
-        p { font-size: 1.2em; color: #777; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Djelo - Maintenance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(145deg, #0f0f0f, #1c1c1c);
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #61dafb;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px #61dafb;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 10px;
+      color: #b0b0b0;
+    }
+
+    .loading {
+      margin-top: 30px;
+      width: 60px;
+      height: 60px;
+      border: 6px solid #333;
+      border-top: 6px solid #61dafb;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      h2 {
+        font-size: 1.1rem;
+      }
+
+      .loading {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>🚧 Maintenance en cours</h1>
-    <p>Nous effectuons une mise à jour du site.<br>Revenez dans quelques instants.</p>
+  <h1>🛠️ Maintenance en cours</h1>
+  <h2>Djelo revient bientôt, préparez vos cryptos.</h2>
+  <div class="loading"></div>
 </body>
 </html>

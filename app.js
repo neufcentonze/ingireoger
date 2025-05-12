@@ -17,11 +17,23 @@ const buildSidebarPages = require('./middlewares/sidebarBuilder');
 
 
 app.use((req, res, next) => {
+    const allowedDuringMaintenance = [
+        /^\/admin/,
+        /^\/auth/,
+        /^\/webhook/, // optionnel si tu veux laisser les dépôts fonctionner
+    ];
+
     if (features.global === false) {
-        return res.render('maintenance'); // views/maintenance.ejs doit exister
+        const isAllowed = allowedDuringMaintenance.some((pattern) =>
+            pattern.test(req.path)
+        );
+        if (!isAllowed) {
+            return res.render("maintenance");
+        }
     }
     next();
 });
+
 
 // 📱 Détection mobile (optionnel)
 app.use((req, res, next) => {

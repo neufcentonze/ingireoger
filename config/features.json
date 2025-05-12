@@ -1,5 +1,5 @@
 {
-  "global": true,
+  "global": true, 
   "dice": true,
   "detective": true,
   "login": true,

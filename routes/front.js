@@ -8,7 +8,8 @@ router.get('/', (req, res) => {
     // isLoggedIn: !!req.session?.user,
     isLoggedIn: false,
     userBalance: req.session?.balance || "0.00000000",
-    successMessage: req.session?.success || null
+    successMessage: req.session?.success || null,
+    showFooter: true
   });
 });
 
