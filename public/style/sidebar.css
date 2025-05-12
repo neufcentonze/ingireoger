@@ -63,7 +63,6 @@
 }
 
 .sidebar-toggle:hover {
-  border-radius: 6px;
   background-color: #2a2a2a;
 }
 
@@ -80,12 +79,17 @@
   object-fit: contain;
 }
 
-/* === ARROW === */
-.sidebar-arrow {
+/* === ARROW (Lucide) === */
+.sidebar-arrow svg {
+  width: 18px;
+  height: 18px;
+  color: #999;
   transition: transform 0.2s ease;
+  transform-origin: center;
+  display: block;
 }
 
-.sidebar-toggle.open .sidebar-arrow {
+.sidebar-section.open .sidebar-arrow svg {
   transform: rotate(180deg);
 }
 
@@ -130,7 +134,7 @@
   transition: margin-left 0.3s ease;
 }
 
-.sidebar--collapsed+.main-wrapper {
+.sidebar--collapsed + .main-wrapper {
   margin-left: 70px;
 }
 
@@ -145,7 +149,6 @@
     width: 70px;
     top: 80px;
     height: calc(100vh - 70px);
-    margin-top: -10px;
     transform: translateX(0);
     transition: transform 0.3s ease-in-out;
     overflow: hidden;

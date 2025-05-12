@@ -3,8 +3,8 @@
   <% const categories = [
     { name: 'Portefeuille', icon: 'wallet', link: '/wallet' },
     { name: 'Progression',  icon: 'trending-up', link: '/progression' },
-    { name: 'Jeux',         icon: 'dice-5', link: '/game' },
-    { name: 'Promotion',    icon: 'megaphone', link: '/promotion' },
+    { name: 'Jeux',         icon: 'dices', link: '/game' },
+    { name: 'Promotion',    icon: 'award', link: '/promotion' },
   ]; %>
 
   <% categories.forEach(cat => {
@@ -25,7 +25,7 @@
           <% } %>
         </div>
         <% if (!sidebarCollapsed && !isMobile) { %>
-          <span class="sidebar-arrow">▾</span>
+          <i data-lucide="chevron-down" class="sidebar-arrow"></i>
         <% } %>
       </a>
 

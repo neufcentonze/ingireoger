@@ -4,102 +4,186 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= title || "Djelo" %></title>
+  <title>
+    <%= title || "Djelo" %>
+  </title>
 
   <!-- Styles -->
   <link rel="stylesheet" href="/style/main.css" />
   <link rel="stylesheet" href="/style/header.css" />
   <link rel="stylesheet" href="/style/sidebar.css" />
+  <link rel="stylesheet" href="/style/modals.css" />
   <% if (showFooter) { %>
     <link rel="stylesheet" href="/style/footer.css" />
-  <% } %>
+    <% } %>
+
+      <!-- Icônes Lucide -->
+      <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<script src="https://unpkg.com/lucide@latest"></script>
+
 <body>
   <!-- 🔝 HEADER -->
   <%- include('../partials/header') %>
 
-  <!-- 🧱 WRAPPER PRINCIPAL -->
-  <main class="main-wrapper">
-    <!-- 📂 SIDEBAR -->
-    <%- include('../partials/sidebar') %>
+    <!-- 🧱 WRAPPER PRINCIPAL -->
+    <main class="main-wrapper">
+      <!-- 📂 SIDEBAR -->
+      <%- include('../partials/sidebar') %>
 
-    <!-- 📦 CONTENU -->
-    <div class="main-content">
-      <%- body %>
+        <!-- 📦 CONTENU -->
+        <div class="main-content">
+          <%- body %>
 
-        <div style="height: 150vh; background: transparent;"></div>
+            <!-- 👇 Scroll technique mobile -->
+            <div style="height: 150vh; background: transparent;"></div>
+            <div style="height: 300px;"></div>
+        </div>
+    </main>
 
-      <!-- 👇 Forcer le scroll sur mobile si nécessaire -->
-      <div style="height: 300px;"></div>
-    </div>
-  </main>
+    <!-- ⬇️ FOOTER -->
+    <% if (showFooter) { %>
+      <%- include('../partials/footer') %>
+        <% } %>
 
-  <!-- ⬇️ FOOTER UNIQUEMENT SUR PAGE ACCUEIL -->
-  <% if (showFooter) { %>
-    <%- include('../partials/footer') %>
-  <% } %>
+          <!-- 🔐 LOGIN MODAL -->
+          <%- include('../partials/modal', { id: 'loginModal' , title: 'Connexion' , width: '350px' ,
+            rawLogo: '<i data-lucide="key-round"></i>' , body: ` <form id="loginForm">
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" placeholder="Mot de passe" required />
+            <button type="submit">Se connecter</button>
+            </form>
+            <div id="loginMsg" class="modal-msg"></div>
+            `
+            }) %>
 
-  <!-- 🔧 JS SIDEBAR + FOOTER -->
-  <script>
-    function isMobile() {
-      return window.innerWidth <= 768;
-    }
+            <!-- 📝 REGISTER MODAL -->
+            <%- include('../partials/modal', { id: 'registerModal' , title: 'Inscription' , width: '380px' ,
+              rawLogo: '<i data-lucide="key-round"></i>' , body: ` <form id="registerForm">
+              <input type="email" name="email" placeholder="Email" required />
+              <input type="text" name="username" placeholder="Nom d'utilisateur" required />
+              <input type="password" name="password" placeholder="Mot de passe" required />
+              <button type="submit">S'inscrire</button>
+              </form>
+              <div id="registerMsg" class="modal-msg"></div>
+              `
+              }) %>
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const sidebar = document.querySelector('.sidebar');
-      const toggleSidebarBtn = document.getElementById('toggleSidebar');
+              <!-- 🔧 JS LOGIQUE UI -->
+              <script>
+                function isMobile() {
+                  return window.innerWidth <= 768;
+                }
 
-      // Sidebar réduite au chargement sur mobile
-      if (isMobile()) {
-        sidebar?.classList.add('sidebar--collapsed');
-      }
+                document.addEventListener('DOMContentLoaded', () => {
+                  const sidebar = document.querySelector('.sidebar');
+                  const toggleSidebarBtn = document.getElementById('toggleSidebar');
 
-      // Toggle sidebar
-      toggleSidebarBtn?.addEventListener('click', () => {
-        if (isMobile()) {
-          sidebar?.classList.toggle('hidden-mobile');
-        } else {
-          sidebar?.classList.toggle('sidebar--collapsed');
-        }
-      });
+                  if (isMobile()) {
+                    sidebar?.classList.add('sidebar--collapsed');
+                  }
 
-      // Toggle des sous-menus
-      document.querySelectorAll('.sidebar-toggle').forEach(el => {
-        el.addEventListener('click', (e) => {
-          const id = el.dataset.id;
-          const link = el.dataset.link;
+                  toggleSidebarBtn?.addEventListener('click', () => {
+                    if (isMobile()) {
+                      sidebar?.classList.toggle('hidden-mobile');
+                    } else {
+                      sidebar?.classList.toggle('sidebar--collapsed');
+                    }
+                  });
 
-          if (isMobile()) {
-            window.location.href = link;
-            return;
-          }
+                  document.querySelectorAll('.sidebar-toggle').forEach(el => {
+                    el.addEventListener('click', (e) => {
+                      const id = el.dataset.id;
+                      const link = el.dataset.link;
 
-          if (sidebar.classList.contains('sidebar--collapsed')) {
-            sidebar.classList.remove('sidebar--collapsed');
-            setTimeout(() => {
-              document.getElementById('submenu-' + id)?.classList.toggle('open');
-            }, 150);
-          } else {
-            document.getElementById('submenu-' + id)?.classList.toggle('open');
-          }
+                      if (isMobile()) {
+                        window.location.href = link;
+                        return;
+                      }
 
-          e.preventDefault();
-        });
-      });
+                      if (sidebar.classList.contains('sidebar--collapsed')) {
+                        sidebar.classList.remove('sidebar--collapsed');
+                        setTimeout(() => {
+                          document.getElementById('submenu-' + id)?.classList.toggle('open');
+                          el.closest('.sidebar-section')?.classList.toggle('open');
+                        }, 150);
+                      } else {
+                        document.getElementById('submenu-' + id)?.classList.toggle('open');
+                        el.closest('.sidebar-section')?.classList.toggle('open');
+                      }
 
-      // Footer visibility on scroll
-      const footer = document.querySelector('.footer-bloc');
-      if (footer) {
-        window.addEventListener('scroll', () => {
-          const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
-          footer.classList.toggle('visible', atBottom);
-        });
-      }
-    });
-  </script>
-  <script>
-  lucide.createIcons();
-</script>
+                      e.preventDefault();
+                    });
+                  });
+
+                  const footer = document.querySelector('.footer-bloc');
+                  if (footer) {
+                    window.addEventListener('scroll', () => {
+                      const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
+                      footer.classList.toggle('visible', atBottom);
+                    });
+                  }
+                });
+              </script>
+
+              <script>
+                lucide.createIcons();
+              </script>
+
+              <!-- 🔁 Modal logic -->
+              <script>
+                function openModal(id) {
+                  document.getElementById(id).style.display = 'block';
+                }
+
+                function closeModal(id) {
+                  document.getElementById(id).style.display = 'none';
+                }
+
+                document.getElementById("openLogin")?.addEventListener("click", (e) => {
+                  e.preventDefault();
+                  openModal("loginModal");
+                });
+
+                document.getElementById("openRegister")?.addEventListener("click", (e) => {
+                  e.preventDefault();
+                  openModal("registerModal");
+                });
+
+                // Login handler
+                document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
+                  e.preventDefault();
+                  const data = {
+                    email: e.target.email.value,
+                    password: e.target.password.value
+                  };
+                  const res = await fetch("/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                  });
+                  const result = await res.json();
+                  document.getElementById("loginMsg").innerText = result.message;
+                  if (result.success) setTimeout(() => location.reload(), 1000);
+                });
+
+                // Register handler
+                document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
+                  e.preventDefault();
+                  const data = {
+                    email: e.target.email.value,
+                    username: e.target.username.value,
+                    password: e.target.password.value
+                  };
+                  const res = await fetch("/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                  });
+                  const result = await res.json();
+                  document.getElementById("registerMsg").innerText = result.message;
+                  if (result.success) setTimeout(() => location.reload(), 1000);
+                });
+              </script>
 </body>
+
 </html>

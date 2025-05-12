@@ -1,0 +1,30 @@
+<div id="<%= id %>" class="modal" style="display: none;">
+  <div class="modal-content" style="width: <%= width || '400px' %>;">
+    <div class="modal-header">
+      <% if (typeof rawLogo !=='undefined' ) { %>
+        <div class="modal-logo"><%- rawLogo %></div>
+        <% } else if (logo) { %>
+          <img src="<%= logo %>" alt="logo" class="modal-logo" />
+          <% } else { %>
+            <div class="modal-logo-placeholder"></div>
+            <% } %>
+
+              <h2 class="modal-title">
+                <%= title %>
+              </h2>
+              <span class="close" onclick="closeModal('<%= id %>')">
+                <i data-lucide="x"></i>
+              </span>
+    </div>
+
+    <div class="modal-body">
+      <%- body %>
+    </div>
+
+    <% if (typeof footer !=='undefined' ) { %>
+      <div class="modal-footer">
+        <%= footer %>
+      </div>
+      <% } %>
+  </div>
+</div>
