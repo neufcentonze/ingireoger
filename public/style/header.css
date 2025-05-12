@@ -1,0 +1,202 @@
+/* === HEADER === */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #111;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-toggle {
+  font-size: 24px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.site-logo img {
+  height: 32px;
+  margin-top: 10px;
+}
+
+/* === BALANCE === */
+.header-balance {
+  display: flex;
+}
+
+.solde-container {
+  display: flex;
+  align-items: center;
+  background: #222;
+  border-radius: 5px;
+  padding: 6px 12px;
+}
+
+.solde-box {
+  font-weight: bold;
+  font-size: 0.95em;
+  margin-right: 8px;
+}
+
+.crypto-dropdown {
+  position: relative;
+}
+
+.crypto-icon {
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+}
+
+.crypto-list-header {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background: #333;
+  padding: 5px;
+  border-radius: 4px;
+  z-index: 1001;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.crypto-dropdown:hover .crypto-list-header {
+  display: flex;
+}
+
+/* === RIGHT (Boutons) === */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-sidebar-style {
+  background: #333;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  text-decoration: none;
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reglage-icon,
+.tlg-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  .header-left {
+    gap: 8px;
+  }
+
+  .site-logo img {
+    height: 26px;
+    margin-top: 10px;
+  }
+
+  .header-balance {
+    display: none;
+    /* géré via .hide-on-mobile dynamiquement */
+  }
+
+  .header-right {
+    gap: 6px;
+  }
+
+  .btn-sidebar-style {
+    padding: 6px 10px;
+    font-size: 0.85em;
+  }
+
+  .hide-on-mobile {
+    display: none !important;
+  }
+}
+
+/* Desktop force affichage */
+.hide-on-mobile {
+  display: block;
+}
+
+/* Solde version mobile (affiché uniquement sur mobile si connecté) */
+.solde-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .solde-mobile {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding-left: 8px;
+  }
+
+  .solde-mobile .solde-container {
+    padding: 6px 10px;
+    background: #222;
+    border-radius: 5px;
+  }
+
+  .solde-mobile .solde-box {
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-right: 6px;
+  }
+
+  .solde-mobile .crypto-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .solde-mobile .crypto-list-header {
+    position: absolute;
+    background: #333;
+    border-radius: 4px;
+    padding: 4px;
+    display: none;
+    top: 30px;
+    left: 0;
+    z-index: 1001;
+  }
+
+  .solde-mobile .crypto-dropdown:hover .crypto-list-header {
+    display: flex;
+    gap: 5px;
+  }
+}

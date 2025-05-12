@@ -1,0 +1,74 @@
+<header class="main-header">
+  <% if (typeof successMessage !=='undefined' && successMessage) { %>
+    <div class="alert success">
+      <%= successMessage %>
+    </div>
+    <% } %>
+
+      <div class="header-inner">
+
+        <!-- ☰ + Logo -->
+        <div class="header-left">
+          <button class="menu-toggle" id="toggleSidebar">☰</button>
+
+
+          <a href="/" class="site-logo">
+            <img src="/images/logo-white.png" alt="Djelo" />
+          </a>
+
+          <% if (isLoggedIn) { %>
+            <div class="solde-mobile">
+              <div class="solde-container">
+                <div class="solde-box">
+                  <%= userBalance || "0.00000000" %>
+                </div>
+                <div class="crypto-dropdown">
+                  <img src="/images/btc.png" class="crypto-icon" />
+                  <div class="crypto-list-header">
+                    <img src="/images/btc.png" title="BTC" />
+                    <img src="/images/eth.svg" title="ETH" />
+                    <img src="/images/sol.png" title="SOL" />
+                    <img src="/images/ltc.png" title="LTC" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% } %>
+        </div>
+
+
+        <!-- 💰 Solde : affiché toujours sur PC, uniquement si connecté sur mobile -->
+        <div class="header-balance <%= !isLoggedIn ? 'hide-on-mobile' : '' %>">
+          <div class="solde-container">
+            <div class="solde-box">
+              <%= userBalance || "0.00000000" %>
+            </div>
+            <div class="crypto-dropdown">
+              <img src="/images/btc.png" class="crypto-icon" />
+              <div class="crypto-list-header">
+                <img src="/images/btc.png" title="BTC" />
+                <img src="/images/eth.svg" title="ETH" />
+                <img src="/images/sol.png" title="SOL" />
+                <img src="/images/ltc.png" title="LTC" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🔧 Réglages / Connexion -->
+        <div class="header-right">
+          <% if (isLoggedIn) { %>
+            <a href="/reglages" title="Réglages">
+              <img src="/images/account-white.png" alt="Réglages" class="reglage-icon" />
+            </a>
+            <a href="https://t.me/DjeloSupportbot" title="Support">
+              <img src="/images/support-white.png" alt="Support" class="tlg-icon" />
+            </a>
+            <% } else { %>
+              <a href="#" id="openLogin" class="btn-sidebar-style">Connexion</a>
+              <a href="#" id="openRegister" class="btn-sidebar-style">Inscription</a>
+              <% } %>
+        </div>
+
+      </div>
+</header>

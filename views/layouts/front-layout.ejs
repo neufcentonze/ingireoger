@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    <%= title || "Djelo" %>
+  </title>
+  <link rel="stylesheet" href="/style/main.css" />
+  <link rel="stylesheet" href="/style/header.css" />
+  <link rel="stylesheet" href="/style/sidebar.css" />
+</head>
+
+<body>
+
+  <!-- 🔝 HEADER -->
+  <%- include('../partials/header') %>
+
+    <!-- 🧱 WRAPPER PRINCIPAL -->
+    <main class="main-wrapper">
+      <!-- 📂 SIDEBAR -->
+      <%- include('../partials/sidebar') %>
+
+        <!-- 📦 CONTENU PRINCIPAL -->
+        <div class="main-content">
+          <%- body %>
+        </div>
+    </main>
+
+    <!-- ⬇️ FOOTER -->
+    <footer class="footer">
+      <p>&copy; 2025 - Tous droits réservés</p>
+    </footer>
+
+    <!-- 🔧 JS pour sidebar -->
+    <script>
+      document.getElementById('toggleSidebar')?.addEventListener('click', () => {
+        document.querySelector('.sidebar')?.classList.toggle('sidebar--collapsed');
+      });
+
+      function toggleSidebarSection(name) {
+        const submenu = document.getElementById('submenu-' + name);
+        const toggle = document.getElementById('toggle-' + name);
+
+        if (submenu && toggle) {
+          submenu.classList.toggle('open');
+          toggle.classList.toggle('open');
+        } else {
+          console.warn('Impossible de trouver submenu ou toggle pour :', name);
+        }
+      }
+    </script>
+
+</body>
+
+</html>

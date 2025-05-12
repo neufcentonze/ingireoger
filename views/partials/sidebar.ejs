@@ -1,0 +1,43 @@
+<aside class="sidebar <%= sidebarCollapsed ? 'sidebar--collapsed' : '' %>">
+  <% const categories = [
+    { name: 'Portefeuille', icon: '/images/sidebar/portefeuille.png', link: '/wallet' },
+    { name: 'Progression',  icon: '/images/sidebar/progression.png',  link: '/progression' },
+    { name: 'Jeux',         icon: '/images/sidebar/jeux.png',         link: '/game' }
+  ]; %>
+
+  <% categories.forEach(cat => {
+    const cleanId = cat.name.replace(/\s+/g, '-'); // ex: "Jeux" => "Jeux"
+  %>
+    <div class="sidebar-section">
+      <a
+        href="<%= sidebarCollapsed ? cat.link : '#' %>"
+        id="toggle-<%= cleanId %>"
+        class="sidebar-toggle"
+        <%= sidebarCollapsed ? '' : `onclick="toggleSidebarSection('${cleanId}')"` %>>
+        
+        <div class="sidebar-toggle-left">
+          <img src="<%= cat.icon %>" alt="<%= cat.name %>" class="sidebar-icon" />
+          <% if (!sidebarCollapsed) { %>
+            <span class="sidebar-label"><%= cat.name %></span>
+          <% } %>
+        </div>
+
+        <% if (!sidebarCollapsed) { %>
+          <span class="sidebar-arrow">▾</span>
+        <% } %>
+      </a>
+
+      <% if (!sidebarCollapsed) { %>
+        <div class="sidebar-submenu" id="submenu-<%= cleanId %>">
+          <% if (sidebarPages && sidebarPages[cat.name]) { %>
+            <% sidebarPages[cat.name].forEach(page => { %>
+              <a href="/<%= cat.name.toLowerCase() %>/<%= page.route %>"><%= page.label %></a>
+            <% }) %>
+          <% } else { %>
+            <p class="empty">Aucune page</p>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  <% }) %>
+</aside>

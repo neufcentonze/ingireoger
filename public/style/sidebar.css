@@ -1,0 +1,152 @@
+/* === SIDEBAR STRUCTURE === */
+.sidebar {
+  width: 220px;
+  background-color: #1a1a1a;
+  padding: 16px;
+  height: calc(100vh - 80px); /* Hauteur = plein écran - header */
+  position: sticky;
+  top: 80px;
+  flex-shrink: 0;
+  border-right: 1px solid #333;
+  overflow-y: auto;
+  transition: width 0.2s ease;
+}
+
+/* === COLLAPSED MODE === */
+.sidebar--collapsed {
+  width: 70px;
+}
+
+.sidebar--collapsed .sidebar-label,
+.sidebar--collapsed .sidebar-arrow,
+.sidebar--collapsed .sidebar-submenu {
+  display: none !important;
+}
+
+.sidebar--collapsed .sidebar-toggle-left {
+  justify-content: center;
+}
+
+.sidebar--collapsed .sidebar-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.sidebar--collapsed .sidebar-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* === SECTION === */
+.sidebar-section {
+  margin-bottom: 16px;
+}
+
+/* === TOGGLE BUTTON === */
+.sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sidebar-toggle:hover {
+  background: #2a2a2a;
+}
+
+.sidebar-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* === ICON === */
+.sidebar-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* === ARROW ROTATION === */
+.sidebar-arrow {
+  transition: transform 0.2s ease;
+}
+
+.sidebar-toggle.open .sidebar-arrow {
+  transform: rotate(180deg);
+}
+
+/* === SUBMENU === */
+.sidebar-submenu {
+  display: none;
+  flex-direction: column;
+  padding-left: 10px;
+  margin-top: 5px;
+}
+
+
+.sidebar-submenu.open {
+  display: flex;
+}
+
+.sidebar-submenu a {
+  text-decoration: none;
+  color: #ccc;
+  font-size: 0.95rem;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.sidebar-submenu a:hover {
+  background-color: #2d2d2d;
+  color: #fff;
+}
+
+.sidebar-submenu .empty {
+  font-size: 0.8rem;
+  color: #777;
+  padding: 4px 8px;
+  font-style: italic;
+}
+
+/* === PAGE LAYOUT === */
+.main-wrapper {
+  display: flex;
+  margin-top: 80px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main-wrapper {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 16px;
+  }
+}
+
+.sidebar-toggle,
+.sidebar-submenu a {
+  text-decoration: none;
+}
