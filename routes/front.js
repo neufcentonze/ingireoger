@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
     title: "Djelo",
     layout: 'layouts/front-layout', // ✅ c’est cette ligne qui applique le layout
     // isLoggedIn: !!req.session?.user,
-    isLoggedIn: false,
+    isLoggedIn: true,
     userBalance: req.session?.balance || "0.00000000",
     successMessage: req.session?.success || null,
     showFooter: true

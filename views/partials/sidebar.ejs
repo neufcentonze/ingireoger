@@ -1,48 +1,60 @@
 <aside class="sidebar <%= isMobile || sidebarCollapsed ? 'sidebar--collapsed' : '' %>">
 
-  <% const categories = [
-    { name: 'Jeux',         icon: 'dices', link: '/game' },
-    { name: 'Portefeuille', icon: 'wallet', link: '/wallet' },
-    { name: 'Progression',  icon: 'trending-up', link: '/progression' },
-    { name: 'Promotion',    icon: 'award', link: '/promotion' },
-    { name: 'Réglage',    icon: 'user-round-cog', link: '/settings' },
-  ]; %>
+  <% const categories=[ { name: 'Jeux' , icon: 'dices' , link: '/game' }, { name: 'Portefeuille' , icon: 'wallet' ,
+    link: '/wallet' }, { name: 'Progression' , icon: 'trending-up' , link: '/progression' }, { name: 'Promotion' ,
+    icon: 'award' , link: '/promotion' }, { name: 'Réglage' , icon: 'user-round-cog' , link: '/settings' }, ]; %>
 
-  <% categories.forEach(cat => {
-    const cleanId = cat.name.replace(/\s+/g, '').toLowerCase();
-  %>
+    <% categories.forEach(cat=> {
+      const cleanId = cat.name.replace(/\s+/g, '').toLowerCase();
+      %>
 
-    <div class="sidebar-section">
-      <a
-        href="<%= (isMobile || sidebarCollapsed) ? cat.link : '#' %>"
-        class="sidebar-toggle"
-        data-id="<%= cleanId %>"
-        onclick="<%= (!isMobile && !sidebarCollapsed) ? `toggleSidebarSection('${cleanId}')` : '' %>"
-      >
-        <div class="sidebar-toggle-left">
-          <i data-lucide="<%= cat.icon %>" class="sidebar-icon"></i>
+      <div class="sidebar-section">
+        <a href="<%= (isMobile || sidebarCollapsed) ? cat.link : '#' %>" class="sidebar-toggle" data-id="<%= cleanId %>"
+          onclick="<%= (!isMobile && !sidebarCollapsed) ? `toggleSidebarSection('${cleanId}')` : '' %>">
+          <div class="sidebar-toggle-left">
+            <i data-lucide="<%= cat.icon %>" class="sidebar-icon"></i>
+            <% if (!sidebarCollapsed && !isMobile) { %>
+              <span class="sidebar-label">
+                <%= cat.name %>
+              </span>
+              <% } %>
+          </div>
           <% if (!sidebarCollapsed && !isMobile) { %>
-            <span class="sidebar-label"><%= cat.name %></span>
-          <% } %>
-        </div>
+            <i data-lucide="chevron-down" class="sidebar-arrow"></i>
+            <% } %>
+        </a>
+
         <% if (!sidebarCollapsed && !isMobile) { %>
-          <i data-lucide="chevron-down" class="sidebar-arrow"></i>
-        <% } %>
-      </a>
-
-      <% if (!sidebarCollapsed && !isMobile) { %>
-        <div class="sidebar-submenu" id="submenu-<%= cleanId %>">
-          <% if (sidebarPages && sidebarPages[cat.name]) { %>
-            <% sidebarPages[cat.name].forEach(page => { %>
-              <a href="/<%= cat.name.toLowerCase() %>/<%= page.route %>"><%= page.label %></a>
-            <% }) %>
-          <% } else { %>
-            <p class="empty">Aucune page</p>
+          <div class="sidebar-submenu" id="submenu-<%= cleanId %>">
+            <% if (sidebarPages && sidebarPages[cat.name]) { %>
+              <% sidebarPages[cat.name].forEach(page=> { %>
+                <a href="/<%= cat.name.toLowerCase() %>/<%= page.route %>">
+                  <%= page.label %>
+                </a>
+                <% }) %>
+                  <% } else { %>
+                    <p class="empty">Aucune page</p>
+                    <% } %>
+          </div>
           <% } %>
-        </div>
-      <% } %>
-    </div>
+      </div>
 
-  <% }) %>
+      <% }) %>
+
+        <% if (isLoggedIn) { %>
+          <div class="sidebar-logout sidebar-section">
+            <form action="/logout" method="POST" style="width: 100%;">
+              <button type="submit" class="logout-button">
+                <div class="sidebar-toggle-left">
+                  <i data-lucide="log-out" class="sidebar-icon"></i>
+                  <% if (!sidebarCollapsed && !isMobile) { %>
+                    <span class="sidebar-label">Déconnexion</span>
+                    <% } %>
+                </div>
+              </button>
+            </form>
+          </div>
+          <% } %>
+
 
 </aside>

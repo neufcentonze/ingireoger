@@ -63,6 +63,21 @@
   font-weight: bold;
   font-size: 0.95em;
   margin-right: 8px;
+  cursor: pointer;
+  padding: 8px 12px;
+  user-select: none;
+  color: #fff;
+  border-radius: 8px;
+  display: inline-block;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.solde-container:hover {
+  background-color: #313131;
+}
+
+.solde-box:active {
+  transform: scale(0.96);
 }
 
 .crypto-dropdown {
