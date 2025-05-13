@@ -1,10 +1,11 @@
 <aside class="sidebar <%= isMobile || sidebarCollapsed ? 'sidebar--collapsed' : '' %>">
 
   <% const categories = [
+    { name: 'Jeux',         icon: 'dices', link: '/game' },
     { name: 'Portefeuille', icon: 'wallet', link: '/wallet' },
     { name: 'Progression',  icon: 'trending-up', link: '/progression' },
-    { name: 'Jeux',         icon: 'dices', link: '/game' },
     { name: 'Promotion',    icon: 'award', link: '/promotion' },
+    { name: 'Réglage',    icon: 'user-round-cog', link: '/settings' },
   ]; %>
 
   <% categories.forEach(cat => {
