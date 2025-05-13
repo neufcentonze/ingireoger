@@ -184,6 +184,107 @@
                   if (result.success) setTimeout(() => location.reload(), 1000);
                 });
               </script>
+
+              <script>
+                function handleSoldeClick(el) {
+                  const chevron = el.querySelector('.solde-chevron');
+                  const isOpen = chevron.getAttribute('data-lucide') === 'chevron-down';
+
+                  chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
+
+                  // Met à jour l'icône
+                  lucide.createIcons();
+
+                  // Optionnel : toggle d’un dropdown, classe .open, etc.
+                  el.classList.toggle('open');
+                }
+              </script>
+
+              <script>
+                function toggleSoldeDropdown(el) {
+                  const container = el.closest('.solde-container');
+                  const isOpen = container.classList.contains('open');
+
+                  // Ferme tous les autres dropdowns
+                  document.querySelectorAll('.solde-container.open').forEach(c => c.classList.remove('open'));
+
+                  // Si pas déjà ouvert, ouvre celui-là
+                  if (!isOpen) {
+                    container.classList.add('open');
+                  }
+
+                  // Change l'icône chevron
+                  const chevron = el.querySelector('.solde-chevron');
+                  if (chevron) {
+                    chevron.setAttribute('data-lucide', isOpen ? 'chevron-down' : 'chevron-up');
+                    lucide.createIcons();
+                  }
+                }
+
+                // Clic en dehors => ferme les dropdowns
+                document.addEventListener('click', (e) => {
+                  const isInside = e.target.closest('.solde-container');
+                  if (!isInside) {
+                    document.querySelectorAll('.solde-container.open').forEach(container => {
+                      container.classList.remove('open');
+                      const chevron = container.querySelector('.solde-chevron');
+                      if (chevron) {
+                        chevron.setAttribute('data-lucide', 'chevron-down');
+                        lucide.createIcons();
+                      }
+                    });
+                  }
+                });
+
+                // Clic sur une crypto dans le dropdown => met à jour le haut
+                document.querySelectorAll('.solde-option').forEach(option => {
+                  option.addEventListener('click', () => {
+                    const container = option.closest('.solde-container');
+                    const soldeBox = container.querySelector('.solde-box');
+                    const newAmount = option.dataset.amount?.slice(0, 10) || '0.00000000';
+                    const newIcon = option.dataset.icon || '/images/btc.png';
+
+                    soldeBox.querySelector('.solde-amount').textContent = newAmount;
+                    soldeBox.querySelector('.solde-crypto-icon').src = newIcon;
+
+                    container.classList.remove('open');
+
+                    const chevron = soldeBox.querySelector('.solde-chevron');
+                    if (chevron) {
+                      chevron.setAttribute('data-lucide', 'chevron-down');
+                      lucide.createIcons();
+                    }
+                  });
+                });
+
+                // Détails (placeholder futur modal)
+                function openSoldeDetailsModal() {
+                  alert("Ouverture du modal détails bientôt dispo !");
+                }
+              </script>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    const email = e.target.email.value.trim();
+                    const username = e.target.username.value.trim();
+                    const password = e.target.password.value;
+
+                    const res = await fetch("/register", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ email, username, password })
+                    });
+
+                    const result = await res.json();
+                    document.getElementById("registerMsg").innerText = result.message;
+                    if (result.success) setTimeout(() => location.reload(), 1000);
+                  });
+                });
+              </script>
+
 </body>
 
 </html>

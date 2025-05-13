@@ -1,76 +1,104 @@
 <header class="main-header">
-  <% if (typeof successMessage !=='undefined' && successMessage) { %>
+  <% if (typeof successMessage !== 'undefined' && successMessage) { %>
     <div class="alert success">
       <%= successMessage %>
     </div>
-    <% } %>
+  <% } %>
 
-      <div class="header-inner">
+  <div class="header-inner">
 
-        <!-- ☰ + Logo -->
-        <div class="header-left">
-          <button class="menu-toggle" id="toggleSidebar">
-            <i data-lucide="menu"></i>
-          </button>
+    <!-- ☰ + Logo -->
+    <div class="header-left">
+      <button class="menu-toggle" id="toggleSidebar">
+        <i data-lucide="menu"></i>
+      </button>
 
+      <a href="/" class="site-logo">
+        <img src="/images/logo-white.png" alt="Djelo" />
+      </a>
 
-          <a href="/" class="site-logo">
-            <img src="/images/logo-white.png" alt="Djelo" />
-          </a>
-
-          <% if (isLoggedIn) { %>
-            <div class="solde-mobile">
-              <div class="solde-container">
-                <div class="solde-box">
-                  <%= userBalance || "0.00000000" %>
-                </div>
-                <div class="crypto-dropdown">
-                  <img src="/images/btc.png" class="crypto-icon" />
-                  <div class="crypto-list-header">
-                    <img src="/images/btc.png" title="BTC" />
-                    <img src="/images/eth.svg" title="ETH" />
-                    <img src="/images/sol.png" title="SOL" />
-                    <img src="/images/ltc.png" title="LTC" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <% } %>
-        </div>
-
-
-        <!-- 💰 Solde : affiché toujours sur PC, uniquement si connecté sur mobile -->
-        <div class="header-balance <%= !isLoggedIn ? 'hide-on-mobile' : '' %>">
+      <% if (isLoggedIn) { %>
+        <div class="solde-mobile">
           <div class="solde-container">
-            <div class="solde-box">
-              <%= userBalance || "0.00000000" %>
+            <div class="solde-box" onclick="toggleSoldeDropdown(this)">
+              <i data-lucide="chevron-down" class="solde-chevron"></i>
+              <span class="solde-amount"><%= userBalance || "0.00000000" %></span>
+              <img src="/images/btc.png" alt="Crypto icon" class="solde-crypto-icon" />
             </div>
-            <div class="crypto-dropdown">
-              <img src="/images/btc.png" class="crypto-icon" />
-              <div class="crypto-list-header">
-                <img src="/images/btc.png" title="BTC" />
-                <img src="/images/eth.svg" title="ETH" />
-                <img src="/images/sol.png" title="SOL" />
-                <img src="/images/ltc.png" title="LTC" />
+            <div class="solde-dropdown">
+              <div class="solde-option" data-symbol="BTC" data-icon="/images/btc.png" data-amount="<%= balances?.btc || '0.00000000' %>">
+                <span><%= (balances?.btc || '0.00000000').slice(0, 10) %></span>
+                <img src="/images/btc.png" />
+              </div>
+              <div class="solde-option" data-symbol="ETH" data-icon="/images/eth.svg" data-amount="<%= balances?.eth || '0.00000000' %>">
+                <span><%= (balances?.eth || '0.00000000').slice(0, 10) %></span>
+                <img src="/images/eth.svg" />
+              </div>
+              <div class="solde-option" data-symbol="SOL" data-icon="/images/sol.png" data-amount="<%= balances?.sol || '0.00000000' %>">
+                <span><%= (balances?.sol || '0.00000000').slice(0, 10) %></span>
+                <img src="/images/sol.png" />
+              </div>
+              <div class="solde-option" data-symbol="LTC" data-icon="/images/ltc.png" data-amount="<%= balances?.ltc || '0.00000000' %>">
+                <span><%= (balances?.ltc || '0.00000000').slice(0, 10) %></span>
+                <img src="/images/ltc.png" />
+              </div>
+              <div class="solde-details" onclick="openSoldeDetailsModal()">
+                <span>Détails</span>
+                <i data-lucide="scan-search"></i>
               </div>
             </div>
           </div>
         </div>
+      <% } %>
+    </div>
 
-        <!-- 🔧 Réglages / Connexion -->
-        <div class="header-right">
-          <% if (isLoggedIn) { %>
-            <a href="/reglages" title="Réglages">
-              <img src="/images/account-white.png" alt="Réglages" class="reglage-icon" />
-            </a>
-            <a href="https://t.me/DjeloSupportbot" title="Support">
-              <img src="/images/support-white.png" alt="Support" class="tlg-icon" />
-            </a>
-            <% } else { %>
-              <a href="#" id="openLogin" class="btn-sidebar-style">Connexion</a>
-              <a href="#" id="openRegister" class="btn-sidebar-style">Inscription</a>
-              <% } %>
+    <!-- 💰 Solde PC -->
+    <div class="header-balance <%= !isLoggedIn ? 'hide-on-mobile' : '' %>">
+      <div class="solde-container">
+        <div class="solde-box" onclick="toggleSoldeDropdown(this)">
+          <i data-lucide="chevron-down" class="solde-chevron"></i>
+          <span class="solde-amount"><%= userBalance || "0.00000000" %></span>
+          <img src="/images/btc.png" alt="Crypto icon" class="solde-crypto-icon" />
         </div>
-
+        <div class="solde-dropdown">
+          <div class="solde-option" data-symbol="BTC" data-icon="/images/btc.png" data-amount="<%= balances?.btc || '0.00000000' %>">
+            <span><%= (balances?.btc || '0.00000000').slice(0, 10) %></span>
+            <img src="/images/btc.png" />
+          </div>
+          <div class="solde-option" data-symbol="ETH" data-icon="/images/eth.svg" data-amount="<%= balances?.eth || '0.00000000' %>">
+            <span><%= (balances?.eth || '0.00000000').slice(0, 10) %></span>
+            <img src="/images/eth.svg" />
+          </div>
+          <div class="solde-option" data-symbol="SOL" data-icon="/images/sol.png" data-amount="<%= balances?.sol || '0.00000000' %>">
+            <span><%= (balances?.sol || '0.00000000').slice(0, 10) %></span>
+            <img src="/images/sol.png" />
+          </div>
+          <div class="solde-option" data-symbol="LTC" data-icon="/images/ltc.png" data-amount="<%= balances?.ltc || '0.00000000' %>">
+            <span><%= (balances?.ltc || '0.00000000').slice(0, 10) %></span>
+            <img src="/images/ltc.png" />
+          </div>
+          <div class="solde-details" onclick="openSoldeDetailsModal()">
+            <span>Détails</span>
+            <i data-lucide="scan-search"></i>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <!-- ⚙️ Réglages / Connexion -->
+    <div class="header-right">
+      <% if (isLoggedIn) { %>
+        <a href="/reglages" title="Réglages">
+          <img src="/images/account-white.png" alt="Réglages" class="reglage-icon" />
+        </a>
+        <a href="https://t.me/DjeloSupportbot" title="Support">
+          <img src="/images/support-white.png" alt="Support" class="tlg-icon" />
+        </a>
+      <% } else { %>
+        <a href="#" id="openLogin" class="btn-sidebar-style">Connexion</a>
+        <a href="#" id="openRegister" class="btn-sidebar-style">Inscription</a>
+      <% } %>
+    </div>
+
+  </div>
 </header>

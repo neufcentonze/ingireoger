@@ -52,6 +52,7 @@
 }
 
 .solde-container {
+  position: relative;
   display: flex;
   align-items: center;
   background: #222;
@@ -60,20 +61,34 @@
 }
 
 .solde-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-weight: bold;
   font-size: 0.95em;
-  margin-right: 8px;
+  padding: 8px 10px;
   cursor: pointer;
-  padding: 8px 12px;
   user-select: none;
   color: #fff;
   border-radius: 8px;
-  display: inline-block;
   transition: background 0.2s, transform 0.1s;
+}
+
+
+.solde-amount {
+  white-space: nowrap;
 }
 
 .solde-container:hover {
   background-color: #313131;
+}
+
+
+.solde-chevron {
+  width: 16px;
+  height: 16px;
+  color: #aaa;
+  transition: transform 0.2s ease;
 }
 
 .solde-box:active {
@@ -192,7 +207,7 @@
   }
 
   .solde-mobile .solde-container {
-    padding: 6px 10px;
+    padding: 6px 3px;
     background: #222;
     border-radius: 5px;
   }
@@ -206,6 +221,7 @@
   .solde-mobile .crypto-icon {
     width: 20px;
     height: 20px;
+    margin-left: -5px;
   }
 
   .solde-mobile .crypto-list-header {
@@ -223,4 +239,99 @@
     display: flex;
     gap: 5px;
   }
+}
+
+/* === NOUVEAU DROPDOWN DE SOLDE === */
+.solde-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 8px 0;
+  min-width: 200px;
+  margin-top: 8px;
+  z-index: 2000;
+  display: none;
+  /* affiché dynamiquement via JS */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  width: 100%;
+  /* ✅ prend la largeur du parent */
+  min-width: unset;
+  /* annule la largeur forcée */
+  max-width: 100%;
+}
+
+.solde-container.open .solde-dropdown {
+  display: block;
+}
+
+.solde-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 8px 12px;
+  color: #eee;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.solde-option span {
+  flex: 1;
+  text-align: center;
+}
+
+.solde-option:hover {
+  background-color: #2a2a2a;
+}
+
+.solde-option img {
+  width: 20px;
+  height: 20px;
+}
+
+.solde-details {
+  display: flex;
+  justify-content: center;
+  /* ✅ centre horizontalement */
+  align-items: center;
+  /* ✅ centre verticalement */
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid #444;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 0.9em;
+  transition: background 0.2s ease;
+  text-align: center;
+}
+
+.solde-details {
+  justify-content: flex-start;
+  /* icône à gauche */
+}
+
+.solde-details span {
+  flex: 1;
+  text-align: center;
+}
+
+.solde-details:hover {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.solde-details i {
+  width: 16px;
+  height: 16px;
+  color: inherit;
+}
+
+.solde-crypto-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
