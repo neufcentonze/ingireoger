@@ -22,6 +22,9 @@
 </head>
 
 <body>
+  <!-- Error / Success -->
+  <div id="globalMessage" class="floating-msg" style="display: none;"></div>
+
   <!-- 🔝 HEADER -->
   <%- include('../partials/header') %>
 
@@ -162,7 +165,9 @@
                     body: JSON.stringify(data)
                   });
                   const result = await res.json();
-                  document.getElementById("loginMsg").innerText = result.message;
+
+                  showMessage("globalMessage", result.message, result.success);
+
                   if (result.success) setTimeout(() => location.reload(), 1000);
                 });
 
@@ -182,11 +187,11 @@
                     });
 
                     const result = await res.json();
-                    showMessage("registerMsg", result.message, result.success);
+                    showMessage("globalMessage", result.message, result.success);
 
                     if (result.success) setTimeout(() => location.reload(), 1000);
                   } catch (err) {
-                    showMessage("registerMsg", "Erreur inconnue", false);
+                    showMessage("globalMessage", "Erreur inconnue", false);
                   }
                 });
               </script>

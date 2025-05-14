@@ -33,7 +33,6 @@ exports.register = (req, res) => {
     return res.json({ success: false, message: "Tous les champs sont requis." });
   }
 
-  // Vérifie la complexité du mot de passe côté serveur
   const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
   if (!passRegex.test(password)) {
     return res.json({
@@ -43,39 +42,52 @@ exports.register = (req, res) => {
   }
 
   // Vérifie si l'email est déjà utilisé
-  db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+  db.get('SELECT * FROM users WHERE email = ?', [email], (err, emailRow) => {
     if (err) {
-      console.error("Erreur DB:", err);
+      console.error("Erreur DB (email):", err);
       return res.json({ success: false, message: "Erreur serveur." });
     }
 
-    if (row) {
+    if (emailRow) {
       return res.json({ success: false, message: "Cet email est déjà utilisé." });
     }
 
-    // Hash du mot de passe
-    bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
-      if (err) {
-        console.error("Erreur hash:", err);
+    // Vérifie si le nom d'utilisateur est déjà pris
+    db.get('SELECT * FROM users WHERE username = ?', [username], (err2, userRow) => {
+      if (err2) {
+        console.error("Erreur DB (username):", err2);
         return res.json({ success: false, message: "Erreur serveur." });
       }
 
-      db.run(
-        `INSERT INTO users (email, password, username, firstname, lastname, birthdate) VALUES (?, ?, ?, '', '', '')`,
-        [email, hashedPassword, username],
-        function (err) {
-          if (err) {
-            console.error("Erreur insertion:", err);
-            return res.json({ success: false, message: "Erreur d'inscription." });
-          }
+      if (userRow) {
+        return res.json({ success: false, message: "Ce nom d'utilisateur est déjà pris." });
+      }
 
-          req.session.email = email;
-          return res.json({ success: true, message: "Inscription réussie !" });
+      // Hash du mot de passe
+      bcrypt.hash(password, saltRounds, (err3, hashedPassword) => {
+        if (err3) {
+          console.error("Erreur hash:", err3);
+          return res.json({ success: false, message: "Erreur serveur." });
         }
-      );
+
+        db.run(
+          `INSERT INTO users (email, password, username, firstname, lastname, birthdate) VALUES (?, ?, ?, '', '', '')`,
+          [email, hashedPassword, username],
+          function (err4) {
+            if (err4) {
+              console.error("Erreur insertion:", err4);
+              return res.json({ success: false, message: "Erreur d'inscription." });
+            }
+
+            req.session.email = email;
+            return res.json({ success: true, message: "Inscription réussie !" });
+          }
+        );
+      });
     });
   });
 };
+
 
 // Déconnexion
 exports.logout = (req, res) => {

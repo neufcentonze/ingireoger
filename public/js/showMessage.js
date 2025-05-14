@@ -1,15 +1,32 @@
 /**
- * Affiche un message dans une balise donnée (succès ou erreur)
- * @param {string} targetId - L'ID de l'élément DOM où afficher le message
- * @param {string} message - Le contenu du message
- * @param {boolean} isSuccess - true = succès (vert), false = erreur (rouge)
+ * Affiche un message global (succès ou erreur)
+ * @param {string} targetId - ID de l'élément (ex: 'globalMessage')
+ * @param {string} message - Texte à afficher
+ * @param {boolean} isSuccess - true = vert / false = rouge
  */
 function showMessage(targetId, message, isSuccess = true) {
   const el = document.getElementById(targetId);
   if (!el) return;
-  el.innerText = message;
-  el.style.color = isSuccess ? "limegreen" : "crimson";
-  el.style.fontWeight = "500";
-  el.style.marginTop = "10px";
-  el.style.textAlign = "center";
+
+  el.innerHTML = `
+    <i data-lucide="${isSuccess ? 'check-circle' : 'ban'}"></i>
+    <span>${message}</span>
+  `;
+
+  lucide.createIcons();
+
+  el.classList.remove('success', 'error', 'show'); // reset
+  el.style.display = "flex";
+
+  void el.offsetWidth; // force reflow for animation
+
+  el.classList.add(isSuccess ? 'success' : 'error', 'show');
+
+  setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(() => {
+      el.style.display = "none";
+      el.classList.remove('success', 'error');
+    }, 400);
+  }, 4000);
 }

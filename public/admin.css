@@ -282,3 +282,52 @@ td img {
   max-width: 250px;
   margin-left: 0;
 }
+
+.dashboard-title {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.dashboard-subtitle {
+  color: #aaa;
+  margin-bottom: 24px;
+  font-size: 1rem;
+}
+
+.dashboard-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.dashboard-card {
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  min-width: 200px;
+  flex: 1;
+  max-width: 300px;
+}
+
+.dashboard-card i {
+  color: #00bfff;
+  width: 28px;
+  height: 28px;
+}
+
+.card-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.card-label {
+  color: #999;
+  font-size: 0.9rem;
+}

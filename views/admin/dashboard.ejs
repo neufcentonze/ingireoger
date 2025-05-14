@@ -1,11 +1,38 @@
-<div class="main-content">
-  <h1>📊 Tableau de bord</h1>
-  <p>Bienvenue dans le panneau d'administration !</p>
+<section class="admin-dashboard">
 
-  <h3>🛠️ Fonctions à venir :</h3>
-  <ul>
-    <li>📈 Statistiques de liens trackés</li>
-    <li>🕵️ Recherche utilisateur</li>
-    <li>🧰 Générateur de liens (UTM / codes courts)</li>
-  </ul>
-</div>
+  <h1 class="dashboard-title">
+    <i data-lucide="layout-dashboard"></i> Tableau de bord
+  </h1>
+
+  <!-- 📦 Blocs -->
+  <div class="dashboard-grid">
+
+    <!-- 👥 Utilisateurs -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <i data-lucide="users"></i>
+        <h2>Aperçu Utilisateur</h2>
+      </div>
+      <div class="card-content">
+        <p>Visiteurs uniques : <strong><%= stats.visitors %></strong></p>
+        <p>Membres inscrits : <strong><%= stats.totalUsers %></strong></p>
+        <p>Utilisateurs actifs (10min) : <strong><%= stats.onlineUsers %></strong></p>
+      </div>
+    </div>
+
+    <!-- 💰 Solde -->
+    <div class="dashboard-card">
+      <div class="card-header">
+        <i data-lucide="vault"></i>
+        <h2>Coffre</h2>
+      </div>
+      <div class="card-content">
+        <p>Solde total : <strong><%= vault.total %> €</strong></p>
+        <% vault.cryptos.forEach(c => { %>
+          <p><%= c.currency.toUpperCase() %> : <strong><%= c.total_eur %> €</strong></p>
+        <% }) %>
+      </div>
+    </div>
+
+  </div>
+</section>
