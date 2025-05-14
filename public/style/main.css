@@ -27,15 +27,35 @@ main {
   flex-direction: column;
 }
 
+.main-content {
+  padding-left: 0 !important;
+}
+
+.main-wrapper.sidebar-collapsed {
+  margin-left: 70px;
+}
+
 @keyframes slideFadeIn {
   0% {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.crypto-balance-amount {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+  color: #f2f2f2;
+  min-width: 100px;
+  display: inline-block;
+  text-align: right;
 }
 
 #globalMessage {
@@ -45,7 +65,8 @@ main {
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #333; /* fallback neutre */
+  background-color: #333;
+  /* fallback neutre */
   color: white;
   padding: 12px 20px;
   border-radius: 8px;
@@ -67,7 +88,8 @@ main {
 
 #globalMessage i {
   font-size: 1.2rem;
-  margin-top: 1px; /* aligne mieux avec le texte */
+  margin-top: 1px;
+  /* aligne mieux avec le texte */
 }
 
 #globalMessage.success {
@@ -78,4 +100,157 @@ main {
 #globalMessage.error {
   background-color: #511f1f;
   color: #ffd1d1;
+}
+
+
+/* === Promo === */
+.promotions-wrapper {
+  width: 100%;
+  padding: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.promotions-scroll-container.fixed-width {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 20px;
+}
+
+.promotions-scroll-container.fixed-width::-webkit-scrollbar {
+  display: none;
+}
+
+.promo-card {
+  background-color: #1e1e1e;
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex: 1 0 calc((100% - 32px) / 3);
+  /* 3 cartes visibles + 2 gaps */
+  min-width: 280px;
+  /* pour éviter trop petit en responsive */
+  max-width: 100%;
+  /* évite que ça dépasse */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.promo-label {
+  background-color: #2f3336;
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.promo-text h3 {
+  font-size: 18px;
+  margin: 4px 0;
+}
+
+.promo-text p {
+  font-size: 14px;
+  color: #ddd;
+}
+
+.promo-btn {
+  background: none;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-top: 15px;
+}
+
+.promo-btn:hover {
+  background-color: #444;
+}
+
+.promo-img img {
+  height: 150px;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(20, 20, 20, 0.6);
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 10;
+  display: none;
+}
+
+.arrow.left {
+  left: 10px;
+}
+
+.arrow.right {
+  right: 10px;
+}
+
+.promotions-wrapper:hover .arrow {
+  display: block;
+}
+
+/* Responsive */
+@media screen and (max-width: 1024px) {
+  .promo-card {
+    flex: 1 0 calc((100% - 16px) / 2);
+    /* 2 cartes visibles */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .promo-card {
+    flex: 0 0 100%;
+    min-width: 100%;
+    height: 215px;
+    /* adapte à ton contenu */
+  }
+
+  .sidebar.hidden-mobile+.main-wrapper {
+    margin-left: 0 !important;
+  }
+
+  .main-wrapper {
+    margin-left: 0 !important;
+    width: 100%;
+    transition: padding-left 0.3s ease, width 0.3s ease, margin-left 0.3s ease;
+  }
+
+  .main-content {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    transition: padding 0.3s ease, width 0.3s ease;
+  }
+
+  .main-wrapper:not(.sidebar-hidden-mobile) {
+    padding-left: 70px;
+    /* largeur estimée de la sidebar mobile */
+  }
+
+  .sidebar.hidden-mobile+.main-wrapper {
+    padding-left: 0 !important;
+  }
+
+  .promo-img {
+    display: none;
+  }
 }

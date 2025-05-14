@@ -4,7 +4,7 @@
       <%= successMessage %>
     </div>
   <% } %>
-
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
   <div class="header-inner">
 
     <!-- ☰ + Logo -->
@@ -27,19 +27,19 @@
             </div>
             <div class="solde-dropdown">
               <div class="solde-option" data-symbol="BTC" data-icon="/images/btc.png" data-amount="<%= balances?.btc || '0.00000000' %>">
-                <span><%= (balances?.btc || '0.00000000').slice(0, 10) %></span>
+                <span class="crypto-balance-amount"><%= (balances?.btc || '0.00000000').slice(0, 10) %></span>
                 <img src="/images/btc.png" />
               </div>
               <div class="solde-option" data-symbol="ETH" data-icon="/images/eth.svg" data-amount="<%= balances?.eth || '0.00000000' %>">
-                <span><%= (balances?.eth || '0.00000000').slice(0, 10) %></span>
+                <span class="crypto-balance-amount"><%= (balances?.eth || '0.00000000').slice(0, 10) %></span>
                 <img src="/images/eth.svg" />
               </div>
               <div class="solde-option" data-symbol="SOL" data-icon="/images/sol.png" data-amount="<%= balances?.sol || '0.00000000' %>">
-                <span><%= (balances?.sol || '0.00000000').slice(0, 10) %></span>
+                <span class="crypto-balance-amount"><%= (balances?.sol || '0.00000000').slice(0, 10) %></span>
                 <img src="/images/sol.png" />
               </div>
               <div class="solde-option" data-symbol="LTC" data-icon="/images/ltc.png" data-amount="<%= balances?.ltc || '0.00000000' %>">
-                <span><%= (balances?.ltc || '0.00000000').slice(0, 10) %></span>
+                <span class="crypto-balance-amount"><%= (balances?.ltc || '0.00000000').slice(0, 10) %></span>
                 <img src="/images/ltc.png" />
               </div>
               <div class="solde-details" onclick="openSoldeDetailsModal()">

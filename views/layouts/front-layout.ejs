@@ -8,6 +8,9 @@
     <%= title || "Djelo" %>
   </title>
 
+   <!-- 🔠 Import Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  
   <!-- Styles -->
   <link rel="stylesheet" href="/style/main.css" />
   <link rel="stylesheet" href="/style/header.css" />
@@ -78,45 +81,7 @@
                 }
 
                 document.addEventListener('DOMContentLoaded', () => {
-                  const sidebar = document.querySelector('.sidebar');
-                  const toggleSidebarBtn = document.getElementById('toggleSidebar');
 
-                  if (isMobile()) {
-                    sidebar?.classList.add('sidebar--collapsed');
-                  }
-
-                  toggleSidebarBtn?.addEventListener('click', () => {
-                    if (isMobile()) {
-                      sidebar?.classList.toggle('hidden-mobile');
-                    } else {
-                      sidebar?.classList.toggle('sidebar--collapsed');
-                    }
-                  });
-
-                  document.querySelectorAll('.sidebar-toggle').forEach(el => {
-                    el.addEventListener('click', (e) => {
-                      const id = el.dataset.id;
-                      const link = el.dataset.link;
-
-                      if (isMobile()) {
-                        window.location.href = link;
-                        return;
-                      }
-
-                      if (sidebar.classList.contains('sidebar--collapsed')) {
-                        sidebar.classList.remove('sidebar--collapsed');
-                        setTimeout(() => {
-                          document.getElementById('submenu-' + id)?.classList.toggle('open');
-                          el.closest('.sidebar-section')?.classList.toggle('open');
-                        }, 150);
-                      } else {
-                        document.getElementById('submenu-' + id)?.classList.toggle('open');
-                        el.closest('.sidebar-section')?.classList.toggle('open');
-                      }
-
-                      e.preventDefault();
-                    });
-                  });
 
                   const footer = document.querySelector('.footer-bloc');
                   if (footer) {
@@ -275,6 +240,24 @@
               </script>
 
               <script src="/js/showMessage.js"></script>
+
+              <script>
+                const toggleBtn = document.querySelector('.menu-toggle');
+                const sidebar = document.querySelector('.sidebar');
+                const wrapper = document.querySelector('.main-wrapper');
+
+                toggleBtn?.addEventListener('click', () => {
+                  const isMobile = window.innerWidth <= 768;
+
+                  if (isMobile) {
+                    sidebar.classList.toggle('hidden-mobile');
+                    wrapper.classList.toggle('sidebar-hidden-mobile'); // ✅ important
+                  } else {
+                    sidebar.classList.toggle('sidebar--collapsed');
+                    wrapper.classList.toggle('sidebar-collapsed');
+                  }
+                });
+              </script>
 </body>
 
 </html>
