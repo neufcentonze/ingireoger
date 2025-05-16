@@ -76,6 +76,8 @@ const adminRoutes = require("./routes/admin");
 app.use("/admin", adminRoutes); // ✅
 app.use("/", require("./routes/tracker"));
 app.use('/', require('./routes/front'));
+const apiRoutes = require('./routes/api');
+app.use('/api', apiRoutes); // Résultat : /api/cryptoDetail
 
 
 module.exports = { app, sessionMiddleware };

@@ -1,24 +1,46 @@
+<head>
+  <!-- Autres liens et scripts -->
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      lucide.createIcons();
+    });
+  </script>
+</head>
+
+<h2
+  style="color: #fff; margin-left: 20px; display: flex; align-items: center; font-size: 18px; margin-top: 10px; margin-bottom: -5px;">
+  <i data-lucide="gift" style="margin-right: 10px;"></i>
+  Promotions
+</h2>
 <section class="promotions-wrapper">
   <div class="promotions-scroll-container fixed-width" id="promoScroll">
-    <% const promos = [
-      { label: "Offre d'inscription", title: "💸 Votre premier dépôt est doublé !", desc: "Votre 1er dépôt doublé jusqu’à 250 €", img: "/images/vault.png" },
-      { label: "Promotion", title: "💥 Surpasse les autres au classement", desc: "Jusqu'à 3 000 € en jeu chaque semaine", img: "/images/trophee.png" },
-      { label: "Tirage au sort", title: "🎫 Chaque mise peut tout changer", desc: "10 000 € à gagner chaque mois !", img: "/images/giveaway.png" },
-    ]; %>
+    <% const promos=[ { label: "Offre d'inscription" , title: "💸 Votre premier dépôt est doublé !" ,
+      desc: "Votre 1er dépôt doublé jusqu'à 250 €" , img: "/images/vault.png" }, { label: "Promotion" ,
+      title: "💥 Surpasse les autres au classement" , desc: "Jusqu'à 3 000 € en jeu chaque semaine" ,
+      img: "/images/trophee.png" }, { label: "Tirage au sort" , title: "🎫 Chaque mise peut tout changer" ,
+      desc: "10 000 € à gagner chaque mois !" , img: "/images/giveaway.png" }, ]; %>
 
-    <% promos.forEach(promo => { %>
-      <div class="promo-card">
-        <div class="promo-text">
-          <span class="promo-label"><%= promo.label %></span>
-          <h3><%= promo.title %></h3>
-          <p><%= promo.desc %></p>
-          <button class="promo-btn">Voir</button>
+      <% promos.forEach(promo=> { %>
+        <div class="promo-card">
+          <div class="promo-text">
+            <span class="promo-label">
+              <%= promo.label %>
+            </span>
+            <h3>
+              <%= promo.title %>
+            </h3>
+            <p>
+              <%= promo.desc %>
+            </p>
+            <button class="promo-btn">Voir</button>
+          </div>
+          <div class="promo-img">
+            <img src="<%= promo.img %>" alt="Promotion">
+          </div>
         </div>
-        <div class="promo-img">
-          <img src="<%= promo.img %>" alt="Promotion">
-        </div>
-      </div>
-    <% }) %>
+        <% }) %>
   </div>
 
   <!-- Flèches -->
@@ -26,43 +48,89 @@
   <button class="arrow right" id="rightArrow">&#10095;</button>
 </section>
 
+<h2
+  style="color: #fff; margin-left: 20px; display: flex; align-items: center; font-size: 18px; margin-top: 10px; margin-bottom: -5px;">
+  <i data-lucide="flame" style="margin-right: 10px;"></i>
+  Djelo Games
+</h2>
+<section class="games-carousel">
+  <% games.forEach(game=> { %>
+    <div class="game-card" style="position: relative;">
+      <a href="/game/<%= game.name %>">
+        <img src="<%= game.image %>" alt="<%= game.name %>" style="border-radius: 10px;">
+      </a>
+      <h3 style="color: #fff; margin-left: 1px; font-size: 14px; text-align: left;">
+        <%= game.name %>
+      </h3>
+    </div>
+    <% }) %>
+</section>
+
+<h2
+  style="color: #fff; margin-left: 20px; display: flex; align-items: center; font-size: 18px; margin-top: 10px; margin-bottom: -5px;">
+  <i data-lucide="gift" style="margin-right: 10px;"></i>
+  Transactions
+</h2>
+<table style="width: 100%; margin-top: 20px; color: #fff;">
+  <thead>
+    <tr>
+      <th>Jeu</th>
+      <th>Utilisateur</th>
+      <th>Temps</th>
+      <th>Montant du Pari</th>
+      <th>Multiplicateur</th>
+      <th>Paiement</th>
+    </tr>
+  </thead>
+  <tbody id="transactionTable">
+    <!-- Les lignes de transactions seront ajoutées ici dynamiquement -->
+  </tbody>
+</table>
+
 <script>
-  const scrollContainer = document.getElementById('promoScroll');
-  const leftArrow = document.getElementById('leftArrow');
-  const rightArrow = document.getElementById('rightArrow');
+  const socket = io();
 
-  function getCardWidth() {
-    const card = scrollContainer.querySelector('.promo-card');
-    return card ? card.offsetWidth + 16 : 0;
-  }
+  socket.on('connect', () => {
+    console.log('Connecté au serveur Socket.IO');
+  });
 
-  function updateArrowVisibility() {
-    const cardCount = scrollContainer.querySelectorAll('.promo-card').length;
-    const screenWidth = window.innerWidth;
-    const visibleCount = screenWidth > 768 ? 3 : 1;
-    if (cardCount <= visibleCount) {
-      leftArrow.style.display = "none";
-      rightArrow.style.display = "none";
-    } else {
-      scrollContainer.parentElement.addEventListener("mouseenter", () => {
-        leftArrow.style.display = "block";
-        rightArrow.style.display = "block";
-      });
-      scrollContainer.parentElement.addEventListener("mouseleave", () => {
-        leftArrow.style.display = "none";
-        rightArrow.style.display = "none";
-      });
+  socket.on('initialTransactions', (transactions) => {
+    console.log('Transactions initiales reçues:', transactions);
+    transactions.forEach(transaction => {
+      addTransaction(transaction.game, transaction.user, transaction.time, transaction.betAmount, transaction.multiplier, transaction.payout);
+    });
+  });
+
+  socket.on('newTransaction', (transaction) => {
+    console.log('Nouvelle transaction reçue:', transaction);
+    addTransaction(transaction.game, transaction.user, transaction.time, transaction.betAmount, transaction.multiplier, transaction.payout);
+  });
+
+  document.getElementById('leftArrow').addEventListener('click', () => {
+    const container = document.getElementById('promoScroll');
+    container.scrollBy({ left: -300, behavior: 'smooth' });
+  });
+
+  document.getElementById('rightArrow').addEventListener('click', () => {
+    const container = document.getElementById('promoScroll');
+    container.scrollBy({ left: 300, behavior: 'smooth' });
+  });
+
+  function addTransaction(game, user, time, betAmount, multiplier, payout) {
+    const table = document.getElementById('transactionTable');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${game}</td>
+      <td>${user}</td>
+      <td>${time}</td>
+      <td>${betAmount}</td>
+      <td>${multiplier}</td>
+      <td>${payout}</td>
+    `;
+    table.insertBefore(row, table.firstChild);
+
+    if (table.rows.length > 10) {
+      table.deleteRow(0);
     }
   }
-
-  leftArrow.addEventListener('click', () => {
-    scrollContainer.scrollBy({ left: -getCardWidth(), behavior: 'smooth' });
-  });
-
-  rightArrow.addEventListener('click', () => {
-    scrollContainer.scrollBy({ left: getCardWidth(), behavior: 'smooth' });
-  });
-
-  window.addEventListener('resize', updateArrowVisibility);
-  window.addEventListener('DOMContentLoaded', updateArrowVisibility);
 </script>

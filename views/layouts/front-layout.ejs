@@ -8,9 +8,6 @@
     <%= title || "Djelo" %>
   </title>
 
-   <!-- 🔠 Import Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-  
   <!-- Styles -->
   <link rel="stylesheet" href="/style/main.css" />
   <link rel="stylesheet" href="/style/header.css" />
@@ -47,6 +44,7 @@
     </main>
 
     <!-- ⬇️ FOOTER -->
+    
     <% if (showFooter) { %>
       <%- include('../partials/footer') %>
         <% } %>
@@ -74,6 +72,50 @@
               `
               }) %>
 
+              <!-- 📝 CRYPTO DETAILS MODAL -->
+              <%- include('../partials/modal', { id: 'soldeDetailsModal' , title: 'Solde Total' , width: '350px' ,
+                rawLogo: '<i data-lucide="user-round-search"></i>' , body: ` <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;">
+                  <span>Solde Total</span>
+                  <span>0.00€</span>
+                </div>
+                <div
+                  style="border: 1px solid #ccc; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
+                  <input type="text" id="soldeTotalInput" value="0.00000000" readonly
+                    style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
+                  <i data-lucide="bitcoin" style="font-size: 24px; margin-left: 10px;"></i>
+                </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                  <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;">
+                    <span>Solde</span>
+                    <span>0.00€</span>
+                  </div>
+                  <div
+                    style="border: 1px solid #ccc; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
+                    <input type="text" id="soldeInput" value="0.00000000" readonly
+                      style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
+                    <i data-lucide="dollar-sign" style="font-size: 24px; margin-left: 10px;"></i>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;">
+                    <span>Solde Bonus</span>
+                    <span>0.00€</span>
+                  </div>
+                  <div
+                    style="border: 1px solid #ccc; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
+                    <input type="text" id="soldeBonusInput" value="0.00000000" readonly
+                      style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
+                    <i data-lucide="gift" style="font-size: 24px; margin-left: 10px;"></i>
+                  </div>
+                </div>
+                `
+                }) %>
+
+
               <!-- 🔧 JS LOGIQUE UI -->
               <script>
                 function isMobile() {
@@ -81,7 +123,45 @@
                 }
 
                 document.addEventListener('DOMContentLoaded', () => {
+                  const sidebar = document.querySelector('.sidebar');
+                  const toggleSidebarBtn = document.getElementById('toggleSidebar');
 
+                  if (isMobile()) {
+                    sidebar?.classList.add('sidebar--collapsed');
+                  }
+
+                  toggleSidebarBtn?.addEventListener('click', () => {
+                    if (isMobile()) {
+                      sidebar?.classList.toggle('hidden-mobile');
+                    } else {
+                      sidebar?.classList.toggle('sidebar--collapsed');
+                    }
+                  });
+
+                  document.querySelectorAll('.sidebar-toggle').forEach(el => {
+                    el.addEventListener('click', (e) => {
+                      const id = el.dataset.id;
+                      const link = el.dataset.link;
+
+                      if (isMobile()) {
+                        window.location.href = link;
+                        return;
+                      }
+
+                      if (sidebar.classList.contains('sidebar--collapsed')) {
+                        sidebar.classList.remove('sidebar--collapsed');
+                        setTimeout(() => {
+                          document.getElementById('submenu-' + id)?.classList.toggle('open');
+                          el.closest('.sidebar-section')?.classList.toggle('open');
+                        }, 150);
+                      } else {
+                        document.getElementById('submenu-' + id)?.classList.toggle('open');
+                        el.closest('.sidebar-section')?.classList.toggle('open');
+                      }
+
+                      e.preventDefault();
+                    });
+                  });
 
                   const footer = document.querySelector('.footer-bloc');
                   if (footer) {
@@ -90,14 +170,11 @@
                       footer.classList.toggle('visible', atBottom);
                     });
                   }
+
+                  lucide.createIcons();
                 });
               </script>
 
-              <script>
-                lucide.createIcons();
-              </script>
-
-              <!-- 🔁 Modal logic -->
               <script>
                 function openModal(id) {
                   document.getElementById(id).style.display = 'block';
@@ -117,14 +194,13 @@
                   openModal("registerModal");
                 });
 
-                // Login handler
                 document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
                   e.preventDefault();
                   const data = {
                     email: e.target.email.value,
                     password: e.target.password.value
                   };
-                  const res = await fetch("/login", {
+                  const res = await fetch("/auth/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data)
@@ -136,7 +212,6 @@
                   if (result.success) setTimeout(() => location.reload(), 1000);
                 });
 
-                // Register handler
                 document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
                   e.preventDefault();
 
@@ -165,54 +240,134 @@
                 function handleSoldeClick(el) {
                   const chevron = el.querySelector('.solde-chevron');
                   const isOpen = chevron.getAttribute('data-lucide') === 'chevron-down';
-
                   chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
-
-                  // Met à jour l'icône
                   lucide.createIcons();
-
-                  // Optionnel : toggle d’un dropdown, classe .open, etc.
                   el.classList.toggle('open');
                 }
               </script>
 
               <script>
-                function toggleSoldeDropdown(el) {
-                  const container = el.closest('.solde-container');
-                  const isOpen = container.classList.contains('open');
+                function getSelectedCrypto() {
+                  // Trouve le conteneur visible (mobile ou PC)
+                  const activeSoldeBox = document.querySelector('.solde-container');
+                  if (!activeSoldeBox) return 'btc';
 
-                  // Ferme tous les autres dropdowns
-                  document.querySelectorAll('.solde-container.open').forEach(c => c.classList.remove('open'));
+                  // Cherche l'icône actuellement affichée dans la box
+                  const icon = activeSoldeBox.querySelector('.solde-crypto-icon');
+                  if (!icon) return 'btc';
 
-                  // Si pas déjà ouvert, ouvre celui-là
-                  if (!isOpen) {
-                    container.classList.add('open');
-                  }
+                  // Déduit la crypto à partir du chemin d'image (ex: /images/btc.png)
+                  const src = icon.getAttribute('src');
+                  if (!src) return 'btc';
 
-                  // Change l'icône chevron
-                  const chevron = el.querySelector('.solde-chevron');
-                  if (chevron) {
-                    chevron.setAttribute('data-lucide', isOpen ? 'chevron-down' : 'chevron-up');
-                    lucide.createIcons();
+                  if (src.includes('btc')) return 'btc';
+                  if (src.includes('eth')) return 'eth';
+                  if (src.includes('sol')) return 'sol';
+                  if (src.includes('ltc')) return 'ltc';
+                  console.log('Selected crypto:', src);
+                  return 'btc'; // fallback
+                }
+
+                function openSoldeDetailsModal() {
+                  const selectedCrypto = getSelectedCrypto();
+                  loadCryptoDetails(selectedCrypto);
+
+                  const modal = document.getElementById('soldeDetailsModal');
+                  if (modal) {
+                    modal.style.display = 'block'; // ou .classList.add('show') selon ton système
                   }
                 }
 
-                // Clic en dehors => ferme les dropdowns
-                document.addEventListener('click', (e) => {
-                  const isInside = e.target.closest('.solde-container');
-                  if (!isInside) {
-                    document.querySelectorAll('.solde-container.open').forEach(container => {
-                      container.classList.remove('open');
-                      const chevron = container.querySelector('.solde-chevron');
-                      if (chevron) {
-                        chevron.setAttribute('data-lucide', 'chevron-down');
-                        lucide.createIcons();
-                      }
-                    });
-                  }
-                });
+                async function loadCryptoDetails(crypto) {
+                  try {
+                    const res = await fetch(`/api/cryptoDetail?crypto=${crypto}`);
+                    const data = await res.json();
 
-                // Clic sur une crypto dans le dropdown => met à jour le haut
+                    const suffix = crypto.toUpperCase();
+                    document.getElementById('soldeTotalInput').value = `${data.total} ${suffix}`;
+                    document.getElementById('soldeInput').value = `${data.solde} ${suffix}`;
+                    document.getElementById('soldeBonusInput').value = `${data.bonus} ${suffix}`;
+                  } catch (err) {
+                    console.error('Erreur lors du chargement des détails crypto:', err);
+                  }
+                }
+              </script>
+
+              <script>
+                function handleSoldeClick(el) {
+                  const chevron = el.querySelector('.solde-chevron');
+                  const isOpen = chevron.getAttribute('data-lucide') === 'chevron-down';
+                  chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
+                  lucide.createIcons();
+                  el.classList.toggle('open');
+                }
+              </script>
+
+              <script>
+                function getSelectedCrypto() {
+                  // Trouve le conteneur visible (mobile ou PC)
+                  const activeSoldeBox = document.querySelector('.solde-container');
+                  if (!activeSoldeBox) return 'btc';
+
+                  // Cherche l'icône actuellement affichée dans la box
+                  const icon = activeSoldeBox.querySelector('.solde-crypto-icon');
+                  if (!icon) return 'btc';
+
+                  // Déduit la crypto à partir du chemin d'image (ex: /images/btc.png)
+                  const src = icon.getAttribute('src');
+                  if (!src) return 'btc';
+
+                  if (src.includes('btc')) return 'btc';
+                  if (src.includes('eth')) return 'eth';
+                  if (src.includes('sol')) return 'sol';
+                  if (src.includes('ltc')) return 'ltc';
+                  console.log('Selected crypto:', src);
+                  return 'btc'; // fallback
+                }
+
+                function openSoldeDetailsModal() {
+                  const selectedCrypto = getSelectedCrypto();
+                  loadCryptoDetails(selectedCrypto);
+
+                  const modal = document.getElementById('soldeDetailsModal');
+                  if (modal) {
+                    modal.style.display = 'block'; // ou .classList.add('show') selon ton système
+                  }
+                }
+
+                async function loadCryptoDetails(crypto) {
+                  try {
+                    const res = await fetch(`/api/cryptoDetail?crypto=${crypto}`);
+                    const data = await res.json();
+
+                    const suffix = crypto.toUpperCase();
+                    document.getElementById('soldeTotalInput').value = `${data.total} ${suffix}`;
+                    document.getElementById('soldeInput').value = `${data.solde} ${suffix}`;
+                    document.getElementById('soldeBonusInput').value = `${data.bonus} ${suffix}`;
+                  } catch (err) {
+                    console.error('Erreur lors du chargement des détails crypto:', err);
+                  }
+                }
+              </script>
+
+              <script src="/js/showMessage.js"></script>
+
+              <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                  // Attacher les événements de clic pour ouvrir les modales
+                  document.getElementById("openLogin")?.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    openModal("loginModal");
+                  });
+
+                  document.getElementById("openRegister")?.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    openModal("registerModal");
+                  });
+                });
+              </script>
+
+              <script>
                 document.querySelectorAll('.solde-option').forEach(option => {
                   option.addEventListener('click', () => {
                     const container = option.closest('.solde-container');
@@ -233,28 +388,18 @@
                   });
                 });
 
-                // Détails (placeholder futur modal)
-                function openSoldeDetailsModal() {
-                  alert("Ouverture du modal détails bientôt dispo !");
-                }
-              </script>
-
-              <script src="/js/showMessage.js"></script>
-
-              <script>
-                const toggleBtn = document.querySelector('.menu-toggle');
-                const sidebar = document.querySelector('.sidebar');
-                const wrapper = document.querySelector('.main-wrapper');
-
-                toggleBtn?.addEventListener('click', () => {
-                  const isMobile = window.innerWidth <= 768;
-
-                  if (isMobile) {
-                    sidebar.classList.toggle('hidden-mobile');
-                    wrapper.classList.toggle('sidebar-hidden-mobile'); // ✅ important
-                  } else {
-                    sidebar.classList.toggle('sidebar--collapsed');
-                    wrapper.classList.toggle('sidebar-collapsed');
+                // Clic en dehors => ferme les dropdowns
+                document.addEventListener('click', (e) => {
+                  const isInside = e.target.closest('.solde-container');
+                  if (!isInside) {
+                    document.querySelectorAll('.solde-container.open').forEach(container => {
+                      container.classList.remove('open');
+                      const chevron = container.querySelector('.solde-chevron');
+                      if (chevron) {
+                        chevron.setAttribute('data-lucide', 'chevron-down');
+                        lucide.createIcons();
+                      }
+                    });
                   }
                 });
               </script>

@@ -143,6 +143,10 @@ main {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.promo-card {
+  gap: 12px;
+}
+
 .promo-label {
   background-color: #2f3336;
   color: #fff;
@@ -180,6 +184,17 @@ main {
 
 .promo-img img {
   height: 150px;
+}
+
+.promo-img {
+  display: flex;
+  align-items: center;
+}
+
+.promo-img img {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
 }
 
 .arrow {
@@ -234,6 +249,11 @@ main {
     transition: padding-left 0.3s ease, width 0.3s ease, margin-left 0.3s ease;
   }
 
+  .sidebar-hidden-mobile .main-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
   .main-content {
     width: 100%;
     padding-left: 0;
@@ -241,9 +261,8 @@ main {
     transition: padding 0.3s ease, width 0.3s ease;
   }
 
-  .main-wrapper:not(.sidebar-hidden-mobile) {
+  .sidebar:not(.hidden-mobile)+.main-wrapper {
     padding-left: 70px;
-    /* largeur estimée de la sidebar mobile */
   }
 
   .sidebar.hidden-mobile+.main-wrapper {
@@ -253,4 +272,112 @@ main {
   .promo-img {
     display: none;
   }
+}
+
+/* === Responsive sidebar logique === */
+@media screen and (max-width: 768px) {
+
+  /* Quand la sidebar est masquée sur mobile */
+  .sidebar.hidden-mobile+.main-wrapper {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Quand la sidebar est visible sur mobile (70px de large) */
+  .sidebar+.main-wrapper {
+    margin-left: 70px;
+    padding-left: 0 !important;
+    width: calc(100% - 70px);
+  }
+}
+
+@media screen and (min-width: 769px) {
+
+  /* Sidebar pleine largeur (240px) sur desktop */
+  .main-wrapper {
+    margin-left: 240px;
+    transition: margin-left 0.3s ease;
+  }
+
+  /* Si sidebar est repliée */
+  .main-wrapper.sidebar-collapsed {
+    margin-left: 70px !important;
+  }
+
+  .sidebar-collapsed.main-wrapper {
+    margin-left: 70px !important;
+  }
+}
+
+.games-carousel {
+  display: flex;
+  overflow-x: auto;
+  padding: 20px;
+  gap: 15px;
+}
+
+.game-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 250px;
+  text-align: center;
+  background-color: #0e0e0e;
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
+.game-card:hover {
+  transform: scale(1.05);
+}
+
+.game-card img {
+  width: 100%;
+  border-radius: 10px;
+  height: 150px;
+}
+
+.game-card span {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.game-card h3 {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #fff;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  /* force chaque colonne à avoir la même largeur */
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  /* ou left si tu préfères */
+  border-bottom: 1px solid #444;
+  white-space: nowrap;
+  /* empêche le retour à la ligne */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+thead th {
+  font-weight: bold;
+  background-color: #222;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #111;
 }

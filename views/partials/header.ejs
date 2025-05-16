@@ -4,7 +4,7 @@
       <%= successMessage %>
     </div>
   <% } %>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+
   <div class="header-inner">
 
     <!-- ☰ + Logo -->
@@ -27,19 +27,19 @@
             </div>
             <div class="solde-dropdown">
               <div class="solde-option" data-symbol="BTC" data-icon="/images/btc.png" data-amount="<%= balances?.btc || '0.00000000' %>">
-                <span class="crypto-balance-amount"><%= (balances?.btc || '0.00000000').slice(0, 10) %></span>
+                <span><%= (balances?.btc || '0.00000000').slice(0, 10) %></span>
                 <img src="/images/btc.png" />
               </div>
               <div class="solde-option" data-symbol="ETH" data-icon="/images/eth.svg" data-amount="<%= balances?.eth || '0.00000000' %>">
-                <span class="crypto-balance-amount"><%= (balances?.eth || '0.00000000').slice(0, 10) %></span>
+                <span><%= (balances?.eth || '0.00000000').slice(0, 10) %></span>
                 <img src="/images/eth.svg" />
               </div>
               <div class="solde-option" data-symbol="SOL" data-icon="/images/sol.png" data-amount="<%= balances?.sol || '0.00000000' %>">
-                <span class="crypto-balance-amount"><%= (balances?.sol || '0.00000000').slice(0, 10) %></span>
+                <span><%= (balances?.sol || '0.00000000').slice(0, 10) %></span>
                 <img src="/images/sol.png" />
               </div>
               <div class="solde-option" data-symbol="LTC" data-icon="/images/ltc.png" data-amount="<%= balances?.ltc || '0.00000000' %>">
-                <span class="crypto-balance-amount"><%= (balances?.ltc || '0.00000000').slice(0, 10) %></span>
+                <span><%= (balances?.ltc || '0.00000000').slice(0, 10) %></span>
                 <img src="/images/ltc.png" />
               </div>
               <div class="solde-details" onclick="openSoldeDetailsModal()">
@@ -102,3 +102,25 @@
 
   </div>
 </header>
+
+<script>
+  function toggleSoldeDropdown(el) {
+    const container = el.closest('.solde-container');
+    const isOpen = container.classList.contains('open');
+
+    // Ferme tous les autres dropdowns
+    document.querySelectorAll('.solde-container.open').forEach(c => c.classList.remove('open'));
+
+    // Si pas déjà ouvert, ouvre celui-là
+    if (!isOpen) {
+      container.classList.add('open');
+    }
+
+    // Change l'icône chevron
+    const chevron = el.querySelector('.solde-chevron');
+    if (chevron) {
+      chevron.setAttribute('data-lucide', isOpen ? 'chevron-down' : 'chevron-up');
+      lucide.createIcons();
+    }
+  }
+</script>
