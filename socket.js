@@ -47,7 +47,6 @@ function setupSocket(server, sessionMiddleware) {
 
     io.on("connection", socket => {
         const email = socket.email;
-        console.log("✅ Connexion WebSocket :", email ? `Utilisateur : ${email}` : "Visiteur non connecté");
 
         // Si l'utilisateur est connecté, on lui envoie son solde
         if (email) {
@@ -91,7 +90,6 @@ function setupSocket(server, sessionMiddleware) {
             }
             transactions.push(data);
 
-            console.log("🧾 Nouvelle transaction :", data);
             socket.emit("newTransaction", data);
 
             const delay = Math.floor(Math.random() * (30000 - 2000 + 1)) + 2000;
@@ -105,7 +103,6 @@ function setupSocket(server, sessionMiddleware) {
         // Nettoyage à la déconnexion
         socket.on("disconnect", () => {
             clearTimeout(timeout);
-            console.log("🔌 Client déconnecté");
         });
     });
 

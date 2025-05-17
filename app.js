@@ -69,7 +69,7 @@ app.set("views", path.join(__dirname, "views"));
 // ➕ Routes
 app.use('/auth', require('./routes/auth'));
 app.use('/game', require('./routes/game'));
-app.use('/transaction', require('./routes/transaction'));
+app.use('/wallet', require('./routes/wallet'));
 app.use('/reglages', require('./routes/reglages'));
 app.use('/webhook', require('./webhooks'));
 const adminRoutes = require("./routes/admin");

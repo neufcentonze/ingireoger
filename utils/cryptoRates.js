@@ -22,7 +22,6 @@ async function updateRates() {
     }
 
     cache.lastUpdated = Date.now();
-    console.log('[CryptoRates] Taux mis à jour:', cache.rates);
   } catch (err) {
     console.error('[CryptoRates] Échec de mise à jour:', err.message);
   }

@@ -1,4 +1,6 @@
-const { getUser, updateBalance, logTransaction } = require("../services/userService");
+const { getUser } = require("../services/userService");
+const { updateBalance } = require("../services/balanceService")
+const { logTransaction  } = require("../services/transactionService")
 const { getCryptoPriceInEur } = require("../services/cryptoService");
 const { préleverSoldeAvecBonus } = require("../utils/bonusLogic");
 const roundIfNeeded = require("../utils/roundIfNeeded");

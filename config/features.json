@@ -3,5 +3,9 @@
   "dice": true,
   "detective": true,
   "login": true,
-  "register": true
+  "register": true,
+  "wallet": true,
+  "wallet_deposit": true,
+  "wallet_withdraw": true,
+  "wallet_history": true
 }

@@ -26,8 +26,6 @@ async function updateCryptoRates() {
     cachedRates.sol = data.solana.eur;
     cachedRates.ltc = data.litecoin.eur;
     cachedRates.lastUpdated = Date.now();
-
-    console.log("🔁 Taux mis à jour :", cachedRates);
   } catch (err) {
     console.error("❌ Erreur mise à jour taux CoinGecko :", err);
   }
