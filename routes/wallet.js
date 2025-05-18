@@ -35,4 +35,7 @@ router.post('/withdraw', checkFeature('wallet_withdraw'), walletController.handl
 // 📊 Historique JSON
 router.get('/api/history', checkFeature('wallet_history'), walletController.apiGetHistory);
 
+// Attribuer une adresse 
+router.get('/address/:currency', walletController.getAddress);
+
 module.exports = router;

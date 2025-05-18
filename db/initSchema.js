@@ -143,5 +143,17 @@ db.serialize(() => {
         );
     `)
 
+    db.run(`
+        CREATE TABLE IF NOT EXISTS available_addresses(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            address TEXT UNIQUE,
+            currency TEXT,
+            assigned INTEGER DEFAULT 0,
+            email TEXT,
+            assignedAt INTEGER,
+            ip TEXT
+        );
+    `)
+
     console.log("✅ Schéma de la base de données initialisé.");
 });

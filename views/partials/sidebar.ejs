@@ -1,4 +1,5 @@
-<aside class="sidebar <%= isMobile || sidebarCollapsed ? 'sidebar--collapsed' : '' %>">
+<aside class="sidebar <%= isMobile ? 'hidden-mobile' : (sidebarCollapsed ? 'sidebar--collapsed' : '') %>">
+
 
   <% const categories=[ { name: 'Jeux' , icon: 'dices' , link: '/game' }, { name: 'Portefeuille' , icon: 'wallet' ,
     link: '/wallet' }, { name: 'Progression' , icon: 'trending-up' , link: '/progression' }, { name: 'Promotion' ,

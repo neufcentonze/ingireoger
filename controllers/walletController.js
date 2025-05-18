@@ -73,7 +73,7 @@ exports.renderHistoryPage = (req, res) => {
 };
 
 exports.handleDeposit = (req, res) => {
-  const email = req.session.email;
+  const email = req.session?.user?.email;
   const { currency, amount } = req.body;
   const floatAmount = parseFloat(amount);
 
@@ -88,7 +88,7 @@ exports.handleDeposit = (req, res) => {
 };
 
 exports.handleWithdraw = (req, res) => {
-  const email = req.session.email;
+  const email = req.session?.user?.email;
   const { currency, amount, address } = req.body;
   const floatAmount = parseFloat(amount);
 
@@ -103,7 +103,7 @@ exports.handleWithdraw = (req, res) => {
 };
 
 exports.apiGetHistory = (req, res) => {
-  const email = req.session.email;
+  const email = req.session?.user?.email;
   const page = parseInt(req.query.page) || 1;
   const limit = 10;
   const offset = (page - 1) * limit;
@@ -113,4 +113,22 @@ exports.apiGetHistory = (req, res) => {
     if (err) return res.status(500).json({ error: 'Erreur chargement historique' });
     res.json({ transactions });
   });
+};
+
+
+exports.getAddress = async (req, res) => {
+  console.log("📦 Session:", req.session); // 👈 ajoute ça
+  const email = req.session?.user?.email;
+  const currency = req.params.currency.toLowerCase();
+
+  if (!email) {
+    return res.status(401).json({ success: false, error: "Utilisateur non connecté." });
+  }
+
+  try {
+    const result = await walletService.getOrAssignAddress(email, currency, req.ip);
+    return res.json({ success: true, ...result });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
 };
