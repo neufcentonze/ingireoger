@@ -15,15 +15,19 @@
 /* === CONTENU DU MODAL === */
 .modal-content {
   background-color: #1c1c1c;
-  margin: 8% auto;
   padding: 20px 25px;
   border-radius: 10px;
   max-width: 400px;
   width: 90%;
-  position: relative;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
   animation: fadeInUp 0.25s ease-out;
+  transform: translate(-50%, -50%);
   color: #f1f1f1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  /* important */
 }
 
 /* === EN-TÊTE MODAL === */
@@ -115,12 +119,12 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    scale: 0.95;
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    scale: 1;
   }
 }
 
@@ -152,4 +156,21 @@
   padding: 30px;
   text-align: center;
   border-radius: 6px;
+}
+
+.modal-link-button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 16px;
+  border: none;
+  background: #2c2c2c;
+  color: white;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-link-button:hover {
+  background: #444;
 }

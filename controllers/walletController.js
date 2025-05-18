@@ -117,7 +117,6 @@ exports.apiGetHistory = (req, res) => {
 
 
 exports.getAddress = async (req, res) => {
-  console.log("📦 Session:", req.session); // 👈 ajoute ça
   const email = req.session?.user?.email;
   const currency = req.params.currency.toLowerCase();
 

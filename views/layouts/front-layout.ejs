@@ -40,7 +40,7 @@
     </main>
 
     <!-- ⬇️ FOOTER -->
-    
+
     <% if (showFooter) { %>
       <%- include('../partials/footer') %>
         <% } %>
@@ -68,337 +68,432 @@
               `
               }) %>
 
-              <!-- 📝 CRYPTO DETAILS MODAL -->
-              <%- include('../partials/modal', { id: 'soldeDetailsModal' , title: 'Solde Total' , width: '350px' ,
-                rawLogo: '<i data-lucide="user-round-search"></i>' , body: ` <div style="margin-bottom: 20px;">
-                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;">
-                  <span>Solde Total</span>
-                  <span>0.00€</span>
-                </div>
-                <div
-                  style="border: 1px solid #ccc; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
-                  <input type="text" id="soldeTotalInput" value="0.00000000" readonly
-                    style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
-                  <i data-lucide="bitcoin" style="font-size: 24px; margin-left: 10px;"></i>
-                </div>
-                </div>
+              <!-- 📝 MODAL SIDEBAR MOBILE -->
+              <%- include('../partials/modal', { id: 'mobileCategoryModal' , title: '' , // à remplir dynamiquement
+                rawLogo: '' ,width: '350px' , body: '<div id="mobileCategoryModalBody"></div>' }) %>
 
-                <div style="margin-bottom: 20px;">
-                  <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;">
-                    <span>Solde</span>
-                    <span>0.00€</span>
+                <!-- 📝 CRYPTO DETAILS MODAL -->
+                <%- include('../partials/modal', { id: 'soldeDetailsModal' , title: 'Solde Total' , width: '350px' ,
+                  rawLogo: '<i data-lucide="user-round-search"></i>' , body: ` <div style="margin-bottom: 20px;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>Solde Total</span>
+                    <span class="js-crypto-total-eur">0.00€</span>
                   </div>
                   <div
-                    style="border: 1px solid #ccc; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
-                    <input type="text" id="soldeInput" value="0.00000000" readonly
+                    style="border: 1px solid #ccc; padding: 8px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
+                    <input type="text" id="soldeTotalInput" value="0.00000000" readonly
                       style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
-                    <i data-lucide="dollar-sign" style="font-size: 24px; margin-left: 10px;"></i>
+                    <img class="js-crypto-icon" src="/images/btc.png" alt="btc"
+                      style="width: 20px; height: 20px; margin-left: 10px;">
                   </div>
-                </div>
-
-                <div>
-                  <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;">
-                    <span>Solde Bonus</span>
-                    <span>0.00€</span>
                   </div>
-                  <div
-                    style="border: 1px solid #ccc; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
-                    <input type="text" id="soldeBonusInput" value="0.00000000" readonly
-                      style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
-                    <i data-lucide="gift" style="font-size: 24px; margin-left: 10px;"></i>
+
+                  <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between ; margin-bottom: 5px;">
+                      <span>Solde</span>
+                      <span class="js-crypto-net-eur">0.00€</span>
+                    </div>
+                    <div
+                      style="border: 1px solid #ccc; padding: 8px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
+                      <input type="text" id="soldeInput" value="0.00000000" readonly
+                        style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
+                      <img class="js-crypto-icon" src="/images/btc.png" alt="btc"
+                        style="width: 20px; height: 20px; margin-left: 10px;">
+                    </div>
                   </div>
-                </div>
-                `
-                }) %>
+
+                  <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                      <span>Solde Bonus</span>
+                      <span class="js-crypto-bonus-eur">0.00€</span>
+                    </div>
+                    <div
+                      style="border: 1px solid #ccc; padding: 8px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
+                      <input type="text" id="soldeBonusInput" value="0.00000000" readonly
+                        style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
+                      <img class="js-crypto-icon" src="/images/btc.png" alt="btc"
+                        style="width: 20px; height: 20px; margin-left: 10px;">
+                    </div>
+                  </div>
+                  `
+                  }) %>
 
 
-              <!-- 🔧 JS LOGIQUE UI -->
-              <script>
-                function isMobile() {
-                  return window.innerWidth <= 768;
-                }
-
-                document.addEventListener('DOMContentLoaded', () => {
-                  const sidebar = document.querySelector('.sidebar');
-                  const toggleSidebarBtn = document.getElementById('toggleSidebar');
-
-                  if (isMobile()) {
-                    sidebar?.classList.add('sidebar--collapsed');
-                  }
-
-                  toggleSidebarBtn?.addEventListener('click', () => {
-                    if (isMobile()) {
-                      sidebar?.classList.toggle('hidden-mobile');
-                    } else {
-                      sidebar?.classList.toggle('sidebar--collapsed');
+                  <!-- 🔧 JS LOGIQUE UI -->
+                  <script>
+                    function isMobile() {
+                      return window.innerWidth <= 768;
                     }
-                  });
 
-                  document.querySelectorAll('.sidebar-toggle').forEach(el => {
-                    el.addEventListener('click', (e) => {
-                      const id = el.dataset.id;
-                      const link = el.dataset.link;
+                    document.addEventListener('DOMContentLoaded', () => {
+                      const sidebar = document.querySelector('.sidebar');
+                      const toggleSidebarBtn = document.getElementById('toggleSidebar');
 
                       if (isMobile()) {
-                        window.location.href = link;
-                        return;
+                        sidebar?.classList.add('sidebar--collapsed');
                       }
 
-                      if (sidebar.classList.contains('sidebar--collapsed')) {
-                        sidebar.classList.remove('sidebar--collapsed');
-                        setTimeout(() => {
-                          document.getElementById('submenu-' + id)?.classList.toggle('open');
-                          el.closest('.sidebar-section')?.classList.toggle('open');
-                        }, 150);
-                      } else {
-                        document.getElementById('submenu-' + id)?.classList.toggle('open');
-                        el.closest('.sidebar-section')?.classList.toggle('open');
+                      toggleSidebarBtn?.addEventListener('click', () => {
+                        if (isMobile()) {
+                          sidebar?.classList.toggle('hidden-mobile');
+                        } else {
+                          sidebar?.classList.toggle('sidebar--collapsed');
+                        }
+                      });
+
+                      document.querySelectorAll('.sidebar-toggle').forEach(el => {
+                        el.addEventListener('click', (e) => {
+                          e.preventDefault();
+
+                          if (isMobile()) {
+                            openModalWithData('mobileCategoryModal', el);
+                            return;
+                          }
+
+                          const id = el.dataset.id;
+                          const submenu = document.getElementById('submenu-' + id);
+                          const arrow = document.querySelector(`.sidebar-arrow[data-id="${id}"]`);
+
+                          if (document.querySelector('.sidebar').classList.contains('sidebar--collapsed')) {
+                            document.querySelector('.sidebar').classList.remove('sidebar--collapsed');
+                            setTimeout(() => {
+                              submenu?.classList.toggle('open');
+                              el.closest('.sidebar-section')?.classList.toggle('open');
+                              if (arrow) {
+                                const isOpen = submenu.classList.contains('open');
+                                arrow.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
+                                lucide.createIcons();
+                              }
+                            }, 150);
+                          } else {
+                            submenu?.classList.toggle('open');
+                            el.closest('.sidebar-section')?.classList.toggle('open');
+                            if (arrow) {
+                              const isOpen = submenu.classList.contains('open');
+                              arrow.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
+                              lucide.createIcons();
+                            }
+                          }
+                        });
+                      });
+                      const footer = document.querySelector('.footer-bloc');
+                      if (footer) {
+                        window.addEventListener('scroll', () => {
+                          const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
+                          footer.classList.toggle('visible', atBottom);
+                        });
                       }
 
-                      e.preventDefault();
-                    });
-                  });
-
-                  const footer = document.querySelector('.footer-bloc');
-                  if (footer) {
-                    window.addEventListener('scroll', () => {
-                      const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
-                      footer.classList.toggle('visible', atBottom);
-                    });
-                  }
-
-                  lucide.createIcons();
-                });
-              </script>
-
-              <script>
-                function openModal(id) {
-                  document.getElementById(id).style.display = 'block';
-                }
-
-                function closeModal(id) {
-                  document.getElementById(id).style.display = 'none';
-                }
-
-                document.getElementById("openLogin")?.addEventListener("click", (e) => {
-                  e.preventDefault();
-                  openModal("loginModal");
-                });
-
-                document.getElementById("openRegister")?.addEventListener("click", (e) => {
-                  e.preventDefault();
-                  openModal("registerModal");
-                });
-
-                document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
-                  e.preventDefault();
-                  const data = {
-                    email: e.target.email.value,
-                    password: e.target.password.value
-                  };
-                  const res = await fetch("/auth/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data)
-                  });
-                  const result = await res.json();
-
-                  showMessage("globalMessage", result.message, result.success);
-
-                  if (result.success) setTimeout(() => location.reload(), 1000);
-                });
-
-                document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
-                  e.preventDefault();
-
-                  const email = e.target.email.value.trim();
-                  const username = e.target.username.value.trim();
-                  const password = e.target.password.value;
-
-                  try {
-                    const res = await fetch("/auth/register", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ email, username, password })
-                    });
-
-                    const result = await res.json();
-                    showMessage("globalMessage", result.message, result.success);
-
-                    if (result.success) setTimeout(() => location.reload(), 1000);
-                  } catch (err) {
-                    showMessage("globalMessage", "Erreur inconnue", false);
-                  }
-                });
-              </script>
-
-              <script>
-                function handleSoldeClick(el) {
-                  const chevron = el.querySelector('.solde-chevron');
-                  const isOpen = chevron.getAttribute('data-lucide') === 'chevron-down';
-                  chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
-                  lucide.createIcons();
-                  el.classList.toggle('open');
-                }
-              </script>
-
-              <script>
-                function getSelectedCrypto() {
-                  // Trouve le conteneur visible (mobile ou PC)
-                  const activeSoldeBox = document.querySelector('.solde-container');
-                  if (!activeSoldeBox) return 'btc';
-
-                  // Cherche l'icône actuellement affichée dans la box
-                  const icon = activeSoldeBox.querySelector('.solde-crypto-icon');
-                  if (!icon) return 'btc';
-
-                  // Déduit la crypto à partir du chemin d'image (ex: /images/btc.png)
-                  const src = icon.getAttribute('src');
-                  if (!src) return 'btc';
-
-                  if (src.includes('btc')) return 'btc';
-                  if (src.includes('eth')) return 'eth';
-                  if (src.includes('sol')) return 'sol';
-                  if (src.includes('ltc')) return 'ltc';
-                  console.log('Selected crypto:', src);
-                  return 'btc'; // fallback
-                }
-
-                function openSoldeDetailsModal() {
-                  const selectedCrypto = getSelectedCrypto();
-                  loadCryptoDetails(selectedCrypto);
-
-                  const modal = document.getElementById('soldeDetailsModal');
-                  if (modal) {
-                    modal.style.display = 'block'; // ou .classList.add('show') selon ton système
-                  }
-                }
-
-                async function loadCryptoDetails(crypto) {
-                  try {
-                    const res = await fetch(`/api/cryptoDetail?crypto=${crypto}`);
-                    const data = await res.json();
-
-                    const suffix = crypto.toUpperCase();
-                    document.getElementById('soldeTotalInput').value = `${data.total} ${suffix}`;
-                    document.getElementById('soldeInput').value = `${data.solde} ${suffix}`;
-                    document.getElementById('soldeBonusInput').value = `${data.bonus} ${suffix}`;
-                  } catch (err) {
-                    console.error('Erreur lors du chargement des détails crypto:', err);
-                  }
-                }
-              </script>
-
-              <script>
-                function handleSoldeClick(el) {
-                  const chevron = el.querySelector('.solde-chevron');
-                  const isOpen = chevron.getAttribute('data-lucide') === 'chevron-down';
-                  chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
-                  lucide.createIcons();
-                  el.classList.toggle('open');
-                }
-              </script>
-
-              <script>
-                function getSelectedCrypto() {
-                  // Trouve le conteneur visible (mobile ou PC)
-                  const activeSoldeBox = document.querySelector('.solde-container');
-                  if (!activeSoldeBox) return 'btc';
-
-                  // Cherche l'icône actuellement affichée dans la box
-                  const icon = activeSoldeBox.querySelector('.solde-crypto-icon');
-                  if (!icon) return 'btc';
-
-                  // Déduit la crypto à partir du chemin d'image (ex: /images/btc.png)
-                  const src = icon.getAttribute('src');
-                  if (!src) return 'btc';
-
-                  if (src.includes('btc')) return 'btc';
-                  if (src.includes('eth')) return 'eth';
-                  if (src.includes('sol')) return 'sol';
-                  if (src.includes('ltc')) return 'ltc';
-                  console.log('Selected crypto:', src);
-                  return 'btc'; // fallback
-                }
-
-                function openSoldeDetailsModal() {
-                  const selectedCrypto = getSelectedCrypto();
-                  loadCryptoDetails(selectedCrypto);
-
-                  const modal = document.getElementById('soldeDetailsModal');
-                  if (modal) {
-                    modal.style.display = 'block'; // ou .classList.add('show') selon ton système
-                  }
-                }
-
-                async function loadCryptoDetails(crypto) {
-                  try {
-                    const res = await fetch(`/api/cryptoDetail?crypto=${crypto}`);
-                    const data = await res.json();
-
-                    const suffix = crypto.toUpperCase();
-                    document.getElementById('soldeTotalInput').value = `${data.total} ${suffix}`;
-                    document.getElementById('soldeInput').value = `${data.solde} ${suffix}`;
-                    document.getElementById('soldeBonusInput').value = `${data.bonus} ${suffix}`;
-                  } catch (err) {
-                    console.error('Erreur lors du chargement des détails crypto:', err);
-                  }
-                }
-              </script>
-
-              <script src="/js/showMessage.js"></script>
-
-              <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                  // Attacher les événements de clic pour ouvrir les modales
-                  document.getElementById("openLogin")?.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    openModal("loginModal");
-                  });
-
-                  document.getElementById("openRegister")?.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    openModal("registerModal");
-                  });
-                });
-              </script>
-
-              <script>
-                document.querySelectorAll('.solde-option').forEach(option => {
-                  option.addEventListener('click', () => {
-                    const container = option.closest('.solde-container');
-                    const soldeBox = container.querySelector('.solde-box');
-                    const newAmount = option.dataset.amount?.slice(0, 10) || '0.00000000';
-                    const newIcon = option.dataset.icon || '/images/btc.png';
-
-                    soldeBox.querySelector('.solde-amount').textContent = newAmount;
-                    soldeBox.querySelector('.solde-crypto-icon').src = newIcon;
-
-                    container.classList.remove('open');
-
-                    const chevron = soldeBox.querySelector('.solde-chevron');
-                    if (chevron) {
-                      chevron.setAttribute('data-lucide', 'chevron-down');
                       lucide.createIcons();
-                    }
-                  });
-                });
+                    });
+                  </script>
 
-                // Clic en dehors => ferme les dropdowns
-                document.addEventListener('click', (e) => {
-                  const isInside = e.target.closest('.solde-container');
-                  if (!isInside) {
-                    document.querySelectorAll('.solde-container.open').forEach(container => {
-                      container.classList.remove('open');
-                      const chevron = container.querySelector('.solde-chevron');
-                      if (chevron) {
-                        chevron.setAttribute('data-lucide', 'chevron-down');
-                        lucide.createIcons();
+                  <script>
+                    function openModal(id) {
+                      document.getElementById(id).style.display = 'block';
+                    }
+
+                    function closeModal(id) {
+                      document.getElementById(id).style.display = 'none';
+                    }
+
+                    document.getElementById("openLogin")?.addEventListener("click", (e) => {
+                      e.preventDefault();
+                      openModal("loginModal");
+                    });
+
+                    document.getElementById("openRegister")?.addEventListener("click", (e) => {
+                      e.preventDefault();
+                      openModal("registerModal");
+                    });
+
+                    document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
+                      e.preventDefault();
+                      const data = {
+                        email: e.target.email.value,
+                        password: e.target.password.value
+                      };
+                      const res = await fetch("/auth/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                      });
+                      const result = await res.json();
+
+                      showMessage("globalMessage", result.message, result.success);
+
+                      if (result.success) setTimeout(() => location.reload(), 1000);
+                    });
+
+                    document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
+                      e.preventDefault();
+
+                      const email = e.target.email.value.trim();
+                      const username = e.target.username.value.trim();
+                      const password = e.target.password.value;
+
+                      try {
+                        const res = await fetch("/auth/register", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ email, username, password })
+                        });
+
+                        const result = await res.json();
+                        showMessage("globalMessage", result.message, result.success);
+
+                        if (result.success) setTimeout(() => location.reload(), 1000);
+                      } catch (err) {
+                        showMessage("globalMessage", "Erreur inconnue", false);
                       }
                     });
-                  }
-                });
-              </script>
+                  </script>
+
+                  <script>
+                    function handleSoldeClick(el) {
+                      const chevron = el.querySelector('.solde-chevron');
+                      const isOpen = chevron.getAttribute('data-lucide') === 'chevron-down';
+                      chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
+                      lucide.createIcons();
+                      el.classList.toggle('open');
+                    }
+                  </script>
+
+                  <script>
+                    function getSelectedCrypto() {
+                      // Trouve le conteneur visible (mobile ou PC)
+                      const activeSoldeBox = document.querySelector('.solde-container');
+                      if (!activeSoldeBox) return 'btc';
+
+                      // Cherche l'icône actuellement affichée dans la box
+                      const icon = activeSoldeBox.querySelector('.solde-crypto-icon');
+                      if (!icon) return 'btc';
+
+                      // Déduit la crypto à partir du chemin d'image (ex: /images/btc.png)
+                      const src = icon.getAttribute('src');
+                      if (!src) return 'btc';
+
+                      if (src.includes('btc')) return 'btc';
+                      if (src.includes('eth')) return 'eth';
+                      if (src.includes('sol')) return 'sol';
+                      if (src.includes('ltc')) return 'ltc';
+                      return 'btc'; // fallback
+                    }
+
+                    function openSoldeDetailsModal() {
+                      const selectedCrypto = getSelectedCrypto();
+                      loadCryptoDetails(selectedCrypto);
+
+                      const modal = document.getElementById('soldeDetailsModal');
+                      if (modal) {
+                        modal.style.display = 'block'; // ou .classList.add('show') selon ton système
+                      }
+                    }
+
+                    async function loadCryptoDetails(crypto) {
+                      try {
+                        const res = await fetch(`/api/cryptoDetail?crypto=${crypto}`);
+                        const data = await res.json();
+
+                        const suffix = crypto.toUpperCase();
+
+                        // Montants crypto
+                        document.getElementById('soldeTotalInput').value = `${data.total} ${suffix}`;
+                        document.getElementById('soldeInput').value = `${data.solde} ${suffix}`;
+                        document.getElementById('soldeBonusInput').value = `${data.bonus} ${suffix}`;
+
+                        // Montants en euros
+                        document.querySelector('.js-crypto-total-eur').textContent = `${data.totalEur} €`;
+                        document.querySelector('.js-crypto-net-eur').textContent = `${data.soldeEur} €`;
+                        document.querySelector('.js-crypto-bonus-eur').textContent = `${data.bonusEur} €`;
+
+                        const extension = crypto === 'eth' ? 'svg' : 'png';
+                        const cryptoIconUrl = `/images/${crypto}.${extension}`;
+
+                        // Met à jour toutes les icônes dans le modal
+                        document.querySelectorAll('.js-crypto-icon').forEach(img => {
+                          img.src = cryptoIconUrl;
+                          img.alt = crypto.toUpperCase();
+                        });
+
+                      } catch (err) {
+                        console.error('❌ Erreur lors du chargement des détails crypto:', err);
+                      }
+                    }
+                  </script>
+
+                  <script>
+                    function handleSoldeClick(el) {
+                      const chevron = el.querySelector('.solde-chevron');
+                      const isOpen = chevron.getAttribute('data-lucide') === 'chevron-down';
+                      chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
+                      lucide.createIcons();
+                      el.classList.toggle('open');
+                    }
+                  </script>
+
+                  <script>
+                    function getSelectedCrypto() {
+                      // Trouve le conteneur visible (mobile ou PC)
+                      const activeSoldeBox = document.querySelector('.solde-container');
+                      if (!activeSoldeBox) return 'btc';
+
+                      // Cherche l'icône actuellement affichée dans la box
+                      const icon = activeSoldeBox.querySelector('.solde-crypto-icon');
+                      if (!icon) return 'btc';
+
+                      // Déduit la crypto à partir du chemin d'image (ex: /images/btc.png)
+                      const src = icon.getAttribute('src');
+                      if (!src) return 'btc';
+
+                      if (src.includes('btc')) return 'btc';
+                      if (src.includes('eth')) return 'eth';
+                      if (src.includes('sol')) return 'sol';
+                      if (src.includes('ltc')) return 'ltc';
+                      return 'btc'; // fallback
+                    }
+
+                    function openSoldeDetailsModal() {
+                      const selectedCrypto = getSelectedCrypto();
+                      loadCryptoDetails(selectedCrypto);
+
+                      const modal = document.getElementById('soldeDetailsModal');
+                      if (modal) {
+                        modal.style.display = 'block'; // ou .classList.add('show') selon ton système
+                      }
+                    }
+                  </script>
+
+                  <script src="/js/showMessage.js"></script>
+
+                  <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                      // Attacher les événements de clic pour ouvrir les modales
+                      document.getElementById("openLogin")?.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        openModal("loginModal");
+                      });
+
+                      document.getElementById("openRegister")?.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        openModal("registerModal");
+                      });
+                    });
+                  </script>
+
+                  <script>
+                    document.querySelectorAll('.solde-option').forEach(option => {
+                      option.addEventListener('click', () => {
+                        const container = option.closest('.solde-container');
+                        const soldeBox = container.querySelector('.solde-box');
+                        const newAmount = option.dataset.amount?.slice(0, 10) || '0.00000000';
+                        const newIcon = option.dataset.icon || '/images/btc.png';
+
+                        soldeBox.querySelector('.solde-amount').textContent = newAmount;
+                        soldeBox.querySelector('.solde-crypto-icon').src = newIcon;
+
+                        container.classList.remove('open');
+
+                        const chevron = soldeBox.querySelector('.solde-chevron');
+                        if (chevron) {
+                          chevron.setAttribute('data-lucide', 'chevron-down');
+                          lucide.createIcons();
+                        }
+                      });
+                    });
+
+                    // Clic en dehors => ferme les dropdowns
+                    document.addEventListener('click', (e) => {
+                      const isInside = e.target.closest('.solde-container');
+                      if (!isInside) {
+                        document.querySelectorAll('.solde-container.open').forEach(container => {
+                          container.classList.remove('open');
+                          const chevron = container.querySelector('.solde-chevron');
+                          if (chevron) {
+                            chevron.setAttribute('data-lucide', 'chevron-down');
+                            lucide.createIcons();
+                          }
+                        });
+                      }
+                    });
+                  </script>
+
+                  <script>
+                    function openCategoryModal(el) {
+                      const name = el.dataset.name;
+                      const icon = el.dataset.icon;
+                      const slug = el.dataset.slug;
+                      const pagesRaw = el.dataset.pages;
+                      const pages = JSON.parse(pagesRaw || '[]');
+
+                      // Remplir le header
+                      const modalTitle = document.querySelector('#mobileCategoryModal .modal-title');
+                      const modalIcon = document.querySelector('#mobileCategoryModal .modal-icon');
+                      const modalBody = document.getElementById('mobileCategoryModalBody');
+
+                      if (modalTitle) modalTitle.textContent = name;
+                      if (modalIcon) modalIcon.setAttribute('data-lucide', icon);
+                      if (modalIcon) lucide.createIcons();
+
+                      // Nettoyer le body
+                      modalBody.innerHTML = '';
+
+                      if (pages.length === 0) {
+                        modalBody.innerHTML = `<p class="empty">Aucune page</p>`;
+                      } else {
+                        pages.forEach(page => {
+                          const button = document.createElement('button');
+                          button.className = 'modal-link-button';
+                          button.innerText = page.label;
+                          button.onclick = () => {
+                            window.location.href = `/${slug}/${page.route}`;
+                          };
+                          modalBody.appendChild(button);
+                        });
+                      }
+
+                      // Afficher le modal
+                      const modal = document.getElementById('mobileCategoryModal');
+                      if (modal) modal.style.display = 'block';
+                    }
+
+                    function openModalWithData(modalId, el) {
+                      const modal = document.getElementById(modalId);
+                      if (!modal) return;
+
+                      const name = el.dataset.name;
+                      const icon = el.dataset.icon;
+                      const slug = el.dataset.slug;
+                      const pagesRaw = el.dataset.pages;
+                      const pages = JSON.parse(pagesRaw || '[]');
+
+                      const modalTitle = modal.querySelector('.modal-title');
+                      const modalIcon = modal.querySelector('.modal-icon');
+                      const modalBody = modal.querySelector('#mobileCategoryModalBody');
+
+                      if (modalTitle) modalTitle.textContent = name;
+                      if (modalIcon) modalIcon.setAttribute('data-lucide', icon);
+                      if (modalIcon) lucide.createIcons();
+
+                      modalBody.innerHTML = '';
+
+                      if (pages.length === 0) {
+                        modalBody.innerHTML = `<p class="empty">Aucune page</p>`;
+                      } else {
+                        pages.forEach(page => {
+                          const button = document.createElement('button');
+                          button.className = 'modal-link-button';
+                          button.innerText = page.label;
+                          button.onclick = () => {
+                            window.location.href = `/${slug}/${page.route}`;
+                          };
+                          modalBody.appendChild(button);
+                        });
+                      }
+
+                      modal.style.display = 'block';
+                    }
+                  </script>
 </body>
 
 </html>

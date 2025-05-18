@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Jeux",
+    "icon": "dices",
+    "slug": "game",
+    "pages": []
+  },
+  {
+    "name": "Portefeuille",
+    "icon": "wallet",
+    "slug": "wallet",
+    "pages": [
+      { "label": "Dépôt", "route": "deposit" },
+      { "label": "Historique", "route": "history" },
+      { "label": "Retrait", "route": "withdraw" }
+    ]
+  },
+  {
+    "name": "Progression",
+    "icon": "trending-up",
+    "slug": "progression",
+    "pages": []
+  },
+  {
+    "name": "Promotion",
+    "icon": "award",
+    "slug": "promotion",
+    "pages": []
+  },
+  {
+    "name": "Réglage",
+    "icon": "user-round-cog",
+    "slug": "settings",
+    "pages": []
+  }
+]

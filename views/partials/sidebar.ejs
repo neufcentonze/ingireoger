@@ -1,61 +1,62 @@
 <aside class="sidebar <%= isMobile ? 'hidden-mobile' : (sidebarCollapsed ? 'sidebar--collapsed' : '') %>">
 
+  <% categories.forEach(cat => {
+    const cleanId = cat.name.replace(/\s+/g, '').toLowerCase();
+  %>
 
-  <% const categories=[ { name: 'Jeux' , icon: 'dices' , link: '/game' }, { name: 'Portefeuille' , icon: 'wallet' ,
-    link: '/wallet' }, { name: 'Progression' , icon: 'trending-up' , link: '/progression' }, { name: 'Promotion' ,
-    icon: 'award' , link: '/promotion' }, { name: 'Réglage' , icon: 'user-round-cog' , link: '/settings' }, ]; %>
+    <div class="sidebar-section">
+      <button type="button"
+        class="sidebar-toggle"
+        data-id="<%= cleanId %>"
+        data-slug="<%= cat.slug %>"
+        data-name="<%= cat.name %>"
+        data-icon="<%= cat.icon %>"
+        data-pages='<%- JSON.stringify(cat.pages || []) %>'
+        onclick="openModalWithData('mobileCategoryModal', this)">
+        
+        <div class="sidebar-toggle-left">
+          <i data-lucide="<%= cat.icon %>" class="sidebar-icon"></i>
 
-    <% categories.forEach(cat=> {
-      const cleanId = cat.name.replace(/\s+/g, '').toLowerCase();
-      %>
-
-      <div class="sidebar-section">
-        <a href="<%= (isMobile || sidebarCollapsed) ? cat.link : '#' %>" class="sidebar-toggle" data-id="<%= cleanId %>"
-          onclick="<%= (!isMobile && !sidebarCollapsed) ? `toggleSidebarSection('${cleanId}')` : '' %>">
-          <div class="sidebar-toggle-left">
-            <i data-lucide="<%= cat.icon %>" class="sidebar-icon"></i>
-            <% if (!sidebarCollapsed && !isMobile) { %>
-              <span class="sidebar-label">
-                <%= cat.name %>
-              </span>
-              <% } %>
-          </div>
           <% if (!sidebarCollapsed && !isMobile) { %>
-            <i data-lucide="chevron-down" class="sidebar-arrow"></i>
-            <% } %>
-        </a>
+            <span class="sidebar-label"><%= cat.name %></span>
+          <% } %>
+        </div>
 
         <% if (!sidebarCollapsed && !isMobile) { %>
-          <div class="sidebar-submenu" id="submenu-<%= cleanId %>">
-            <% if (sidebarPages && sidebarPages[cat.name]) { %>
-              <% sidebarPages[cat.name].forEach(page=> { %>
-                <a href="/<%= cat.name.toLowerCase() %>/<%= page.route %>">
-                  <%= page.label %>
-                </a>
-                <% }) %>
-                  <% } else { %>
-                    <p class="empty">Aucune page</p>
-                    <% } %>
-          </div>
+          <i data-lucide="chevron-down" class="sidebar-arrow" data-id="<%= cleanId %>"></i>
+        <% } %>
+      </button>
+
+      <% if (!sidebarCollapsed && !isMobile) { %>
+        <div class="sidebar-submenu" id="submenu-<%= cleanId %>">
+          <% if (cat.pages && cat.pages.length > 0) { %>
+            <% cat.pages.forEach(page => { %>
+              <a href="/<%= cat.slug %>/<%= page.route %>">
+                <%= page.label %>
+              </a>
+            <% }) %>
+          <% } else { %>
+            <p class="empty">Aucune page</p>
           <% } %>
-      </div>
+        </div>
+      <% } %>
+    </div>
 
-      <% }) %>
+  <% }) %>
 
-        <% if (isLoggedIn) { %>
-          <div class="sidebar-logout sidebar-section">
-            <form action="/logout" method="POST" style="width: 100%;">
-              <button type="submit" class="logout-button">
-                <div class="sidebar-toggle-left">
-                  <i data-lucide="log-out" class="sidebar-icon"></i>
-                  <% if (!sidebarCollapsed && !isMobile) { %>
-                    <span class="sidebar-label">Déconnexion</span>
-                    <% } %>
-                </div>
-              </button>
-            </form>
+  <% if (isLoggedIn) { %>
+    <div class="sidebar-logout sidebar-section">
+      <form action="/logout" method="POST" style="width: 100%;">
+        <button type="submit" class="logout-button">
+          <div class="sidebar-toggle-left">
+            <i data-lucide="log-out" class="sidebar-icon"></i>
+            <% if (!sidebarCollapsed && !isMobile) { %>
+              <span class="sidebar-label">Déconnexion</span>
+            <% } %>
           </div>
-          <% } %>
-
+        </button>
+      </form>
+    </div>
+  <% } %>
 
 </aside>

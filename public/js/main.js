@@ -15,7 +15,7 @@ async function loadCryptoDetails() {
     console.log("💱 Crypto détectée :", currency);
 
     try {
-        const res = await fetch(`/api/crypto-details?currency=${currency}`, {
+        const res = await fetch(`/api/cryptoDetail?crypto=${currency}`, {
             method: 'GET',
             credentials: 'same-origin'
         });
