@@ -144,7 +144,6 @@
                       document.querySelectorAll('.sidebar-toggle').forEach(el => {
                         el.addEventListener('click', (e) => {
                           e.preventDefault();
-
                           if (isMobile()) {
                             openModalWithData('mobileCategoryModal', el);
                             return;
@@ -458,6 +457,7 @@
                     }
 
                     function openModalWithData(modalId, el) {
+                      if (!isMobile()) return;
                       const modal = document.getElementById(modalId);
                       if (!modal) return;
 
