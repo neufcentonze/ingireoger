@@ -5,9 +5,7 @@ const checkFeature = require('../middlewares/checkFeature');
 
 // ✅ Middleware pour vérifier que l'utilisateur est connecté
 function isLoggedIn(req, res, next) {
-  if (!req.session?.user?.email) {
-    return res.status(401).json({ error: 'Non connecté' });
-  }
+  res.locals.isAuthenticated = !!req.session?.user?.email;
   next();
 }
 

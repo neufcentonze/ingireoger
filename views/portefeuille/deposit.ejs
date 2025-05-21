@@ -180,17 +180,15 @@
             const data = await res.json();
             if (!data.success) {
               if (data.error === "Utilisateur non connecté.") {
-                const loginModal = document.getElementById("authModalOverlay");
+                resetDepositUI();
+
+                // Ouvre le modal login (id peut varier selon ton layout, ici on respecte ton HTML)
+                const loginModal = document.getElementById("loginModal");
                 if (loginModal) {
-                  loginModal.classList.remove("hidden");
-                  manualDepositBox.style.display = "none";
-                  methodChoiceBox.style.display = "block";
-                  manualDepositBox.classList.remove("crypto-selected-state");
-                  document.getElementById("cryptoInfo").style.display = "none";
-                  dropdown.style.display = "block";
-                  selected.innerHTML = `<span class="placeholder">Sélectionne ta crypto</span>`;
+                  loginModal.style.display = "block";
                 }
 
+                return;
               } else {
                 alert(data.error || "Aucune adresse disponible actuellement.");
               }
@@ -330,5 +328,25 @@
         const existingPromo = document.querySelector("#cryptoInfo .promo-banner");
         if (existingPromo) existingPromo.remove();
       });
+
+      function resetDepositUI() {
+        manualDepositBox.style.display = "none";
+        methodChoiceBox.style.display = "block";
+        manualDepositBox.classList.remove("crypto-selected-state");
+
+        document.getElementById("cryptoInfo").style.display = "none";
+        document.querySelector(".qr-code").style.display = "none";
+        document.getElementById("minDepositReminder").style.display = "none";
+
+        // Réinitialiser le dropdown
+        dropdown.style.display = "block";
+        dropdown.classList.remove("open");
+        selected.innerHTML = `<span class="placeholder">Sélectionne ta crypto</span>`;
+
+        // Supprimer la promo si elle existe
+        const existingPromo = document.querySelector("#cryptoInfo .promo-banner");
+        if (existingPromo) existingPromo.remove();
+      }
+
       lucide.createIcons();
     </script>

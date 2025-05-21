@@ -494,6 +494,26 @@
                       modal.style.display = 'block';
                     }
                   </script>
+                  <script>
+                    const isAuthenticated = <%= JSON.stringify(isAuthenticated) %>;
+
+                    // 🛡️ Liste des routes qui nécessitent un login modal automatique
+                    const loginRequiredRoutes = [
+                      '/wallet/deposit',
+                    ];
+
+                    const currentPath = window.location.pathname;
+
+                    // Si l'utilisateur est non connecté ET qu'on est sur une route protégée
+                    if (!isAuthenticated && loginRequiredRoutes.includes(currentPath)) {
+                      document.addEventListener('DOMContentLoaded', () => {
+                        const loginModal = document.getElementById('loginModal');
+                        if (loginModal) {
+                          loginModal.style.display = 'block'; // ou .classList.add('show') selon ton système
+                        }
+                      });
+                    }
+                  </script>
 </body>
 
 </html>
