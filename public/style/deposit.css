@@ -278,6 +278,10 @@ body {
     transition: transform 0.3s ease;
 }
 
+#qrCode canvas {
+    border-radius: 5px;
+}
+
 @media (max-width: 768px) {
     .deposit-box {
         margin-right: -15px;
