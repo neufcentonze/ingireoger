@@ -10,66 +10,67 @@
 </head>
 
 <div class="main">
-
-  <div class="main-inner">
-    <div class="deposit-box" id="method-choice">
-      <div class="deposit-option">
-        <button class="btn wallet-connect" disabled style="opacity: 0.5; cursor: not-allowed;">
-          Se connecter à mon wallet
-        </button>
-        <p class="option-desc">Méthode rapide et sécurisée</p>
-      </div>
-      <div class="deposit-option">
-        <button class="btn manual-pay">Déposer manuellement</button>
-        <p class="option-desc">Sans connexion, envoi libre, QR Code</p>
-      </div>
-    </div>
-
-    <div class="deposit-box" id="manual-deposit" style="display: none;">
-      <div class="crypto-dropdown deposit-dropdown" id="cryptoDropdownDeposit">
-        <div class="selected">
-          <span class="placeholder">Sélectionne ta crypto</span>
+  <div class="main-inner-wrapper">
+    <div class="main-inner">
+      <div class="deposit-box" id="method-choice">
+        <div class="deposit-option">
+          <button class="btn wallet-connect" disabled style="opacity: 0.5; cursor: not-allowed;">
+            Se connecter à mon wallet
+          </button>
+          <p class="option-desc">Méthode rapide et sécurisée</p>
         </div>
-        <div class="options">
-          <div class="option" data-img="/images/btc.png" data-symbol="btc">
-            <img src="/images/btc.png" alt="Bitcoin">
-            <div class="info">
-              <strong>Bitcoin</strong>
-              <span>Minimum: €25.00, Frais: 0%</span>
-            </div>
-          </div>
-          <div class="option" data-img="/images/eth.svg" data-symbol="eth">
-            <img src="/images/eth.svg" alt="Ethereum">
-            <div class="info">
-              <strong>Ethereum</strong>
-              <span>Minimum: €25.00, Frais: 0%</span>
-            </div>
-          </div>
-          <div class="option" data-img="/images/sol.png" data-symbol="sol">
-            <img src="/images/sol.png" alt="Solana">
-            <div class="info">
-              <strong>Solana</strong>
-              <span>Minimum: €25.00, Frais: 0%</span>
-            </div>
-          </div>
-          <div class="option" data-img="/images/ltc.png" data-symbol="ltc">
-            <img src="/images/ltc.png" alt="Litecoin">
-            <div class="info">
-              <strong>Litecoin</strong>
-              <span>Minimum: €25.00, Frais: 0%</span>
-            </div>
-          </div>
+        <div class="deposit-option">
+          <button class="btn manual-pay">Déposer manuellement</button>
+          <p class="option-desc">Sans connexion, envoi libre, QR Code</p>
         </div>
       </div>
-      <div id="cryptoInfo" style="display: none;">
-        <div class="deposit-header" style="
+
+      <div class="deposit-box" id="manual-deposit" style="display: none;">
+        <div class="crypto-dropdown deposit-dropdown" id="cryptoDropdownDeposit">
+          <div class="selected">
+            <span class="placeholder">Sélectionne ta crypto</span>
+            <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+          </div>
+          <div class="options">
+            <div class="option" data-img="/images/btc.png" data-symbol="btc">
+              <img src="/images/btc.png" alt="Bitcoin">
+              <div class="info">
+                <strong>Bitcoin</strong>
+                <span>Minimum: €25.00, Frais: 0%</span>
+              </div>
+            </div>
+            <div class="option" data-img="/images/eth.svg" data-symbol="eth">
+              <img src="/images/eth.svg" alt="Ethereum">
+              <div class="info">
+                <strong>Ethereum</strong>
+                <span>Minimum: €25.00, Frais: 0%</span>
+              </div>
+            </div>
+            <div class="option" data-img="/images/sol.png" data-symbol="sol">
+              <img src="/images/sol.png" alt="Solana">
+              <div class="info">
+                <strong>Solana</strong>
+                <span>Minimum: €25.00, Frais: 0%</span>
+              </div>
+            </div>
+            <div class="option" data-img="/images/ltc.png" data-symbol="ltc">
+              <img src="/images/ltc.png" alt="Litecoin">
+              <div class="info">
+                <strong>Litecoin</strong>
+                <span>Minimum: €25.00, Frais: 0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="cryptoInfo" style="display: none;">
+          <div class="deposit-header" style="
                             display: flex;
                             align-items: center;
                             justify-content: space-between;
                             margin-bottom: 24px;
                         ">
-          <!-- Flèche retour -->
-          <div id="backBtn" style="
+            <!-- Flèche retour -->
+            <div id="backBtn" style="
                                 cursor: pointer;
                                 font-size: 22px;
                                 color: white;
@@ -78,11 +79,11 @@
                                 gap: 6px;
                                 flex: 1;
                             ">
-            <span style="font-size: 26px;">←</span>
-          </div>
+              <span style="font-size: 26px;">←</span>
+            </div>
 
-          <!-- Titre centré -->
-          <h2 style="
+            <!-- Titre centré -->
+            <h2 style="
                                 flex: 2;
                                 text-align: center;
                                 color: white;
@@ -90,27 +91,27 @@
                                 margin: 0;
                             ">Dépôt manuel</h2>
 
-          <!-- Placeholder pour équilibrer -->
-          <div style="flex: 1;"></div>
-        </div>
+            <!-- Placeholder pour équilibrer -->
+            <div style="flex: 1;"></div>
+          </div>
 
 
-        <!-- Bloc adresse + logo -->
-        <div class="crypto-address-block">
-          <img id="cryptoLogoInside" src="" alt="Logo" class="crypto-icon-inside">
-          <input id="cryptoAddress" type="text" readonly>
+          <!-- Bloc adresse + logo -->
+          <div class="crypto-address-block">
+            <img id="cryptoLogoInside" src="" alt="Logo" class="crypto-icon-inside">
+            <input id="cryptoAddress" type="text" readonly>
 
-          <span class="copy-btn-wrapper">
-            <span id="copyBtn" class="lucide-icon" title="Copier" style="cursor: pointer;">
-              <i data-lucide="clipboard-copy"></i>
+            <span class="copy-btn-wrapper">
+              <span id="copyBtn" class="lucide-icon" title="Copier" style="cursor: pointer;">
+                <i data-lucide="clipboard-copy"></i>
+              </span>
             </span>
-          </span>
 
-        </div>
+          </div>
 
-        <!-- QR Code EN DESSOUS -->
-        <div class="qr-code" style="display: none; justify-content: center; margin-top: 20px;">
-          <div class="qr-wrapper" style="
+          <!-- QR Code EN DESSOUS -->
+          <div class="qr-code" style="display: none; justify-content: center; margin-top: 20px;">
+            <div class="qr-wrapper" style="
                                     border-radius: 16px;
                                     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
                                     padding: 16px;
@@ -119,234 +120,247 @@
                                     align-items: center;
                                     background-color: #282828;
                                 ">
-            <div style="position: relative; width: 180px; height: 180px;">
-              <div id="qrCode" style="width: 180px; height: 180px;"></div>
-              <img id="qrLogo" src="/images/dLogo.png" alt="Crypto Logo" class="qr-logo"
-                style="position: absolute; top: 50%; left: 50%; width: 30px; height: 30px; transform: translate(-50%, -50%); background: #1a1f24; border-radius: 6px; padding: 2px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);">
+              <div style="position: relative; width: 180px; height: 180px;">
+                <div id="qrCode" style="width: 180px; height: 180px;"></div>
+                <img id="qrLogo" src="/images/dLogo.png" alt="Crypto Logo" class="qr-logo"
+                  style="position: absolute; top: 50%; left: 50%; width: 30px; height: 30px; transform: translate(-50%, -50%); background: #1a1f24; border-radius: 6px; padding: 2px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);">
+              </div>
             </div>
           </div>
-        </div>
-        <p id="minDepositReminder" style="
+          <p id="minDepositReminder" style="
                                     color: #aaa;
                                     text-align: center;
                                     margin-top: 16px;
                                     font-size: 13px;
                                     display: none;
                                 ">
-          Le montant minimum pour un dépôt est de 25 €
-        </p>
+            Le montant minimum pour un dépôt est de 25 €
+          </p>
+        </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <script>
-      const manualBtn = document.querySelector(".manual-pay");
-      const methodChoiceBox = document.getElementById("method-choice");
-      const manualDepositBox = document.getElementById("manual-deposit");
+<script>
+  const manualBtn = document.querySelector(".manual-pay");
+  const methodChoiceBox = document.getElementById("method-choice");
+  const manualDepositBox = document.getElementById("manual-deposit");
 
-      manualBtn.addEventListener("click", () => {
-        methodChoiceBox.style.display = "none";
-        manualDepositBox.style.display = "block";
-      });
+  manualBtn.addEventListener("click", () => {
+    methodChoiceBox.style.display = "none";
+    manualDepositBox.style.display = "block";
+  });
 
-      const dropdown = document.getElementById("cryptoDropdownDeposit");
-      const selected = dropdown.querySelector(".selected");
-      const options = dropdown.querySelectorAll(".option");
+  const dropdown = document.getElementById("cryptoDropdownDeposit");
+  const selected = dropdown.querySelector(".selected");
+  const options = dropdown.querySelectorAll(".option");
 
-      selected.addEventListener("click", () => {
-        dropdown.classList.toggle("open");
-      });
+  selected.addEventListener("click", (e) => {
+    e.stopPropagation(); // évite propagation inutile
 
-      options.forEach(option => {
-        option.addEventListener("click", async () => {
-          const img = option.querySelector("img").src;
-          const name = option.querySelector("strong").innerText;
-          const details = option.querySelector("span").innerText;
-          const currency = option.dataset.symbol;
+    dropdown.classList.toggle("open");
 
-          selected.innerHTML = `
+    const chevron = selected.querySelector('.dropdown-chevron');
+    const isOpen = dropdown.classList.contains("open");
+
+    if (chevron) {
+      chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
+      lucide.createIcons();
+    }
+  });
+
+  options.forEach(option => {
+    option.addEventListener("click", async () => {
+      const img = option.querySelector("img").src;
+      const name = option.querySelector("strong").innerText;
+      const details = option.querySelector("span").innerText;
+      const currency = option.dataset.symbol;
+
+      selected.innerHTML = `
                                     <img src="${img}" alt="${name}">
                                     <div class="info">
                                         <strong>${name}</strong>
                                         <span>${details}</span>
                                     </div>
                                 `;
-          dropdown.style.display = "none";
+      dropdown.style.display = "none";
 
 
-          try {
-            const res = await fetch(`/api/wallet/address/${currency}`, {
-              credentials: 'include'
-            });
-            const data = await res.json();
-            if (!data.success) {
-              if (data.error === "Utilisateur non connecté.") {
-                resetDepositUI();
+      try {
+        const res = await fetch(`/api/wallet/address/${currency}`, {
+          credentials: 'include'
+        });
+        const data = await res.json();
+        if (!data.success) {
+          if (data.error === "Utilisateur non connecté.") {
+            resetDepositUI();
 
-                // Ouvre le modal login (id peut varier selon ton layout, ici on respecte ton HTML)
-                const loginModal = document.getElementById("loginModal");
-                if (loginModal) {
-                  loginModal.style.display = "block";
-                }
+            // Ouvre le modal login (id peut varier selon ton layout, ici on respecte ton HTML)
+            const loginModal = document.getElementById("loginModal");
+            if (loginModal) {
+              loginModal.style.display = "block";
+            }
 
-                return;
-              } else {
-                alert(data.error || "Aucune adresse disponible actuellement.");
-              }
+            return;
+          } else {
+            alert(data.error || "Aucune adresse disponible actuellement.");
+          }
 
-              // Nettoyage de l'UI
-              document.getElementById("cryptoInfo").style.display = "none";
-              manualDepositBox.classList.remove("crypto-selected-state");
-              dropdown.classList.remove("open");
+          // Nettoyage de l'UI
+          document.getElementById("cryptoInfo").style.display = "none";
+          manualDepositBox.classList.remove("crypto-selected-state");
+          dropdown.classList.remove("open");
+          return;
+        }
+
+        // ✅ Si succès : on affiche les infos de dépôt
+        document.getElementById("cryptoInfo").style.display = "block";
+        manualDepositBox.classList.add("crypto-selected-state");
+        document.getElementById("cryptoAddress").value = data.address;
+        document.getElementById("cryptoLogoInside").src = img;
+
+        const qrContainer = document.getElementById("qrCode");
+        qrContainer.innerHTML = "";
+
+        new QRCode(qrContainer, {
+          text: data.address,
+          width: 180,
+          height: 180,
+          colorDark: "#ffffff",
+          colorLight: "#1a1f24",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+
+        document.querySelector(".qr-code").style.display = "flex";
+        document.getElementById("minDepositReminder").style.display = "block";
+
+        // ⏳ Ajout d’un compte à rebours si `expiresIn` est présent
+        const existingCountdown = document.getElementById("addressCountdown");
+        if (existingCountdown) existingCountdown.remove();
+
+        if (data.expiresIn && data.expiresIn > 0) {
+          const expiration = new Date(Date.now() + data.expiresIn * 1000);
+          const timerElement = document.createElement("p");
+          timerElement.id = "addressCountdown";
+          timerElement.style.color = "#aaaaaa";
+          timerElement.style.fontSize = "13px";
+          timerElement.style.textAlign = "center";
+          timerElement.style.marginTop = "-5px";
+
+          document.getElementById("cryptoInfo").appendChild(timerElement);
+
+          function updateCountdown() {
+            const now = new Date();
+            const diff = expiration - now;
+
+            if (diff <= 0) {
+              timerElement.textContent = "⛔ Adresse expirée.";
+              timerElement.style.color = "#aaaaaa";
+              clearInterval(intervalId);
               return;
             }
 
-            // ✅ Si succès : on affiche les infos de dépôt
-            document.getElementById("cryptoInfo").style.display = "block";
-            manualDepositBox.classList.add("crypto-selected-state");
-            document.getElementById("cryptoAddress").value = data.address;
-            document.getElementById("cryptoLogoInside").src = img;
-
-            const qrContainer = document.getElementById("qrCode");
-            qrContainer.innerHTML = "";
-
-            new QRCode(qrContainer, {
-              text: data.address,
-              width: 180,
-              height: 180,
-              colorDark: "#ffffff",
-              colorLight: "#1a1f24",
-              correctLevel: QRCode.CorrectLevel.H
-            });
-
-            document.querySelector(".qr-code").style.display = "flex";
-            document.getElementById("minDepositReminder").style.display = "block";
-
-            // ⏳ Ajout d’un compte à rebours si `expiresIn` est présent
-            const existingCountdown = document.getElementById("addressCountdown");
-            if (existingCountdown) existingCountdown.remove();
-
-            if (data.expiresIn && data.expiresIn > 0) {
-              const expiration = new Date(Date.now() + data.expiresIn * 1000);
-              const timerElement = document.createElement("p");
-              timerElement.id = "addressCountdown";
-              timerElement.style.color = "#aaaaaa";
-              timerElement.style.fontSize = "13px";
-              timerElement.style.textAlign = "center";
-              timerElement.style.marginTop = "-5px";
-
-              document.getElementById("cryptoInfo").appendChild(timerElement);
-
-              function updateCountdown() {
-                const now = new Date();
-                const diff = expiration - now;
-
-                if (diff <= 0) {
-                  timerElement.textContent = "⛔ Adresse expirée.";
-                  timerElement.style.color = "#aaaaaa";
-                  clearInterval(intervalId);
-                  return;
-                }
-
-                const minutes = Math.floor(diff / 60000);
-                const seconds = Math.floor((diff % 60000) / 1000);
-                timerElement.textContent = `Adresse valable encore ${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
-              }
-
-              updateCountdown();
-              const intervalId = setInterval(updateCountdown, 1000);
-            }
-
-
-            // 🔁 Retirer l'ancienne promo si existante
-            const existingPromo = document.querySelector("#cryptoInfo .promo-banner");
-            if (existingPromo) existingPromo.remove();
-
-            // 🎁 Ajout de la promo si premier dépôt
-            if (data.isFirstDeposit) {
-              const promoDiv = document.createElement("div");
-              promoDiv.classList.add("promo-banner");
-
-              promoDiv.style.marginTop = "20px";
-              promoDiv.style.padding = "14px";
-              promoDiv.style.backgroundColor = "#2e7d32";
-              promoDiv.style.borderRadius = "8px";
-              promoDiv.style.textAlign = "center";
-              promoDiv.style.color = "white";
-              promoDiv.style.fontSize = "14px";
-              promoDiv.style.fontWeight = "500";
-              promoDiv.innerText = "🎁 Offre spéciale : ton premier dépôt est doublé (max 250€) !";
-
-              const cryptoInfo = document.getElementById("cryptoInfo");
-              cryptoInfo.insertBefore(promoDiv, cryptoInfo.children[1]);
-            }
-          } catch (err) {
-            console.error("⚠️ Erreur fetch :", err);
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            timerElement.textContent = `Adresse valable encore ${minutes} min ${seconds < 10 ? '0' : ''}${seconds} sec`;
           }
-        });
-      });
 
-      document.addEventListener("click", (e) => {
-        if (!dropdown.contains(e.target)) {
-          dropdown.classList.remove("open");
+          updateCountdown();
+          const intervalId = setInterval(updateCountdown, 1000);
         }
-      });
 
-      const copyBtn = document.getElementById("copyBtn");
 
-      copyBtn.addEventListener("click", () => {
-        const address = document.getElementById("cryptoAddress").value;
-        if (!address) return;
-
-        navigator.clipboard.writeText(address).then(() => {
-          copyBtn.src = "/images/check.png";
-          copyBtn.classList.add("pulse");
-
-          setTimeout(() => {
-            copyBtn.src = "/images/copie.png";
-            copyBtn.classList.remove("pulse");
-          }, 2000);
-        });
-      });
-      const backBtn = document.getElementById("backBtn");
-      backBtn.addEventListener("click", () => {
-        document.getElementById("cryptoInfo").style.display = "none";
-        document.querySelector(".qr-code").style.display = "none";
-        document.getElementById("minDepositReminder").style.display = "none";
-
-        // Cacher le bloc de dépôt manuel
-        manualDepositBox.classList.remove("crypto-selected-state");
-        manualDepositBox.style.display = "none";
-
-        // Réafficher les choix
-        methodChoiceBox.style.display = "block";
-
-        // Réinitialiser le dropdown
-        dropdown.style.display = "block";
-        selected.innerHTML = `<span class="placeholder">Sélectionne ta crypto</span>`;
-
-        // Supprimer la promo si elle existe
+        // 🔁 Retirer l'ancienne promo si existante
         const existingPromo = document.querySelector("#cryptoInfo .promo-banner");
         if (existingPromo) existingPromo.remove();
-      });
 
-      function resetDepositUI() {
-        manualDepositBox.style.display = "none";
-        methodChoiceBox.style.display = "block";
-        manualDepositBox.classList.remove("crypto-selected-state");
+        // 🎁 Ajout de la promo si premier dépôt
+        if (data.isFirstDeposit) {
+          const promoDiv = document.createElement("div");
+          promoDiv.classList.add("promo-banner");
 
-        document.getElementById("cryptoInfo").style.display = "none";
-        document.querySelector(".qr-code").style.display = "none";
-        document.getElementById("minDepositReminder").style.display = "none";
+          promoDiv.style.marginTop = "20px";
+          promoDiv.style.padding = "14px";
+          promoDiv.style.backgroundColor = "#2e7d32";
+          promoDiv.style.borderRadius = "8px";
+          promoDiv.style.textAlign = "center";
+          promoDiv.style.color = "white";
+          promoDiv.style.fontSize = "14px";
+          promoDiv.style.fontWeight = "500";
+          promoDiv.innerText = "🎁 Offre spéciale : ton premier dépôt est doublé (max 250€) !";
 
-        // Réinitialiser le dropdown
-        dropdown.style.display = "block";
-        dropdown.classList.remove("open");
-        selected.innerHTML = `<span class="placeholder">Sélectionne ta crypto</span>`;
-
-        // Supprimer la promo si elle existe
-        const existingPromo = document.querySelector("#cryptoInfo .promo-banner");
-        if (existingPromo) existingPromo.remove();
+          const cryptoInfo = document.getElementById("cryptoInfo");
+          cryptoInfo.insertBefore(promoDiv, cryptoInfo.children[1]);
+        }
+      } catch (err) {
+        console.error("⚠️ Erreur fetch :", err);
       }
+    });
+  });
 
-      lucide.createIcons();
-    </script>
+  document.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove("open");
+    }
+  });
+
+  const copyBtn = document.getElementById("copyBtn");
+
+  copyBtn.addEventListener("click", () => {
+    const address = document.getElementById("cryptoAddress").value;
+    if (!address) return;
+
+    navigator.clipboard.writeText(address).then(() => {
+      copyBtn.src = "/images/check.png";
+      copyBtn.classList.add("pulse");
+
+      setTimeout(() => {
+        copyBtn.src = "/images/copie.png";
+        copyBtn.classList.remove("pulse");
+      }, 2000);
+    });
+  });
+  const backBtn = document.getElementById("backBtn");
+  backBtn.addEventListener("click", () => {
+    document.getElementById("cryptoInfo").style.display = "none";
+    document.querySelector(".qr-code").style.display = "none";
+    document.getElementById("minDepositReminder").style.display = "none";
+
+    // Cacher le bloc de dépôt manuel
+    manualDepositBox.classList.remove("crypto-selected-state");
+    manualDepositBox.style.display = "none";
+
+    // Réafficher les choix
+    methodChoiceBox.style.display = "block";
+
+    // Réinitialiser le dropdown
+    dropdown.style.display = "block";
+    selected.innerHTML = `<span class="placeholder">Sélectionne ta crypto</span>`;
+
+    // Supprimer la promo si elle existe
+    const existingPromo = document.querySelector("#cryptoInfo .promo-banner");
+    if (existingPromo) existingPromo.remove();
+  });
+
+  function resetDepositUI() {
+    manualDepositBox.style.display = "none";
+    methodChoiceBox.style.display = "block";
+    manualDepositBox.classList.remove("crypto-selected-state");
+
+    document.getElementById("cryptoInfo").style.display = "none";
+    document.querySelector(".qr-code").style.display = "none";
+    document.getElementById("minDepositReminder").style.display = "none";
+
+    // Réinitialiser le dropdown
+    dropdown.style.display = "block";
+    dropdown.classList.remove("open");
+    selected.innerHTML = `<span class="placeholder">Sélectionne ta crypto</span>`;
+
+    // Supprimer la promo si elle existe
+    const existingPromo = document.querySelector("#cryptoInfo .promo-banner");
+    if (existingPromo) existingPromo.remove();
+  }
+
+  lucide.createIcons();
+</script>

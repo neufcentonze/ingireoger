@@ -495,8 +495,8 @@
                     }
                   </script>
                   <script>
-                    const isAuthenticated = <%= JSON.stringify(isAuthenticated) %>;
-
+                    const isAuthenticated = <%= JSON.stringify(typeof isLoggedIn !== 'undefined' && isLoggedIn) %>;
+                    
                     // 🛡️ Liste des routes qui nécessitent un login modal automatique
                     const loginRequiredRoutes = [
                       '/wallet/deposit',
@@ -513,6 +513,15 @@
                         }
                       });
                     }
+                  </script>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      const noScrollPages = ['/wallet/deposit']; // tu peux en ajouter d'autres ici
+                      if (noScrollPages.includes(window.location.pathname)) {
+                        document.body.classList.add("no-scroll");
+                      }
+                    });
                   </script>
 </body>
 
