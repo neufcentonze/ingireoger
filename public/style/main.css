@@ -357,30 +357,80 @@ main {
   color: #fff;
 }
 
-table {
-  border-collapse: collapse;
-  width: 100%;
-  table-layout: fixed;
-  /* force chaque colonne à avoir la même largeur */
-}
-
-th,
-td {
-  padding: 10px;
-  text-align: center;
-  /* ou left si tu préfères */
-  border-bottom: 1px solid #444;
-  white-space: nowrap;
-  /* empêche le retour à la ligne */
+.transactions-table {
+  display: flex;
+  flex-direction: column;
+  background-color: #181818;
+  border-radius: 12px;
   overflow: hidden;
-  text-overflow: ellipsis;
+  font-family: 'Inter', sans-serif;
+  margin: 20px;
+  margin-top: 30px;
+  font-size: 13px;
 }
 
-thead th {
-  font-weight: bold;
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1fr 1.2fr 1fr 1.4fr;
+  /* proportions personnalisées */
+  padding: 12px 16px;
+  align-items: center;
+  text-align: center;
+}
+
+.table-header {
   background-color: #222;
+  font-weight: 600;
+  color: #f5f5f5;
+  font-size: 14px;
+  border-bottom: 1px solid #333;
 }
 
-tbody tr:nth-child(even) {
-  background-color: #111;
+.table-row {
+  background-color: #141414;
+  border-top: 1px solid #2a2a2a;
+  color: #ccc;
+  transition: background 0.2s;
+}
+
+.table-row:hover {
+  background-color: #1e1e1e;
+}
+
+.table-header div,
+.table-row div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  /* pour l’espace entre icône et texte */
+}
+
+.table-row img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.table-row .positive {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.table-row .negative {
+  color: #f44336;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 600px) {
+  .mobile-hide {
+    display: none !important;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1.5fr 1fr 1.5fr;
+  }
 }

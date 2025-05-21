@@ -71,21 +71,18 @@
   <i data-lucide="gift" style="margin-right: 10px;"></i>
   Transactions
 </h2>
-<table style="width: 100%; margin-top: 20px; color: #fff;">
-  <thead>
-    <tr>
-      <th>Jeu</th>
-      <th>Utilisateur</th>
-      <th>Temps</th>
-      <th>Montant du Pari</th>
-      <th>Multiplicateur</th>
-      <th>Paiement</th>
-    </tr>
-  </thead>
-  <tbody id="transactionTable">
-    <!-- Les lignes de transactions seront ajoutées ici dynamiquement -->
-  </tbody>
-</table>
+
+<div class="transactions-table" id="transactionTableStyled">
+  <div class="table-header">
+    <div>Jeu</div>
+    <div class="mobile-hide">Utilisateur</div>
+    <div class="mobile-hide">Temps</div>
+    <div class="mobile-hide">Pari</div>
+    <div>Multi</div>
+    <div>Paiement</div>
+  </div>
+</div>
+
 
 <div style="height: 10vh; background: transparent;"></div>
 <div style="height: 200px;"></div>
@@ -129,20 +126,41 @@
   });
 
   function addTransaction(game, user, time, betAmount, multiplier, payout) {
-    const table = document.getElementById('transactionTable');
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${game}</td>
-      <td>${user}</td>
-      <td>${time}</td>
-      <td>${betAmount}</td>
-      <td>${multiplier}</td>
-      <td>${payout}</td>
-    `;
-    table.insertBefore(row, table.firstChild);
+    const table = document.getElementById('transactionTableStyled');
 
-    while (table.rows.length > 10) {
-      table.deleteRow(table.rows.length - 1); // supprime la plus ancienne
+    const row = document.createElement('div');
+    row.classList.add('table-row');
+
+    row.innerHTML = `
+      <div>${game}</div>
+      <div class="mobile-hide">${user}</div>
+      <div class="mobile-hide">${time}</div>
+      <div class="mobile-hide">${formatAmountWithIcon(betAmount)}</div>
+      <div>${multiplier}</div>
+      <div class="${parseFloat(payout) >= 0 ? 'positive' : 'negative'}">${formatAmountWithIcon(payout)}</div>
+    `;
+    // Ajoute en haut
+    table.insertBefore(row, table.children[1]);
+
+    // Garde seulement les 10 derniers
+    const rows = table.querySelectorAll('.table-row');
+    if (rows.length > 10) {
+      table.removeChild(rows[rows.length - 1]);
     }
   }
+
+  function formatAmountWithIcon(amountStr) {
+    let [value, currency] = amountStr.split(" ");
+    const iconPath = `/images/${currency}.` + (currency === "eth" ? "svg" : "png");
+
+    const isNegative = value.startsWith("-");
+    value = value.replace("-", "");
+
+    return `
+    ${isNegative ? '-' : ''}
+    ${value}
+    <img src="${iconPath}" alt="${currency}" style="width: 16px; vertical-align: middle; margin-left: 4px;">
+  `;
+  }
+
 </script>
