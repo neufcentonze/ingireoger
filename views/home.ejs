@@ -11,64 +11,71 @@
 
 <h2
   style="color: #fff; margin-left: 20px; display: flex; align-items: center; font-size: 18px; margin-top: 10px; margin-bottom: -5px;">
-  <i data-lucide="gift" style="margin-right: 10px;"></i>
+  <i data-lucide="gift" style="margin-right: 10px; height: 20px;"></i>
   Promotions
 </h2>
 <section class="promotions-wrapper">
-  <div class="promotions-scroll-container fixed-width" id="promoScroll">
-    <% const promos=[ { label: "Offre d'inscription" , title: "💸 Votre premier dépôt est doublé !" ,
-      desc: "Votre 1er dépôt doublé jusqu'à 250 €" , img: "/images/vault.png" }, { label: "Promotion" ,
-      title: "💥 Surpasse les autres au classement" , desc: "Jusqu'à 3 000 € en jeu chaque semaine" ,
-      img: "/images/trophee.png" }, { label: "Tirage au sort" , title: "🎫 Chaque mise peut tout changer" ,
-      desc: "10 000 € à gagner chaque mois !" , img: "/images/giveaway.png" }, ]; %>
+  <div class="promo-inner">
+    <div class="promotions-scroll-container fixed-width" id="promoScroll">
+      <% const promos=[ { label: "Offre d'inscription" , title: "Votre premier dépôt est doublé !" ,
+        desc: "Votre 1er dépôt doublé jusqu'à 250 €" , img: "/images/promo-w1.png" }, { label: "Promotion" ,
+        title: "Surpasse les autres au classement" , desc: "Jusqu'à 3 000 € en jeu chaque semaine" ,
+        img: "/images/promo-w2.png" }, { label: "Tirage au sort" , title: "Chaque mise peut tout changer" ,
+        desc: "10 000 € à gagner chaque mois !" , img: "/images/giveaway.png" }, ]; %>
 
-      <% promos.forEach(promo=> { %>
-        <div class="promo-card">
-          <div class="promo-text">
-            <span class="promo-label">
-              <%= promo.label %>
-            </span>
-            <h3>
-              <%= promo.title %>
-            </h3>
-            <p>
-              <%= promo.desc %>
-            </p>
-            <button class="promo-btn">Voir</button>
+        <% promos.forEach(promo => { %>
+          <div class="promo-card">
+            <div class="promo-text">
+              <span class="promo-label">
+                <%= promo.label %>
+              </span>
+              <h3>
+                <%= promo.title %>
+              </h3>
+              <p>
+                <%= promo.desc %>
+              </p>
+              <button class="promo-btn">Voir</button>
+            </div>
+            <div class="promo-img">
+              <img src="<%= promo.img %>" alt="Promotion">
+            </div>
           </div>
-          <div class="promo-img">
-            <img src="<%= promo.img %>" alt="Promotion">
-          </div>
-        </div>
-        <% }) %>
+          <% }) %>
+    </div>
+
+    <!-- Flèches -->
+    <button class="arrow left" id="leftArrow">&#10094;</button>
+    <button class="arrow right" id="rightArrow">&#10095;</button>
   </div>
-
-  <!-- Flèches -->
-  <button class="arrow left" id="leftArrow">&#10094;</button>
-  <button class="arrow right" id="rightArrow">&#10095;</button>
 </section>
 
 <h2
   style="color: #fff; margin-left: 20px; display: flex; align-items: center; font-size: 18px; margin-top: 10px; margin-bottom: -5px;">
-  <i data-lucide="flame" style="margin-right: 10px;"></i>
+  <i data-lucide="flame" style="margin-right: 10px; height: 20px;"></i>
   Djelo Games
 </h2>
-<section class="games-carousel">
-  <% games.forEach(game=> { %>
-    <div class="game-card" style="position: relative;">
-      <a href="/game/<%= game.name %>">
-        <img src="<%= game.image %>" alt="<%= game.name %>" style="border-radius: 10px;">
-      </a>
-      <h3 style="color: #fff; margin-left: 1px; font-size: 14px; text-align: left;">
-        <%= game.name %>
-      </h3>
+<section class="games-wrapper">
+  <div class="game-inner">
+    <div class="games-carousel" id="gameScroll">
+      <% games.forEach(game=> { %>
+        <div class="game-card" style="position: relative;">
+          <a href="/game/<%= game.name %>" draggable="false">
+            <img src="<%= game.image %>" alt="<%= game.name %>" draggable="false">
+          </a>
+          <h3 style="color: #fff; margin-left: 1px; font-size: 14px; text-align: left;">
+            <%= game.name %>
+          </h3>
+        </div>
+        <% }) %>
     </div>
-    <% }) %>
+  </div>
 </section>
+
 
 <h2
   style="color: #fff; margin-left: 20px; display: flex; align-items: center; font-size: 18px; margin-top: 10px; margin-bottom: -5px;">
-  <i data-lucide="gift" style="margin-right: 10px;"></i>
+  <i data-lucide="chart-bar" style="margin-right: 10px; height: 20px;"></i>
   Transactions
 </h2>
 
@@ -83,9 +90,6 @@
   </div>
 </div>
 
-
-<div style="height: 10vh; background: transparent;"></div>
-<div style="height: 200px;"></div>
 
 <script>
   const socket = io();
@@ -162,5 +166,65 @@
     <img src="${iconPath}" alt="${currency}" style="width: 16px; vertical-align: middle; margin-left: 4px;">
   `;
   }
+
+  (() => {
+    const container = document.getElementById('promoScroll');
+    let startX = 0;
+    let scrollStart = 0;
+    const cardWidth = container.offsetWidth; // largeur visible d'une carte
+
+    container.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      scrollStart = container.scrollLeft;
+    });
+
+    container.addEventListener('touchend', (e) => {
+      const deltaX = e.changedTouches[0].clientX - startX;
+      const threshold = cardWidth * 0.3; // 30%
+
+      let direction = 0;
+      if (Math.abs(deltaX) > threshold) {
+        direction = deltaX < 0 ? 1 : -1; // 1 = droite, -1 = gauche
+      }
+
+      const nextScrollLeft = Math.round(scrollStart / cardWidth + direction) * cardWidth;
+
+      container.scrollTo({
+        left: nextScrollLeft,
+        behavior: 'smooth'
+      });
+    });
+  })();
+
+  (() => {
+    const container = document.getElementById('gameScroll');
+    if (!container) return;
+
+    let startX = 0;
+    let scrollStart = 0;
+
+    container.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      scrollStart = container.scrollLeft;
+    });
+
+    container.addEventListener('touchend', (e) => {
+      const deltaX = e.changedTouches[0].clientX - startX;
+      const cardWidth = container.querySelector('.game-card').offsetWidth + 16;
+      const threshold = cardWidth * 0.3;
+
+      let direction = 0;
+      if (Math.abs(deltaX) > threshold) {
+        direction = deltaX < 0 ? 1 : -1;
+      }
+
+      const nextScrollLeft = Math.round(scrollStart / cardWidth + direction) * cardWidth;
+
+      container.scrollTo({
+        left: nextScrollLeft,
+        behavior: 'smooth'
+      });
+    });
+  })();
 
 </script>

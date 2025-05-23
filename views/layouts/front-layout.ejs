@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="/style/header.css" />
   <link rel="stylesheet" href="/style/sidebar.css" />
   <link rel="stylesheet" href="/style/modals.css" />
-  <% if (showFooter) { %>
+  <% if (typeof showFooter !=='undefined' && showFooter) { %>
     <link rel="stylesheet" href="/style/footer.css" />
     <% } %>
 
@@ -496,10 +496,11 @@
                   </script>
                   <script>
                     const isAuthenticated = <%= JSON.stringify(typeof isLoggedIn !== 'undefined' && isLoggedIn) %>;
-                    
+
                     // 🛡️ Liste des routes qui nécessitent un login modal automatique
                     const loginRequiredRoutes = [
                       '/wallet/deposit',
+                      '/wallet/history',
                     ];
 
                     const currentPath = window.location.pathname;
@@ -517,7 +518,7 @@
 
                   <script>
                     document.addEventListener("DOMContentLoaded", () => {
-                      const noScrollPages = ['/wallet/deposit']; // tu peux en ajouter d'autres ici
+                      const noScrollPages = ['/wallet/deposit', '/wallet/history']; // tu peux en ajouter d'autres ici
                       if (noScrollPages.includes(window.location.pathname)) {
                         document.body.classList.add("no-scroll");
                       }

@@ -1,0 +1,279 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #0e0e0e;
+    color: white;
+}
+
+/* Wrapper */
+.main {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-inner-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+}
+
+.main-inner {
+    width: 100%;
+    max-width: 1000px;
+}
+
+/* Box */
+.deposit-box {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.deposit-box h2 {
+    font-size: 22px;
+    text-align: left;
+}
+
+/* Filter buttons */
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    background-color: #333;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.filter-button.active {
+    background-color: #555;
+}
+
+/* Transaction table */
+.transaction-table {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-header,
+.table-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1.8fr 1.2fr 2fr 1fr;
+    padding: 12px 16px;
+}
+
+.table-header {
+    background: #2c2c2c;
+    font-weight: bold;
+    color: #ccc;
+}
+
+.table-row {
+    border-top: 1px solid #333;
+    background: #1e1e1e;
+}
+
+.table-row:hover {
+    background-color: #272727;
+}
+
+.cell {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* Crypto Montant */
+.crypto-amount {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.crypto-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.amount .fiat {
+    font-size: 12px;
+    color: #aaa;
+    margin-left: 6px;
+}
+
+/* Statut */
+.status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.status::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    background-color: currentColor;
+}
+
+/* Couleurs du point */
+.status.completed::before {
+    background-color: #4caf50;
+    margin-left: 10px;
+}
+
+.status.pending::before {
+    background-color: #ffc107;
+    margin-left: 10px;
+}
+
+.status.cancelled::before {
+    background-color: #f44336;
+    margin-left: 10px;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pagination button {
+    padding: 8px 14px;
+    border: 1px solid #444;
+    background: #222;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.pagination button:hover {
+    background-color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .table-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .col-date,
+    .col-id,
+    .cell.date,
+    .cell.tx-id {
+        display: none !important;
+    }
+
+    .filter-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .status::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
+
+    .status::before {
+        display: none !important;
+    }
+}
+
+.transaction-header {
+    display: flex;
+    justify-content: space-between;
+    /* ⬅️ Sépare le titre et les boutons */
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    /* facultatif car déjà géré par parent */
+}
+
+.type-dropdown {
+    position: relative;
+    width: 150px;
+    background-color: #2c2c2c;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+}
+
+.dropdown-selected {
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dropdown-icon {
+    width: 18px;
+    height: 18px;
+    color: white;
+}
+
+.dropdown-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #2c2c2c;
+    border-radius: 6px;
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-option {
+    padding: 10px 12px;
+    transition: background 0.2s;
+}
+
+.dropdown-option:hover {
+    background-color: #444;
+}
+
+.type-dropdown.open .dropdown-options {
+    display: flex;
+}

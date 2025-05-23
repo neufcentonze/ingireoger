@@ -335,3 +335,8 @@
   height: 20px;
   object-fit: contain;
 }
+
+.solde-container.open .solde-chevron {
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}

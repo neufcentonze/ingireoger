@@ -1,74 +1,25 @@
 const walletService = require('../services/walletService');
 const db = require('../db');
-// 🟢 Affiche la page de dépôt (anciennement "wallet page")
-
-exports.renderDepositPage = (req, res) => {
-  const email = req.session?.user?.email;
-
-  if (!email) {
-    return res.render('portefeuille/deposit', {
-      layout: 'layouts/front-layout',
-      isLoggedIn: false,
-      title: 'Déposer',
-      userBalance: "0.00000000",
-      showFooter: false,
-      balances: {
-        btc: "0.00000000",
-        eth: "0.00000000",
-        sol: "0.00000000",
-        ltc: "0.00000000"
-      }
-    });
-  }
-
-  db.get("SELECT * FROM solde WHERE email = ?", [email], (err, row) => {
-    if (err || !row) {
-      return res.render('portefeuille/deposit', {
-        layout: 'layouts/front-layout',
-        isLoggedIn: true,
-        title: 'Déposer',
-        userBalance: "0.00000000",
-        showFooter: false,
-        balances: {
-          btc: "0.00000000",
-          eth: "0.00000000",
-          sol: "0.00000000",
-          ltc: "0.00000000"
-        }
-      });
-    }
-
-    const balances = {
-      btc: parseFloat(row.btc || 0).toFixed(8),
-      eth: parseFloat(row.eth || 0).toFixed(8),
-      sol: parseFloat(row.sol || 0).toFixed(8),
-      ltc: parseFloat(row.ltc || 0).toFixed(8)
-    };
-
-    res.render('portefeuille/deposit', {
-      layout: 'layouts/front-layout',
-      isLoggedIn: true,
-      title: 'Déposer',
-      userBalance: balances.btc,
-      balances,
-      showFooter: false,
-    });
-  });
-};
+const renderWithUserData = require('../utils/renderWithUserData'); // rappel vr passer balance / footer / info ...
 
 exports.renderWithdrawPage = (req, res) => {
-  res.render('portefeuille/withdraw', {
-    layout: 'layouts/front-layout',
-    isLoggedIn: true,
-    title: 'Retrait'
+  renderWithUserData(req, res, 'portefeuille/withdraw', {
+    title: 'Retrait',
+    layout: 'layouts/front-layout'
   });
 };
 
 exports.renderHistoryPage = (req, res) => {
-  res.render('portefeuille/history', {
-    layout: 'layouts/front-layout',
-    isLoggedIn: true,
-    title: 'Historique des transactions'
+  renderWithUserData(req, res, 'portefeuille/history', {
+    title: 'Historique des transactions',
+    layout: 'layouts/front-layout'
+  });
+};
+
+exports.renderDepositPage = (req, res) => {
+  renderWithUserData(req, res, 'portefeuille/deposit', {
+    title: 'Déposer',
+    layout: 'layouts/front-layout'
   });
 };
 
@@ -107,11 +58,16 @@ exports.apiGetHistory = (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = 10;
   const offset = (page - 1) * limit;
-  const types = req.query.type ? req.query.type.split(',') : [];
 
-  walletService.getHistory(email, types, limit, offset, (err, transactions) => {
+  const allowedTypes = ['depot', 'withdrawal'];
+
+  walletService.getHistory(email, allowedTypes, limit, offset, (err, transactions, total) => {
     if (err) return res.status(500).json({ error: 'Erreur chargement historique' });
-    res.json({ transactions });
+
+    res.json({
+      transactions,
+      total
+    });
   });
 };
 

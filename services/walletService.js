@@ -21,8 +21,32 @@ function withdraw(email, currency, amount, callback) {
   });
 }
 
-function getHistory(email, types = [], limit = 20, offset = 0, callback) {
-  transactionService.getUserTransactions(email, types, limit, offset, callback);
+function getHistory(email, allowedTypes, limit, offset, callback) {
+  const placeholders = allowedTypes.map(() => '?').join(',');
+
+  const query = `
+    SELECT * FROM transactions
+    WHERE email = ? AND type IN (${placeholders})
+    ORDER BY date DESC
+    LIMIT ? OFFSET ?
+  `;
+
+  const countQuery = `
+    SELECT COUNT(*) AS total FROM transactions
+    WHERE email = ? AND type IN (${placeholders})
+  `;
+
+  const params = [email, ...allowedTypes, limit, offset];
+  const countParams = [email, ...allowedTypes];
+
+  db.all(query, params, (err, rows) => {
+    if (err) return callback(err);
+
+    db.get(countQuery, countParams, (err, countResult) => {
+      if (err) return callback(err);
+      callback(null, rows, countResult.total);
+    });
+  });
 }
 
 async function getOrAssignAddress(email, currency, ip) {

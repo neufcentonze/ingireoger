@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="/style/history.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <div class="main">
+    <div class="main-inner-wrapper">
+      <div class="main-inner">
+        <div class="deposit-box">
+          <div class="transaction-header">
+            <h2>Historique des transactions</h2>
+            <div class="type-dropdown">
+              <div class="dropdown-selected">
+                <span id="dropdown-label">Tout</span>
+                <i data-lucide="chevron-down" class="dropdown-icon"></i>
+              </div>
+              <div class="dropdown-options" id="dropdown-options">
+                <div class="dropdown-option" data-type="">Tout</div>
+                <div class="dropdown-option" data-type="depot">Dépôts</div>
+                <div class="dropdown-option" data-type="withdrawal">Retraits</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="transaction-table">
+            <div class="table-header">
+              <div class="col-date">Date</div>
+              <div class="col-id">Transaction ID</div>
+              <div class="col-type">Type</div>
+              <div class="col-amount">Montant</div>
+              <div class="col-status">Statut</div>
+            </div>
+            <div id="transactions" class="table-body"></div>
+          </div>
+
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    let currentType = '';
+    let allTransactions = [];
+
+    function getIconExtension(symbol) {
+      return symbol === "eth" ? "svg" : "png";
+    }
+
+    function fetchTransactions() {
+      fetch(`/wallet/api/history?page=${currentPage}`)
+        .then(res => res.json())
+        .then(data => {
+          allTransactions = data.transactions || [];
+          renderTransactions();
+          renderPagination();
+        });
+    }
+
+    function renderTransactions() {
+      const container = document.getElementById("transactions");
+      container.innerHTML = "";
+
+      const filtered = currentType
+        ? allTransactions.filter(tx => tx.type === currentType)
+        : allTransactions;
+
+      if (!filtered.length) {
+        container.innerHTML = "<p style='padding: 16px;'>Aucune transaction trouvée.</p>";
+        return;
+      }
+
+      filtered.forEach(tx => {
+        const txDate = new Date(tx.date);
+        const date = txDate.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+        const status = tx.type === "withdrawal" ? "En cours" : "Confirmé";
+        const statusClass = tx.type === "withdrawal" ? "pending" : "completed";
+        const currency = tx.currency.toLowerCase();
+        const ext = getIconExtension(currency);
+        const label = tx.type === "depot" ? "Dépôt" : "Retrait";
+
+        const row = document.createElement("div");
+        row.className = "table-row";
+        row.innerHTML = `
+          <div class="cell col-date">${date}</div>
+          <div class="cell col-id">#DJ00${tx.id || '---'}</div>
+          <div class="cell col-type">${label}</div>
+          <div class="cell col-amount">
+            <div class="crypto-amount">
+              ${parseFloat(tx.amount).toFixed(8)}
+              <img src="/images/${currency}.${currency === 'eth' ? 'svg' : 'png'}" alt="${currency}" class="crypto-hs-icon" />
+            </div>
+          </div>
+          <div class="cell col-status status ${statusClass}">${status}</div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function renderPagination() {
+      const container = document.getElementById("pagination");
+      container.innerHTML = "";
+
+      const filtered = currentType
+        ? allTransactions.filter(tx => tx.type === currentType)
+        : allTransactions;
+
+      const maxPage = Math.ceil(filtered.length / 10);
+      if (currentPage > 1) {
+        const prev = document.createElement("button");
+        prev.textContent = "Précédent";
+        prev.onclick = () => {
+          currentPage--;
+          renderTransactions();
+          renderPagination();
+        };
+        container.appendChild(prev);
+      }
+
+      if (currentPage < maxPage) {
+        const next = document.createElement("button");
+        next.textContent = "Suivant";
+        next.onclick = () => {
+          currentPage++;
+          renderTransactions();
+          renderPagination();
+        };
+        container.appendChild(next);
+      }
+    }
+
+    document.querySelectorAll(".filter-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentType = btn.dataset.type;
+        currentPage = 1;
+        renderTransactions();
+        renderPagination();
+      });
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      fetchTransactions();
+      lucide.createIcons();
+    });
+
+    const dropdown = document.querySelector(".type-dropdown");
+    const label = document.getElementById("dropdown-label");
+    const options = document.getElementById("dropdown-options");
+
+    dropdown.addEventListener("click", () => {
+      dropdown.classList.toggle("open");
+      lucide.createIcons(); // met à jour l'icône si besoin
+    });
+
+    options.querySelectorAll(".dropdown-option").forEach(option => {
+      option.addEventListener("click", () => {
+        const type = option.dataset.type;
+        currentType = type;
+        label.textContent = option.textContent;
+        currentPage = 1;
+        renderTransactions();
+        renderPagination();
+        dropdown.classList.remove("open");
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove("open");
+      }
+    });
+  </script>
+</body>
+
+</html>
