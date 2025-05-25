@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const roundIfNeeded = require('../utils/roundIfNeeded');
-const db = require('../db'); // Connexion SQLite
+const db = require('../db/index');; // Connexion SQLite
 const { convertToEur } = require('../utils/cryptoRates');
 
 // 👇 AJOUT : brancher les routes /wallet

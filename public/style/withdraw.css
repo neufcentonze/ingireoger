@@ -1,0 +1,190 @@
+body {
+  overflow: hidden;
+}
+
+/* === PAGE FULLSCREEN CENTRÉE === */
+.withdraw-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 16px;
+}
+
+.withdraw-wrapper {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* === BLOC DE RETRAIT === */
+.withdraw-box {
+  background: #1e1e1e;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  margin-bottom: 150px;
+  margin-left: 10px;
+}
+
+/* === DROPDOWN CRYPTO === */
+.withdraw-dropdown {
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+  color: black;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.withdraw-dropdown .selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #ffffff;
+  font-weight: 500;
+}
+
+.withdraw-dropdown .selected img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.withdraw-dropdown .selected-name {
+  flex: 1;
+  color: #111;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.withdraw-dropdown .dropdown-chevron {
+  width: 20px;
+  height: 20px;
+}
+
+.withdraw-dropdown .options {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.withdraw-dropdown.open .options {
+  display: flex;
+}
+
+.withdraw-dropdown .option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #eee;
+}
+
+.withdraw-dropdown .option img {
+  width: 22px;
+  height: 22px;
+}
+
+.withdraw-dropdown .option:hover {
+  background-color: #f5f5f5;
+}
+
+/* === LABELS === */
+.withdraw-box label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ccc;
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+
+/* === MONTANT + € en ligne === */
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+
+.label-row label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ccc;
+  margin: 0;
+}
+
+.label-row .euro-conversion {
+  font-size: 13px;
+  color: #aaa;
+}
+
+/* === INPUTS === */
+.withdraw-box input[type="number"],
+.withdraw-box input[type="text"] {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #282828;
+  color: #eee;
+  border: none;
+  font-size: 15px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+/* === AVERTISSEMENT === */
+.withdraw-warning {
+  text-align: center;
+  color: #ffaa00;
+  font-size: 13px;
+  margin-top: 14px;
+}
+
+/* === BOUTON RETRAIT === */
+#withdrawBtn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  background-color: #282828;
+  color: #eee;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+#withdrawBtn:hover {
+  background-color: #222;
+}
+
+#withdrawBtn.confirming {
+  background-color: #35d15a;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.4);
+}
+
+#withdrawBtn.confirming:hover {
+  background-color: #2baf4c;
+}

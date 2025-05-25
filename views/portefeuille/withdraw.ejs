@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Retrait</title>
+    <link rel="stylesheet" href="/style/withdraw.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="withdraw-page">
+        <div class="withdraw-wrapper">
+            <div class="withdraw-box" id="withdrawal-box">
+                <div class="crypto-dropdown withdraw-dropdown" id="cryptoDropdownWithdraw">
+                    <div class="selected">
+                        <span class="placeholder">Sélectionne ta crypto</span>
+                        <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-img="/images/btc.png" data-symbol="btc">
+                            <img src="/images/btc.png" alt="Bitcoin">
+                            <div class="info"><span>Bitcoin</span></div>
+                        </div>
+                        <div class="option" data-img="/images/eth.svg" data-symbol="eth">
+                            <img src="/images/eth.svg" alt="Ethereum">
+                            <div class="info"><span>Ethereum</span></div>
+                        </div>
+                        <div class="option" data-img="/images/sol.png" data-symbol="sol">
+                            <img src="/images/sol.png" alt="Solana">
+                            <div class="info"><span>Solana</span></div>
+                        </div>
+                        <div class="option" data-img="/images/ltc.png" data-symbol="ltc">
+                            <img src="/images/ltc.png" alt="Litecoin">
+                            <div class="info"><span>Litecoin</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="label-row">
+                    <label for="amount">Montant</label>
+                    <div class="euro-conversion" id="euroValue">0.00€</div>
+                </div>
+                <input type="number" id="amount" placeholder="Montant à retirer">
+
+                <label for="address">Adresse de retrait</label>
+                <input type="text" id="address" placeholder="Adresse crypto">
+
+                <p class="withdraw-warning">⚠️ Minimum 50 €, frais déduits du solde.</p>
+
+                <button class="btn" id="withdrawBtn">Confirmer le retrait</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dropdownWithdraw = document.getElementById("cryptoDropdownWithdraw");
+        const selectedWithdraw = dropdownWithdraw.querySelector(".selected");
+        const optionsWithdraw = dropdownWithdraw.querySelectorAll(".option");
+
+        selectedWithdraw.addEventListener("click", () => {
+            dropdownWithdraw.classList.toggle("open");
+            const chevron = selectedWithdraw.querySelector('.dropdown-chevron');
+            const isOpen = dropdownWithdraw.classList.contains("open");
+            if (chevron) {
+                chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
+                lucide.createIcons();
+            }
+        });
+
+        optionsWithdraw.forEach(option => {
+            option.addEventListener("click", async () => {
+                const img = option.querySelector("img").src;
+                const name = option.querySelector(".info span").innerText;
+                const symbol = option.dataset.symbol;
+
+                // Affiche le nom et l'image dans le dropdown
+                selectedWithdraw.innerHTML = `
+    <img src="${img}" alt="${name}">
+    <span class="selected-name">${name}</span>
+    <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+  `;
+                selectedWithdraw.setAttribute('data-symbol', symbol);
+                dropdownWithdraw.classList.remove("open");
+                lucide.createIcons();
+
+                try {
+                    const res = await fetch(`/api/cryptoDetail?crypto=${symbol}`);
+                    const data = await res.json();
+
+                    // Stocke le taux EUR pour la crypto sélectionnée
+                    const totalCrypto = parseFloat(data.total);
+                    const totalEur = parseFloat(data.totalEur);
+
+                    // ✅ Calcule le taux 1 crypto => €
+                    const rate = totalCrypto > 0 ? totalEur / totalCrypto : 0;
+                    window.cryptoRates = window.cryptoRates || {};
+                    window.cryptoRates[symbol] = rate;
+
+                    window.selectedCoin = symbol;
+                    window.dispatchEvent(new Event("cryptoChanged"));
+                } catch (err) {
+                    showMessage("globalMessage", "Erreur lors du chargement du taux.", false);
+                }
+            });
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!dropdownWithdraw.contains(e.target)) {
+                dropdownWithdraw.classList.remove("open");
+            }
+        });
+
+        const amountInput = document.getElementById("amount");
+        const euroDisplay = document.getElementById("euroValue");
+
+        function updateEuroConversion() {
+            const val = parseFloat(amountInput.value);
+            const rate = window.cryptoRates?.[window.selectedCoin?.toLowerCase()] || 0;
+            const converted = (val && rate) ? (val * rate).toFixed(2) : "0.00";
+            euroDisplay.textContent = `${converted}€`;
+        }
+
+        amountInput.addEventListener("input", updateEuroConversion);
+        window.addEventListener("cryptoChanged", updateEuroConversion);
+
+        const withdrawBtn = document.getElementById("withdrawBtn");
+        let confirmStep = false;
+
+        withdrawBtn.addEventListener("click", () => {
+            const symbol = selectedWithdraw.getAttribute("data-symbol");
+            const amount = parseFloat(amountInput.value);
+            const address = document.getElementById("address").value.trim();
+
+            if (!symbol) {
+                showMessage("globalMessage", "Sélectionne une crypto.", false);
+                return;
+            }
+
+            if (!amount || isNaN(amount)) {
+                showMessage("globalMessage", "Montant invalide.", false);
+                return;
+            }
+
+            const conversionRate = window.cryptoRates?.[symbol] || 0;
+            if (amount * conversionRate < 50) {
+                showMessage("globalMessage", "Montant minimum : 50€.", false);
+                return;
+            }
+
+            if (!address) {
+                showMessage("globalMessage", "Adresse manquante.", false);
+                return;
+            }
+
+            const regexes = {
+                btc: /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,62}$/i,
+                eth: /^0x[a-fA-F0-9]{40}$/,
+                sol: /^[1-9A-HJ-NP-Za-km-z]{32,44}$/,
+                ltc: /^(ltc1[0-9a-z]{39,59}|[LM3][a-km-zA-HJ-NP-Z1-9]{26,33})$/i
+            };
+
+            if (!regexes[symbol] || !regexes[symbol].test(address)) {
+                showMessage("globalMessage", "Adresse crypto invalide.", false);
+                return;
+            }
+
+            if (!confirmStep) {
+                withdrawBtn.textContent = "Valider le retrait";
+                withdrawBtn.classList.add("confirming");
+                confirmStep = true;
+                return;
+            }
+
+            fetch("/wallet/withdraw", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    currency: symbol,
+                    amount: amount,          // ✅ pas 'montant'
+                    address: address         // ✅ pas 'adresse'
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    const success = data.success === true;
+                    const message = data.message || data.error || (success ? "✅ Retrait effectué." : "❌ Erreur lors du retrait.");
+                    showMessage("globalMessage", message, success);
+
+                    if (data.success) {
+                        withdrawBtn.textContent = "Confirmer le retrait";
+                        withdrawBtn.classList.remove("confirming");
+                        confirmStep = false;
+
+                        // ✅ Appelle ici la fonction pour mettre à jour le header
+                        refreshHeaderBalance(symbol);
+
+                        // Reset UI
+                        amountInput.value = "";
+                        document.getElementById("address").value = "";
+                        euroDisplay.textContent = "0.00€";
+                        selectedWithdraw.innerHTML = '<span class="placeholder">Sélectionne ta crypto</span>';
+                        selectedWithdraw.removeAttribute("data-symbol");
+                        delete window.selectedCoin;
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    showMessage("globalMessage", "Erreur réseau.", false);
+                });
+        });
+
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

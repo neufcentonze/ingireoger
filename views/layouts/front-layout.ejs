@@ -518,11 +518,33 @@
 
                   <script>
                     document.addEventListener("DOMContentLoaded", () => {
-                      const noScrollPages = ['/wallet/deposit', '/wallet/history']; // tu peux en ajouter d'autres ici
+                      const noScrollPages = ['/wallet/deposit', '/wallet/history', '/wallet/withdraw']; // tu peux en ajouter d'autres ici
                       if (noScrollPages.includes(window.location.pathname)) {
                         document.body.classList.add("no-scroll");
                       }
                     });
+                  </script>
+
+                  <script>
+                    async function refreshHeaderBalance(crypto = 'btc') {
+                      try {
+                        const res = await fetch(`/wallet/balance?crypto=${crypto}`);
+                        const data = await res.json();
+                        if (!data.success) return;
+
+                        const amount = data.amount;
+                        const eur = data.amountEur;
+
+                        // Mets à jour les éléments HTML dans le header (modifie selon ton code)
+                        const amountEl = document.querySelector('.solde-amount');
+                        const eurEl = document.querySelector('.js-crypto-total-eur');
+
+                        if (amountEl) amountEl.textContent = amount;
+                        if (eurEl) eurEl.textContent = `${eur} €`;
+                      } catch (err) {
+                        console.error("❌ Erreur MAJ header solde :", err);
+                      }
+                    }
                   </script>
 </body>
 

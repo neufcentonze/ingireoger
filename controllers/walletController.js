@@ -1,5 +1,5 @@
 const walletService = require('../services/walletService');
-const db = require('../db');
+const db = require('../db/index');;
 const renderWithUserData = require('../utils/renderWithUserData'); // rappel vr passer balance / footer / info ...
 
 exports.renderWithdrawPage = (req, res) => {
@@ -86,4 +86,25 @@ exports.getAddress = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
   }
+};
+
+exports.getUserBalance = (req, res) => {
+  const email = req.session?.user?.email;
+
+  if (!email) {
+    return res.status(401).json({ error: 'Non connecté.' });
+  }
+
+  const crypto = req.query.crypto || 'btc';
+
+  const sql = `SELECT ${crypto} FROM solde WHERE email = ? LIMIT 1`;
+  db.get(sql, [email], (err, row) => {
+    if (err) return res.status(500).json({ error: 'Erreur SQL' });
+
+    const amount = parseFloat(row?.[crypto] || 0).toFixed(8);
+    const rate = require('../utils/cryptoRates').getRate(crypto);
+    const amountEur = (amount * rate).toFixed(2);
+
+    res.json({ success: true, amount, amountEur });
+  });
 };

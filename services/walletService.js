@@ -1,4 +1,4 @@
-const db = require('../db'); // ton instance sqlite
+const db = require('../db/index');; // ton instance sqlite
 const balanceService = require('./balanceService');
 const transactionService = require('./transactionService');
 const getOrAssignCryptoAddress = require('../helpers/getOrAssignCryptoAddress');
@@ -15,9 +15,10 @@ function deposit(email, currency, amount, callback) {
 }
 
 function withdraw(email, currency, amount, callback) {
+  console.log(db)
   balanceService.updateBalance(email, currency, curr => curr - amount, (err) => {
     if (err) return callback(err);
-    transactionService.logTransaction(email, currency, amount, 'retrait', callback);
+    transactionService.logTransaction(email, currency, amount, 'withdrawal', callback);
   });
 }
 

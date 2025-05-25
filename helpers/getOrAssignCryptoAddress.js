@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../db/index');;
 
 function getOrAssignCryptoAddress(email, currency, ip, callback) {
   // Cherche une adresse disponible pour cette crypto

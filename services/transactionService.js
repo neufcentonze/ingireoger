@@ -1,4 +1,4 @@
-const { db } = require('../db');
+const db = require('../db');
 const cryptoRates = require('./cryptoRates');
 
 function logTransaction(email, currency, amount, type, callback = () => {}, game = null, bet = null) {

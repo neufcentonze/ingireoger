@@ -1,4 +1,4 @@
-const { db } = require('../db');
+const db = require('../db/index');
 
 const ALLOWED_CURRENCIES = ['btc', 'eth', 'ltc', 'sol'];
 

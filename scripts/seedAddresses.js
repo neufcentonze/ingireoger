@@ -1,5 +1,5 @@
 const fs = require('fs');
-const db = require('../db'); // Ton instance SQLite
+const db = require('../db/index');; // Ton instance SQLite
 const path = require('path');
 
 // 📥 Lis le fichier JSON

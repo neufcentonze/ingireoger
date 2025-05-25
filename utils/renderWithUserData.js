@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../db/index');;
 
 module.exports = function renderWithUserData(req, res, view, customData = {}) {
   const email = req.session?.user?.email;

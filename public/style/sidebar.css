@@ -60,6 +60,7 @@
   transition: background 0.2s;
   text-decoration: none;
   border-radius: 6px;
+  font-family: Arial, sans-serif;
 }
 
 .sidebar-toggle:hover {

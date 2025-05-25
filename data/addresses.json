@@ -1,6 +1,5 @@
 {
     "btc": [
-        "bc1q4zj86gw74ralms8yl9835ywmzny7a8wexmx33n",
         "bc1qpyy952jp6uwj5qkf5m2elaree9wvgvg6cfa4n8",
         "bc1qp9ex5jv7qshc9jq9runnwfhes8hdzzg7edf9nv",
         "bc1qj26d3p8hxufhr6tl3fm74s5shl9t06cxthv8qr",
@@ -18,7 +17,6 @@
     ],
     "eth": [
         "0x57339e3c8D64A5E1Fc83daA2a87167E318102ce3",
-        "0x75218beFC53A20A0B1233A84C771644e177035Dd",
         "0x42838BB763C8B99F7d1658D298680bB8F84031dB",
         "0xb5029CF2b5a23fa3ccEf6C652A401009A98f7A31",
         "0xA0F3ba14910371935dC9861b42c02A28Be3AAa0e",
@@ -47,7 +45,6 @@
         "ltc1ql2tspf3rpa6p7qpu5r336vdgjc5643hppt87hc"
     ],
     "sol": [
-        "HSYSDQsNvofEDbhQ2dxZ5GRFHPcJ6fkGxJMMsfMCAX4Q",
         "BtAiEyRgDJHE7ecHaHVr3U1jgH3HnRxwii5oUScQ8SPU",
         "52kLZGBKf15VEENeUqvsxJGbUHviA8GhSCCXj7Abuvd7",
         "BaUkZbKEQjhC91KNbbJ4T6Hdo7ujRwTVx3tTRpnNMxJA",

@@ -36,4 +36,7 @@ router.get('/api/history', checkFeature('wallet_history'), walletController.apiG
 // Attribuer une adresse 
 router.get('/address/:currency', walletController.getAddress);
 
+// Refresh header solde
+router.get('/balance', walletController.getUserBalance);
+
 module.exports = router;
