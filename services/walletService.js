@@ -1,6 +1,5 @@
-const db = require('../db/index');; // ton instance sqlite
-const balanceService = require('./balanceService');
-const transactionService = require('./transactionService');
+const db = require('../db/index');
+const { updateBalance, computeRealAndBonusParts } = require('./balanceService'); // ← ton nouveau updateBalance
 const getOrAssignCryptoAddress = require('../helpers/getOrAssignCryptoAddress');
 
 // ----------------------
@@ -8,17 +7,39 @@ const getOrAssignCryptoAddress = require('../helpers/getOrAssignCryptoAddress');
 // ----------------------
 
 function deposit(email, currency, amount, callback) {
-  balanceService.updateBalance(email, currency, curr => curr + amount, (err) => {
-    if (err) return callback(err);
-    transactionService.logTransaction(email, currency, amount, 'depot', callback);
+  updateBalance({
+    email,
+    currency,
+    computeOrValue: curr => curr + amount,
+    type: 'depot',
+    callback
   });
 }
 
 function withdraw(email, currency, amount, callback) {
-  console.log(db)
-  balanceService.updateBalance(email, currency, curr => curr - amount, (err) => {
-    if (err) return callback(err);
-    transactionService.logTransaction(email, currency, amount, 'withdrawal', callback);
+  const selectQuery = `SELECT ${currency} FROM solde WHERE email = ?`;
+
+  db.get(selectQuery, [email], (err, row) => {
+    if (err || !row) return callback(err || new Error("Utilisateur non trouvé"));
+
+    const totalBalance = parseFloat(row[currency]) || 0;
+
+    computeRealAndBonusParts(email, currency, totalBalance, (err, parts) => {
+      if (err) return callback(err);
+
+      if (amount > parts.real) {
+        return callback(new Error("Vous ne pouvez pas retirer des fonds provenant du bonus tant que le wager n'est pas terminé."));
+      }
+
+
+      updateBalance({
+        email,
+        currency,
+        computeOrValue: curr => curr - amount,
+        type: 'withdrawal',
+        callback
+      });
+    });
   });
 }
 

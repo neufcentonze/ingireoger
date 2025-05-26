@@ -418,3 +418,7 @@ img {
   user-select: none;
   -webkit-user-select: none;
 }
+
+#wagerProgressBar {
+  transition: width 0.4s ease;
+}

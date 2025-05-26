@@ -46,16 +46,23 @@ db.serialize(() => {
 
     // 🎁 Bonus
     db.run(`
-        CREATE TABLE IF NOT EXISTS bonuses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT NOT NULL,
-            type TEXT,
-            amount REAL,
-            amount_eur REAL,
-            currency TEXT,
-            reason TEXT,
-            status TEXT,
-            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    CREATE TABLE IF NOT EXISTS bonuses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT NOT NULL,
+        type TEXT,                    -- 'bonus', 'streamer', 'standard'
+        amount REAL,                 
+        amount_eur REAL,
+        currency TEXT,
+        reason TEXT,
+        status TEXT,                 -- 'active', 'used', etc.
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        -- 🎯 Champs liés au wagering
+        wager_type TEXT,             -- 'standard', 'bonus', 'streamer'
+        wager_factor INTEGER,        -- 1, 10, 50 selon le type
+        wager_target REAL,           -- Montant total à miser (calculé)
+        wager_progress REAL DEFAULT 0.0, -- Ce que l’utilisateur a déjà misé
+        wager_status TEXT DEFAULT 'in_progress' -- 'in_progress', 'completed', etc.
         );
     `);
 

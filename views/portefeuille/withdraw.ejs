@@ -189,6 +189,7 @@
                     showMessage("globalMessage", message, success);
 
                     if (data.success) {
+                        refreshHeaderBalance(symbol);
                         withdrawBtn.textContent = "Confirmer le retrait";
                         withdrawBtn.classList.remove("confirming");
                         confirmStep = false;

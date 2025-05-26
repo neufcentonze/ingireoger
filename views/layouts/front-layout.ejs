@@ -80,10 +80,10 @@
                     <span class="js-crypto-total-eur">0.00€</span>
                   </div>
                   <div
-                    style="border: 1px solid #ccc; padding: 8px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
+                    style="padding: 8px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #282828;">
                     <input type="text" id="soldeTotalInput" value="0.00000000" readonly
                       style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
-                    <img class="js-crypto-icon" src="/images/btc.png" alt="btc"
+                    <img class="js-crypto-icon" data-crypto="eth" src="/images/eth.svg" alt="ETH"
                       style="width: 20px; height: 20px; margin-left: 10px;">
                   </div>
                   </div>
@@ -94,10 +94,10 @@
                       <span class="js-crypto-net-eur">0.00€</span>
                     </div>
                     <div
-                      style="border: 1px solid #ccc; padding: 8px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
+                      style="padding: 8px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #282828;">
                       <input type="text" id="soldeInput" value="0.00000000" readonly
                         style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
-                      <img class="js-crypto-icon" src="/images/btc.png" alt="btc"
+                      <img class="js-crypto-icon" data-crypto="eth" src="/images/eth.svg" alt="ETH"
                         style="width: 20px; height: 20px; margin-left: 10px;">
                     </div>
                   </div>
@@ -108,11 +108,26 @@
                       <span class="js-crypto-bonus-eur">0.00€</span>
                     </div>
                     <div
-                      style="border: 1px solid #ccc; padding: 8px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #1a1a1a;">
+                      style="padding: 8px; display: flex; justify-content: space-between; align-items: center; border-radius: 6px; background: #282828;">
                       <input type="text" id="soldeBonusInput" value="0.00000000" readonly
                         style="background: none; border: none; color: #fff; font-size: 16px; width: 100%;">
-                      <img class="js-crypto-icon" src="/images/btc.png" alt="btc"
+                      <img class="js-crypto-icon" data-crypto="eth" src="/images/eth.svg" alt="ETH"
                         style="width: 20px; height: 20px; margin-left: 10px;">
+                    </div>
+                  </div>
+
+                  <div class="wager-section" style="margin-top: 10px;">
+                    <div class="wager-label" style="font-size: 12px; color: #ccc;">
+                      Wager :
+                      <span id="wagerProgress">0</span>
+                      <span id="wagerCurrency">BTC</span> /
+                      <span id="wagerTarget">0</span>
+                      <span id="wagerCurrencyClone">BTC</span>
+                      (<span id="wagerPercent">0%</span>)
+                    </div>
+                    <div style="height: 8px; background: #444; border-radius: 5px; overflow: hidden; margin-top: 5px;">
+                      <div id="wagerFill" style="height: 100%; background: orange; width: 0%; transition: width 0.3s;">
+                      </div>
                     </div>
                   </div>
                   `
@@ -288,70 +303,8 @@
                         modal.style.display = 'block'; // ou .classList.add('show') selon ton système
                       }
                     }
-
-                    async function loadCryptoDetails(crypto) {
-                      try {
-                        const res = await fetch(`/api/cryptoDetail?crypto=${crypto}`);
-                        const data = await res.json();
-
-                        const suffix = crypto.toUpperCase();
-
-                        // Montants crypto
-                        document.getElementById('soldeTotalInput').value = `${data.total} ${suffix}`;
-                        document.getElementById('soldeInput').value = `${data.solde} ${suffix}`;
-                        document.getElementById('soldeBonusInput').value = `${data.bonus} ${suffix}`;
-
-                        // Montants en euros
-                        document.querySelector('.js-crypto-total-eur').textContent = `${data.totalEur} €`;
-                        document.querySelector('.js-crypto-net-eur').textContent = `${data.soldeEur} €`;
-                        document.querySelector('.js-crypto-bonus-eur').textContent = `${data.bonusEur} €`;
-
-                        const extension = crypto === 'eth' ? 'svg' : 'png';
-                        const cryptoIconUrl = `/images/${crypto}.${extension}`;
-
-                        // Met à jour toutes les icônes dans le modal
-                        document.querySelectorAll('.js-crypto-icon').forEach(img => {
-                          img.src = cryptoIconUrl;
-                          img.alt = crypto.toUpperCase();
-                        });
-
-                      } catch (err) {
-                        console.error('❌ Erreur lors du chargement des détails crypto:', err);
-                      }
-                    }
                   </script>
-
                   <script>
-                    function handleSoldeClick(el) {
-                      const chevron = el.querySelector('.solde-chevron');
-                      const isOpen = chevron.getAttribute('data-lucide') === 'chevron-down';
-                      chevron.setAttribute('data-lucide', isOpen ? 'chevron-up' : 'chevron-down');
-                      lucide.createIcons();
-                      el.classList.toggle('open');
-                    }
-                  </script>
-
-                  <script>
-                    function getSelectedCrypto() {
-                      // Trouve le conteneur visible (mobile ou PC)
-                      const activeSoldeBox = document.querySelector('.solde-container');
-                      if (!activeSoldeBox) return 'btc';
-
-                      // Cherche l'icône actuellement affichée dans la box
-                      const icon = activeSoldeBox.querySelector('.solde-crypto-icon');
-                      if (!icon) return 'btc';
-
-                      // Déduit la crypto à partir du chemin d'image (ex: /images/btc.png)
-                      const src = icon.getAttribute('src');
-                      if (!src) return 'btc';
-
-                      if (src.includes('btc')) return 'btc';
-                      if (src.includes('eth')) return 'eth';
-                      if (src.includes('sol')) return 'sol';
-                      if (src.includes('ltc')) return 'ltc';
-                      return 'btc'; // fallback
-                    }
-
                     function openSoldeDetailsModal() {
                       const selectedCrypto = getSelectedCrypto();
                       loadCryptoDetails(selectedCrypto);
@@ -524,28 +477,7 @@
                       }
                     });
                   </script>
-
-                  <script>
-                    async function refreshHeaderBalance(crypto = 'btc') {
-                      try {
-                        const res = await fetch(`/wallet/balance?crypto=${crypto}`);
-                        const data = await res.json();
-                        if (!data.success) return;
-
-                        const amount = data.amount;
-                        const eur = data.amountEur;
-
-                        // Mets à jour les éléments HTML dans le header (modifie selon ton code)
-                        const amountEl = document.querySelector('.solde-amount');
-                        const eurEl = document.querySelector('.js-crypto-total-eur');
-
-                        if (amountEl) amountEl.textContent = amount;
-                        if (eurEl) eurEl.textContent = `${eur} €`;
-                      } catch (err) {
-                        console.error("❌ Erreur MAJ header solde :", err);
-                      }
-                    }
-                  </script>
+                  <script src="/js/main.js"></script>
 </body>
 
 </html>

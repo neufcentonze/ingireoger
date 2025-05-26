@@ -1,6 +1,8 @@
 const walletService = require('../services/walletService');
 const db = require('../db/index');;
 const renderWithUserData = require('../utils/renderWithUserData'); // rappel vr passer balance / footer / info ...
+const { updateBalance  } = require('../services/balanceService');
+const { getRate } = require('../services/cryptoRates');
 
 exports.renderWithdrawPage = (req, res) => {
   renderWithUserData(req, res, 'portefeuille/withdraw', {
@@ -43,15 +45,28 @@ exports.handleWithdraw = (req, res) => {
   const { currency, amount, address } = req.body;
   const floatAmount = parseFloat(amount);
 
-  if (!currency || isNaN(floatAmount) || floatAmount <= 0 || !address) {
+  if (!email || !currency || isNaN(floatAmount) || floatAmount <= 0 || !address) {
     return res.status(400).json({ error: 'Requête invalide' });
   }
 
-  walletService.withdraw(email, currency, floatAmount, (err) => {
+  const lowerCurrency = currency.toLowerCase();
+  const rate = getRate(lowerCurrency);
+  const minEur = floatAmount * rate;
+
+  if (minEur < 50) {
+    return res.status(400).json({ error: 'Montant minimum : 50€' });
+  }
+
+  walletService.withdraw(email, lowerCurrency, floatAmount, (err) => {
     if (err) return res.status(400).json({ error: err.message });
+
+    // Ici tu pourrais ajouter : addToWithdrawalQueue(email, lowerCurrency, floatAmount, address)
+
     res.json({ success: true, message: 'Retrait en cours de traitement' });
   });
 };
+
+
 
 exports.apiGetHistory = (req, res) => {
   const email = req.session?.user?.email;
