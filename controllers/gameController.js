@@ -1,8 +1,7 @@
 const { getUser } = require("../services/userService");
 const { updateBalance } = require("../services/balanceService")
-const { logTransaction  } = require("../services/transactionService")
+const { logTransaction } = require("../services/transactionService")
 const { getCryptoPriceInEur } = require("../services/cryptoService");
-const { préleverSoldeAvecBonus } = require("../utils/bonusLogic");
 const roundIfNeeded = require("../utils/roundIfNeeded");
 
 exports.playDice = async (req, res) => {
@@ -29,13 +28,16 @@ exports.playDice = async (req, res) => {
         const userSolde = solde[crypto];
         if (userSolde === undefined) return res.status(400).json({ error: "Crypto inconnue" });
 
-        préleverSoldeAvecBonus(email, crypto, bet, (err, àPrélever) => {
-            if (err) return res.status(500).json({ error: "Erreur bonus" });
-            if (userSolde < àPrélever) return res.status(400).json({ error: "Solde insuffisant" });
+        if (userSolde < bet) return res.status(400).json({ error: "Solde insuffisant" });
 
-            const newSolde = roundIfNeeded(userSolde - àPrélever + totalGain);
-
-            updateBalance(email, crypto, newSolde, (err2) => {
+        updateBalance({
+            email,
+            currency: crypto,
+            computeOrValue: current => roundIfNeeded(current - bet + totalGain),
+            type: "games",
+            game: "dice",
+            bet,
+            callback: (err2) => {
                 if (err2) return res.status(500).json({ error: "Erreur maj solde" });
 
                 const type = win ? "gain" : "perte";
@@ -48,9 +50,8 @@ exports.playDice = async (req, res) => {
                     gain,
                     multiplier,
                     totalGain,
-                    newSolde
                 });
-            });
+            }
         });
     });
 };

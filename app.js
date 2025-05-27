@@ -16,6 +16,11 @@ const sessionMiddleware = session({
 });
 const buildSidebarPages = require('./middlewares/sidebarBuilder');
 
+
+app.use(sessionMiddleware);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // 🔧 Maintenance
 app.use((req, res, next) => {
     const allowedDuringMaintenance = [/^\/admin/, /^\/auth/, /^\/webhook/];
@@ -45,15 +50,20 @@ app.use((req, res, next) => {
     next();
 });
 
+// 🎮 CSS games only on /game routes
+app.use((req, res, next) => {
+    // adapte la regex si tu utilises /games au lieu de /game
+    res.locals.showGamesCss = /^\/game(\/|$)/.test(req.path);
+    next();
+});
+
 // 📍 Middlewares globaux
-app.use(sessionMiddleware);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(buildSidebarPages); // Si tu veux garder le contenu dynamique des sous-pages
 app.use(expressLayouts);
+// app.set("layout", "layouts/front-layout");
 
 // Routes
 app.use("/", require("./routes/admin-code"));

@@ -1,0 +1,449 @@
+/* ============================================
+   VARIABLES GLOBALES
+   ============================================ */
+:root {
+    --sidebar-width: 20rem;
+    /* largeur idéale de la sidebar */
+    --section-gap: 0.75rem;
+    /* espacement vertical entre sections */
+    --radius: 0.5rem;
+    /* coin arrondi */
+    --transition: 0.2s ease;
+    --color-bg: #121212;
+    --color-sidebar: #2c2f33;
+    --color-panel: #1f2124;
+    --color-btn: #3a3d42;
+    --color-btn-active: #1abc9c;
+    --color-accent: #16a085;
+    --color-text: #ddd;
+    --color-text-light: #fff;
+    --color-border: #444;
+}
+
+/* ============================================
+   RESET & LAYOUT PRINCIPAL
+   ============================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: #0f0f0f;
+    color: var(--color-text-light);
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    /* on gère le scroll dans .game-zone */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    /* centre horizontalement */
+    align-items: center;
+    /* centre verticalement */
+}
+
+/* Conteneur général */
+.game-layout {
+    display: flex;
+    flex-direction: column;
+
+    /* largeur = 80% de la fenêtre, centré par le body flex */
+    width: 80vw;
+    max-width: 90rem;
+    min-width: 30rem;
+
+    /* hauteur = 80% de la fenêtre, centré par le body flex */
+    height: 80vh;
+
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+}
+
+
+/* ============================================
+   ZONES PRINCIPALES
+   ============================================ */
+/* sidebar + zone de jeu */
+.game-main {
+    display: flex;
+    flex: 0 0 auto;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* sidebar config */
+.game-config {
+    flex: 0 0 auto;
+    max-width: var(--sidebar-width);
+    background: var(--color-sidebar);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--section-gap);
+    overflow-y: auto;
+}
+
+.game-zone {
+    flex: 1 1 auto;
+    /* 1 part d’espace libre vs 0 pour la sidebar */
+    min-width: 0;
+    /* indispensable pour que flex-shrink marche */
+    background: var(--color-panel);
+    padding: 1.25rem;
+    overflow-y: auto;
+}
+
+/* pied (footer) */
+.game-footer {
+    position: relative;
+    background: #23272a;
+    /* on impose une hauteur minimale pour que le logo reste carré */
+    min-height: 3rem;
+    /* on ajoute un petit padding interne pour que le logo ne colle pas trop */
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* on n’a plus besoin de flex-shrink ni de height fixe */
+    flex-shrink: 0;
+    margin-top: auto;
+    /* pour toujours coller en bas du .game-layout */
+}
+
+/* ============================================
+   RESPONSIVITÉ
+   ============================================ */
+@media (max-width: 768px) {
+
+    body {
+        align-items: flex-start;
+        /* colle le layout en haut */
+        overflow: auto;
+        /* on récupère le scroll global */
+    }
+
+    .game-layout {
+        height: auto;
+        width: calc(100vw - 2rem);
+        min-width: auto;
+        margin-left: 1rem !important;
+        margin-right: auto !important;
+    }
+
+    .game-main {
+        flex-direction: column;
+    }
+
+    .game-config {
+        max-width: none;
+        flex: 1 1 auto;
+        /* elle occupe le surplus de hauteur */
+        overflow: visible;
+        width: 100%;
+        order: 2;
+    }
+
+    .game-zone {
+        min-height: 55vh;
+        flex: 0 0 auto;
+        order: 1;
+        padding-top: 0.5rem;
+    }
+
+    .game-footer {
+        order: 3;
+    }
+}
+
+/* ============================================
+   COMPOSANTS DE LA SIDEBAR
+   ============================================ */
+/* Mode Manuel / Auto */
+.mode-switch {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 0.75rem 0;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--color-btn);
+    color: var(--color-text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition), box-shadow var(--transition);
+}
+
+.mode-btn.active {
+    background: var(--color-btn-active);
+    color: var(--color-text-light);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.mode-btn:hover {
+    background: var(--color-accent);
+    color: var(--color-text-light);
+}
+
+/* Montant du pari */
+.bet-amount {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.bet-amount-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+.bet-eur-value {
+    font-weight: 600;
+    color: #bbb;
+}
+
+/* Input + boutons ½, 2×, Max */
+.bet-input {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem;
+    background: var(--color-sidebar);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    position: relative;
+}
+
+.bet-input input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--color-text-light);
+    padding: 0.5rem;
+    font-size: 1rem;
+    min-width: 0;
+}
+
+.bet-buttons {
+    display: flex;
+    gap: 0.1rem;
+    border-left: 1px solid var(--color-border);
+    padding-left: 0.5rem;
+}
+
+.bet-buttons button {
+    padding: 0.5rem 0.75rem;
+    background: var(--color-btn);
+    border: none;
+    border-radius: var(--radius);
+    color: var(--color-text);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.bet-buttons button.max {
+    display: none !important;
+}
+
+.bet-buttons button:hover {
+    background: var(--color-accent);
+    color: var(--color-text-light);
+}
+
+/* Bouton Parier / Lancer pari */
+.place-bet {
+    padding: 0.75rem 0;
+    background: var(--color-btn-active);
+    border: none;
+    border-radius: var(--radius);
+    color: var(--color-text-light);
+    font-weight: bold;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.place-bet:hover {
+    background: var(--color-accent);
+}
+
+/* Option auto : Nombre de parties */
+.auto-settings {
+    display: none;
+    /* sera togglé en JS */
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.auto-settings label,
+.game-option label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+.game-option input[type="number"],
+.game-option input[type="text"],
+.game-option select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    background: var(--color-sidebar);
+    color: var(--color-text-light);
+}
+
+/* ============================================
+   FOOTER : icône SETTINGS + LOGO
+   ============================================ */
+/* bouton settings */
+.settings-btn {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 1rem;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #bbb;
+    transition: color var(--transition);
+}
+
+.settings-btn:hover {
+    color: #fff;
+}
+
+/* logo centré */
+.footer-logo {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 2rem;
+    user-select: none;
+}
+
+/* ============================================
+   PANEL SETTINGS (glissant depuis le bas)
+   ============================================ */
+.settings-panel {
+    position: fixed;
+    inset: auto 0 0 0;
+    /* bottom:0; left/right:0 */
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+    background: var(--color-panel);
+    padding: 1rem;
+    box-shadow: 0 -0.25rem 1rem rgba(0, 0, 0, 0.5);
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+    z-index: 100;
+}
+
+.settings-panel.open {
+    transform: translateY(0);
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    color: var(--color-text-light);
+}
+
+.settings-header h2 {
+    font-size: 1rem;
+}
+
+.close-settings {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: #bbb;
+    cursor: pointer;
+    transition: color var(--transition);
+}
+
+.close-settings:hover {
+    color: #fff;
+}
+
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.settings-option label {
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.settings-option input[type="range"] {
+    width: 100%;
+}
+
+.settings-option input[type="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.bet-buttons {
+    position: relative;
+    /* nécessaire pour le ::before */
+    padding-left: 2rem;
+    /* espace réservé pour l’icône */
+}
+
+.bet-buttons::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0.5rem;
+    /* décale l’icône depuis le bord gauche */
+    width: 1.25rem;
+    height: 1.25rem;
+    transform: translateY(-50%);
+    background-image: var(--crypto-icon-url, url('/images/btc.png'));
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+    /* l’icône ne bloque pas les clics */
+}
+
+@media (min-width: 769px) {
+
+  .game-main {
+    flex: 1 1 0;   /* prend tout l'espace restant dans .game-layout  */
+    min-height: 0; /* autorise le shrink si besoin (évite scroll fantôme) */
+    align-items: stretch; /* valeur par défaut, mais on force pour être sûr */
+  }
+
+  /* Les deux colonnes héritent de la hauteur de .game-main */
+  .game-config,
+  .game-zone {
+    height: 100%;      /* s’étirent jusqu’au footer               */
+    /* overflow-y reste auto sur .game-config → scroll interne OK */
+  }
+}

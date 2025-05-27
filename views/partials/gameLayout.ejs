@@ -1,0 +1,227 @@
+<script>
+    // expose au client
+    window.currentSymbol = '<%= currentSymbol %>';
+    window.betRate = <%= rate %>;
+    window.allRates = <%- JSON.stringify(allRates) %>;
+    // <%- JSON.stringify(allRates) %>; a modif comme ca si alt shift f (bug)
+
+    function round8(x) {                // 8 décimales, trim des zéros
+        return (+x).toFixed(8).replace(/\.?0+$/, '');
+    }
+
+    /* ------------------------------------------------------------------
+       Gestion des boutons ½ / 2× / Max
+    ------------------------------------------------------------------*/
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.querySelector('.bet-input input');
+        const eurSpan = document.querySelector('.bet-eur-value');
+        const betBtns = document.querySelector('.bet-buttons');
+        const soldeBox = document.querySelector('.solde-container .solde-box');
+
+        betBtns.addEventListener('click', e => {
+            if (e.target.tagName !== 'BUTTON') return;     // clic à côté → ignore
+            const label = e.target.textContent.trim();
+            let value = parseFloat(input.value.replace(',', '.')) || 0;
+
+            /* ----- calcule la nouvelle valeur crypto ----- */
+            if (label === '½') value = value / 2;
+            else if (label === '2×') value = value * 2;
+            else {                   // Max
+                // récupère le solde affiché dans l’entête (ou autre source serveur)
+                const amountStr = soldeBox?.querySelector('.solde-amount')?.textContent || '0';
+                value = parseFloat(amountStr.replace(',', '.')) || 0;
+            }
+
+            /* on borne à 8 décimales, pas de négatif */
+            value = Math.max(0, value);
+            input.value = round8(value);
+
+            /* ----- rafraîchit le montant € ----- */
+            if (typeof window.updateEurValue === 'function') {
+                window.updateEurValue();
+            }
+        });
+    });
+</script>
+
+<div class="game-layout">
+    <!-- Conteneur des deux zones principales : config + jeu -->
+    <div class="game-main">
+        <!-- 1 – Configuration du jeu -->
+        <aside class="game-config">
+            <div class="mode-switch">
+                <button class="mode-btn active" data-mode="manuel">Manuel</button>
+                <button class="mode-btn" data-mode="auto">Auto</button>
+            </div>
+
+            <div class="bet-amount">
+                <div class="bet-amount-header">
+                    <label>Montant du Pari</label>
+                    <span class="bet-eur-value">0,00 €</span>
+                </div>
+
+                <div class="bet-input">
+                    <input type="text" value="0.00000000" />
+
+                    <div class="bet-buttons">
+                        <button>½</button>
+                        <button>2×</button>
+                        <button class="max">Max</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ici tu injectes tes options spécifiques au jeu : -->
+            <!-- chaque bloc avec la classe `.game-option` sera espacé automatiquement -->
+
+
+            <div class="game-option auto-settings" style="display: none;">
+                <label for="auto-count">Nombre de parties</label>
+                <input id="auto-count" type="number" min="1" value="1" />
+            </div>
+
+
+            <button class="place-bet">Parier</button>
+        </aside>
+
+        <!-- 2 – Zone de jeu -->
+        <main class="game-zone">
+            <%- body %>
+        </main>
+    </div>
+
+    <!-- 3 – Bandeau d’options / logs -->
+    <footer class="game-footer">
+        <!-- logo Djelo -->
+        <img src="/images/logo-white.png" alt="Djelo" class="footer-logo">
+    </footer>
+</div>
+
+
+<script>
+    document.querySelectorAll('.mode-switch .mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // virer l’ancienne sélection
+            document.querySelector('.mode-switch .mode-btn.active')
+                .classList.remove('active');
+            // marquer la nouvelle
+            btn.classList.add('active');
+
+            // ici tu peux ajouter ton code pour passer en mode manuel/auto
+            // ex : if (btn.dataset.mode === 'manuel') { … }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // première passe au chargement
+        updateBetInputIcon();
+
+        // à chaque fois que tu cliques sur une option de crypto dans le header
+        document.querySelectorAll('.solde-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                // (ton code existant change déjà l'icône du header)
+                // on rafraîchit aussi l'input de mise :
+                updateBetInputIcon();
+            });
+        });
+    });
+</script>
+
+<script>
+    // taux EUR injecté par le serveur
+    window.betRate = <%= rate %>;
+
+    function formatEUR(x) {
+        return x.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+    }
+
+    function updateEurValue() {
+        const input = document.querySelector('.bet-input input');
+        const eurSpan = document.querySelector('.bet-eur-value');
+        const valCrypto = parseFloat(input.value.replace(',', '.')) || 0;
+        eurSpan.textContent = formatEUR(valCrypto * window.betRate);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.querySelector('.bet-input input');
+        updateEurValue();            // initial
+        input.addEventListener('input', updateEurValue);
+    });
+</script>
+
+<script>
+    function updateBetInputIcon() {
+        const src = document
+            .querySelector('.solde-container .solde-crypto-icon')
+            .getAttribute('src');
+        if (!src) return;
+        document
+            .querySelector('.bet-input')
+            .style.setProperty('--crypto-icon-url', `url("${src}")`);
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1) initialisation
+        updateBetInputIcon();
+        updateEurValue();
+
+        // 2) si l'utilisateur modifie le montant
+        document.querySelector('.bet-input input')
+            .addEventListener('input', updateEurValue);
+
+        // 3) à chaque clic sur un choix de crypto dans le header
+        document.querySelectorAll('.solde-option').forEach(opt => {
+            opt.addEventListener('click', async () => {
+                const symbol = opt.dataset.symbol.toLowerCase();
+
+                // a) envoie en session
+                await fetch('/set-symbol', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symbol })
+                });
+
+                // b) mets à jour window.currentSymbol & betRate
+                window.currentSymbol = symbol;
+                window.betRate = window.allRates[symbol] || 1;
+
+                // c) actualise l’UI
+                // - header icon + amount : ton code existant
+                const soldeBox = document.querySelector('.solde-container .solde-box');
+                soldeBox.querySelector('.solde-amount').textContent = opt.dataset.amount.slice(0, 10);
+                soldeBox.querySelector('.solde-crypto-icon').src = opt.dataset.icon;
+
+                // - champ pari
+                updateBetInputIcon();
+                updateEurValue();
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modeButtons = document.querySelectorAll('.mode-switch .mode-btn');
+        const autoSettings = document.querySelector('.auto-settings');
+        const placeBetBtn = document.querySelector('.place-bet');
+
+        modeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 1) bascule du bouton actif
+                document.querySelector('.mode-switch .mode-btn.active')
+                    .classList.remove('active');
+                btn.classList.add('active');
+
+                // 2) affichage du champ “nombre de parties”
+                if (btn.dataset.mode === 'auto') {
+                    autoSettings.style.display = 'block';
+                    placeBetBtn.textContent = 'Lancer pari';
+                } else {
+                    autoSettings.style.display = 'none';
+                    placeBetBtn.textContent = 'Parier';
+                }
+            });
+        });
+    })
+</script>

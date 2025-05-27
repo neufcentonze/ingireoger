@@ -10,15 +10,18 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="/style/main.css" />
-  <link rel="stylesheet" href="/style/header.css" />
-  <link rel="stylesheet" href="/style/sidebar.css" />
-  <link rel="stylesheet" href="/style/modals.css" />
-  <% if (typeof showFooter !=='undefined' && showFooter) { %>
-    <link rel="stylesheet" href="/style/footer.css" />
+  <% if (showGamesCss) { %>
+    <link rel="stylesheet" href="/style/games.css" />
     <% } %>
+      <link rel="stylesheet" href="/style/header.css" />
+      <link rel="stylesheet" href="/style/sidebar.css" />
+      <link rel="stylesheet" href="/style/modals.css" />
+      <% if (typeof showFooter !=='undefined' && showFooter) { %>
+        <link rel="stylesheet" href="/style/footer.css" />
+        <% } %>
 
-      <!-- Icônes Lucide -->
-      <script src="https://unpkg.com/lucide@latest"></script>
+          <!-- Icônes Lucide -->
+          <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
