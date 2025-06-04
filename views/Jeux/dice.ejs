@@ -1,7 +1,42 @@
-<%- include('../partials/gameLayout', {
-  title: 'Jeu du Dé',
-  subtitle: 'Devine la bonne face pour gagner',
-  body: `
-  
+<%- include('../partials/gameLayout', { title: 'Jeu du Dé' , subtitle: 'Devine la bonne face pour gagner' , body: `
+  <script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+  const diceButtons = document.querySelectorAll(".dice-btn");
+  const maxSelections = 5;
+
+  diceButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+  const isSelected = btn.classList.contains("selected");
+  const selectedButtons = document.querySelectorAll(".dice-btn.selected");
+
+  if (!isSelected && selectedButtons.length >= maxSelections) {
+  btn.classList.add("shake");
+  setTimeout(() => btn.classList.remove("shake"), 300);
+  return;
+  }
+
+  btn.classList.toggle("selected");
+  });
+  });
+  });
+  </script>
+
+
+  <script type="module">
+    import { animateDiceWithSpin } from '/js/dice.js';
+
+    function randomFromList() {
+      const values = [2, 4, 6];
+      return values[Math.floor(Math.random() * values.length)];
+    }
+
+    window.addEventListener('placeBetClicked', () => {
+      animateDiceWithSpin(randomFromList());
+    });
+  </script>
+
+  <script type="module" src="/js/dice.js"></script>
+  <canvas id="diceCanvas"></canvas>
   `
-}) %>
+  }) %>

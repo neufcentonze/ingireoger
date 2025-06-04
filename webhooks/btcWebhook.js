@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
             db.get("SELECT COUNT(*) AS count FROM transactions WHERE email = ? AND currency = 'btc' AND type = 'depot'", [email], (err2, row2) => {
                 const isFirst = row2?.count === 0;
 
-                if (isFirst && valueInEur <= 250) {
+                if (isFirst && valueInEur <= 500) {
                     credited *= 2;
                     const bonus = credited - btcAmount;
                     const bonusEur = bonus * btcPriceEur;

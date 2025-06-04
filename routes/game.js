@@ -15,31 +15,30 @@ router.post('/set-symbol', (req, res) => {
 
 router.get("/dice", (req, res) => {
     const userEmail = req.session?.user?.email;
-    // 1) récupère le symbole en session (ou 'btc')
     const currentSymbol = (req.session.currentSymbol || 'btc').toLowerCase();
 
-    // 2) récupère tous les taux
-    const allRates = symbols.reduce((acc, s) => {
-        acc[s] = cryptoRates.getRate(s);
+    const allRates = symbols.reduce((acc, sym) => {
+        acc[sym] = cryptoRates.getRate(sym);
         return acc;
     }, {});
-
-    // 3) récupère le rate de la crypto active
     const rate = allRates[currentSymbol] || 1;
+
+    const baseRenderData = {
+        layout: "layouts/front-layout",
+        currentSymbol,
+        rate,
+        allRates,
+        title: "Dice",
+        game: "dice",
+        showFooter: false,
+    };
 
     if (!userEmail) {
         return res.render("jeux/dice", {
-            rate,
-            layout: "layouts/front-layout",
+            ...baseRenderData,
             isLoggedIn: false,
             userBalance: "0.00000000",
             balances: { btc: 0, eth: 0, sol: 0, ltc: 0 },
-            title: "Dice",
-            showFooter: false,
-            currentSymbol,               // 'btc', 'eth', ...
-            rate,                        // taux € de la crypto active
-            allRates                     // objet { btc:…, eth:…, sol:…, ltc:… }
-            // autres données que tu veux passer à ta vue dice.ejs
         });
     }
 
@@ -57,17 +56,89 @@ router.get("/dice", (req, res) => {
         };
 
         res.render("jeux/dice", {
-            rate,
-            layout: "layouts/front-layout",
+            ...baseRenderData,
             isLoggedIn: true,
-            userBalance: balances.btc,
+            userBalance: balances[currentSymbol],
             balances,
-            title: "Dice",
-            showFooter: false,
-            currentSymbol,               // 'btc', 'eth', ...
-            rate,                        // taux € de la crypto active
-            allRates                     // objet { btc:…, eth:…, sol:…, ltc:… }
-            // autres données utiles
+        });
+    });
+});
+
+router.get("/gwenix", (req, res) => {
+    const userEmail = req.session?.user?.email;
+    const currentSymbol = (req.session.currentSymbol || 'btc').toLowerCase();
+    const allRates = symbols.reduce((acc, sym) => {
+        acc[sym] = cryptoRates.getRate(sym);
+        return acc;
+    }, {});
+    const rate = allRates[currentSymbol] || 1;
+    const baseRenderData = {
+        layout: "layouts/front-layout",
+        currentSymbol,
+        rate,
+        allRates,
+        title: "Tower Promotion",
+        game: "tower",
+        showFooter: false,
+    };
+
+    if (!userEmail) {
+        return res.render("jeux/gwenix", {
+            ...baseRenderData,
+            isLoggedIn: false,
+            userBalance: "0.00000000",
+            balances: { btc: 0, eth: 0, sol: 0, ltc: 0 },
+        });
+    }
+})
+
+router.get("/tower", (req, res) => {
+    const userEmail = req.session?.user?.email;
+    const currentSymbol = (req.session.currentSymbol || 'btc').toLowerCase();
+
+    const allRates = symbols.reduce((acc, sym) => {
+        acc[sym] = cryptoRates.getRate(sym);
+        return acc;
+    }, {});
+    const rate = allRates[currentSymbol] || 1;
+
+    const baseRenderData = {
+        layout: "layouts/front-layout",
+        currentSymbol,
+        rate,
+        allRates,
+        title: "Tower Promotion",
+        game: "tower",
+        showFooter: false,
+    };
+
+    if (!userEmail) {
+        return res.render("jeux/tower", {
+            ...baseRenderData,
+            isLoggedIn: false,
+            userBalance: "0.00000000",
+            balances: { btc: 0, eth: 0, sol: 0, ltc: 0 },
+        });
+    }
+
+    db.get("SELECT * FROM solde WHERE email = ?", [userEmail], (err, row) => {
+        if (err) {
+            console.error("Erreur récupération solde:", err);
+            return res.status(500).send("Erreur serveur");
+        }
+
+        const balances = {
+            btc: parseFloat(row?.btc || 0).toFixed(8),
+            eth: parseFloat(row?.eth || 0).toFixed(8),
+            sol: parseFloat(row?.sol || 0).toFixed(8),
+            ltc: parseFloat(row?.ltc || 0).toFixed(8),
+        };
+
+        res.render("jeux/tower", {
+            ...baseRenderData,
+            isLoggedIn: true,
+            userBalance: balances[currentSymbol],
+            balances,
         });
     });
 });

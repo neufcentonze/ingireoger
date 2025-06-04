@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Bureau Stylisé</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+
+    .desk {
+      width: 900px;
+      height: 600px;
+      background: linear-gradient(to bottom, #5b2b06, #2e1405);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      grid-template-rows: 5fr 2fr;
+      gap: 10px;
+    }
+
+    .shelf, .center-panel, .drawer {
+      background: linear-gradient(to bottom, #4a2005, #2c1304);
+      border-radius: 10px;
+      box-shadow:
+        inset 0 2px 5px rgba(255, 255, 255, 0.05),
+        inset 0 -4px 10px rgba(0, 0, 0, 0.6),
+        0 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .shelf {
+      display: grid;
+      grid-template-rows: 1fr 1fr 0.5fr;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .shelf-box {
+      background: linear-gradient(to bottom, #3a1805, #1f0c02);
+      border-radius: 6px;
+      box-shadow:
+        inset 0 1px 4px rgba(255, 255, 255, 0.05),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    .center-panel {
+      padding: 10px;
+      position: relative;
+    }
+
+    .center-panel::after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      bottom: 15px;
+      border-radius: 16px;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+    }
+
+    .bottom {
+      grid-column: 1 / span 3;
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 10px;
+      padding-top: 10px;
+    }
+
+    .drawer {
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="desk">
+    <!-- Étagère gauche -->
+    <div class="shelf">
+      <div class="shelf-box"></div>
+      <div class="shelf-box"></div>
+      <div class="shelf-box"></div>
+    </div>
+
+    <!-- Panneau central -->
+    <div class="center-panel"></div>
+
+    <!-- Étagère droite -->
+    <div class="shelf">
+      <div class="shelf-box"></div>
+      <div class="shelf-box"></div>
+      <div class="shelf-box"></div>
+    </div>
+
+    <!-- Tiroirs bas -->
+    <div class="bottom">
+      <div class="drawer"></div>
+      <div class="drawer"></div>
+      <div class="drawer"></div>
+    </div>
+  </div>
+
+</body>
+</html>

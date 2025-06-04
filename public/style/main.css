@@ -132,40 +132,93 @@ main {
 }
 
 .promo-card {
-  background-color: #1e1e1e;
-  color: #fff;
-  border-radius: 12px;
+  position: relative;
+  border-radius: 16px;
   padding: 20px;
+  color: #ffffff;
+  overflow: hidden;
+  min-width: 260px;
+  max-width: 300px;
+  height: 200px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   display: flex;
-  justify-content: space-between;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  gap: 12px;
-
-  /* 💻 Desktop: 3 cartes visibles */
-  flex: 1 0 calc((100% - 32px) / 3);
-  min-width: 0;
-  max-width: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: #101722;
+  /* fallback */
 }
 
-.promo-card {
-  gap: 12px;
+.promo-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  opacity: 1;
+  /* Pas de voile opaque dégueu */
+  filter: brightness(0.9);
 }
+
+/* Cartes spécifiques */
+.promo-id-inscription::before {
+  background-image: url('/images/promo-w1.png');
+}
+
+.promo-id-classement::before {
+  background-image: url('/images/promo-w3.png');
+}
+
+.promo-id-tirage::before {
+  background-image: url('/images/promo-w2.png');
+}
+
+.promo-card .promo-text {
+  position: relative;
+  z-index: 1;
+}
+
+.promo-card .promo-label {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.promo-card h3 {
+  font-size: 16px;
+  margin: 0 0 4px;
+  font-weight: bold;
+}
+
+.promo-card p {
+  font-size: 14px;
+  margin: 0 0 12px;
+  color: #ddd;
+}
+
 
 .promo-label {
-  background: linear-gradient(45deg, #737373, #4b4b4b);
-  color: #fff;
-  padding: 4px 10px;
-  font-size: 13px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ccc;
+  font-size: 12px;
+  padding: 4px 8px;
   border-radius: 8px;
-  margin-bottom: 8px;
   display: inline-block;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  margin-bottom: 8px;
 }
 
 .promo-text h3 {
   font-size: 18px;
   margin: 4px 0;
+  font-family: 'Flavors', cursive; 
 }
+
+
 
 .promo-text p {
   font-size: 14px;
@@ -173,27 +226,42 @@ main {
 }
 
 .promo-btn {
-  background: none;
-  border: 1px solid #fff;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 6px;
+  background: #00c896;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
   cursor: pointer;
-  transition: 0.2s;
-  margin-top: 15px;
+  transition: background 0.2s ease-in-out;
 }
 
 .promo-btn:hover {
-  background-color: #444;
+  background: #00a37a;
 }
+
+.promo-card .promo-img {
+  position: absolute;
+  top: -10px;
+  right: -20px;
+  width: 130px;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.promo-card .promo-img img {
+  width: 100%;
+  object-fit: contain;
+}
+
 
 .promo-img img {
   height: 150px;
 }
 
 .promo-img {
-  display: flex;
-  align-items: center;
+  display: none;
+  /* ne plus afficher le <img> visuel */
 }
 
 .promo-img img {
@@ -421,4 +489,28 @@ img {
 
 #wagerProgressBar {
   transition: width 0.4s ease;
+}
+
+#logo-container svg {
+  height: 36px;
+  /* ✅ remplace si tu veux + petit */
+  width: auto;
+  display: block;
+}
+
+@keyframes rotateSelf {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotating-star {
+  transform-origin: center;
+  transform-box: fill-box;
+  /* 🧠 crucial pour centrer sur l'objet lui-même */
+  animation: rotateSelf 3s linear infinite;
 }

@@ -13,9 +13,7 @@
             <i data-lucide="menu"></i>
           </button>
 
-          <a href="/" class="site-logo">
-            <img src="/images/logo-white.png" alt="Djelo" />
-          </a>
+          <a href="/" class="site-logo" id="logo-container"></a>
 
           <% if (isLoggedIn) { %>
             <div class="solde-mobile">
@@ -158,4 +156,27 @@
       }
     });
   });
+</script>
+
+<script>
+  function loadLogoSVG(callback) {
+    fetch('/images/djellylogo.svg')
+      .then(res => res.text())
+      .then(svg => {
+        const logo = document.getElementById('logo-container');
+        logo.innerHTML = svg;
+        logo.classList.add('svg-loaded');
+
+        // 👉 Appliquer l'animation à l’étoile si elle a un ID connu
+        const star = logo.querySelector('#_x3C_star_x3E_1'); // ou un autre id si nécessaire
+        if (star) {
+          star.classList.add('rotating-star');
+        }
+
+        if (callback) callback();
+      });
+  }
+
+
+  document.addEventListener('DOMContentLoaded', loadLogoSVG);
 </script>

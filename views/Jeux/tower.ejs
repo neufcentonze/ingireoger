@@ -1,0 +1,516 @@
+<%- include('../partials/gameLayout', { title: 'Tower Promotion' , subtitle: 'Monte jusqu’au boss pour gagner' , body: `
+  <!-- HTML -->
+
+  <div id="loader" style="color: white; font-weight: bold; margin-top: 2rem;">Chargement...</div>
+  <div id="towerContainer">
+    <div id="elevatorIndicator">Étage : <span id="floorLevel">1</span> / 8</div>
+    <div class="tower-container">
+      <img src="/images/tower-top.png" class="tower-top" />
+      <div class="tower-body">
+        <!-- Cordes séparées du scaffold-wrapper -->
+        <div id="cord-left" class="cord"></div>
+        <div id="cord-right" class="cord"></div>
+
+        <!-- Le chariot -->
+        <div id="scaffold-wrapper">
+          <img id="scaffold" src="/images/scaffold-body.png" alt="échafaudage" />
+          <div id="window-washer"></div>
+        </div>
+
+
+        <div id="window-grid"></div>
+      </div>
+      <img src="/images/tower-base.png" class="tower-base" />
+    </div>
+    <div style="margin-top: 1rem;">
+    </div>
+  </div>
+
+  <!-- CSS -->
+  <style>
+    #towerContainer {
+      visibility: hidden;
+      /* on cache tant que tout n'est pas prêt */
+    }
+
+    #towerContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 1rem auto;
+      user-select: none;
+    }
+
+    #elevatorIndicator {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .tower-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 260px;
+      user-select: none;
+    }
+
+    .tower-top,
+    .tower-base {
+      width: 100%;
+      height: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tower-top {
+      top: 20px;
+      left: 0;
+      z-index: 2;
+    }
+
+    .tower-base {
+      bottom: 80px;
+      left: 0;
+      z-index: 2;
+    }
+
+    .tower-body {
+      height: calc(100vh - 200px);
+      background-color: #3e6982;
+      max-height: 400px;
+      min-height: 300px;
+      padding: 10px 16px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 3;
+      margin-bottom: 60px;
+      width: 233px;
+      margin-left: -1px;
+      border: 3px solid #274d64;
+    }
+
+    #window-grid {
+      display: grid;
+      grid-template-rows: repeat(8, 1fr);
+      height: 100%;
+      gap: 8px;
+    }
+
+    .floor-row {
+      display: grid;
+      gap: 12px;
+    }
+
+    .window {
+      background-color: #3ba4f4;
+      border: 3px solid #f7d08a;
+      border-radius: 4px;
+      box-shadow: inset 0 0 6px #a8cbe9;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .window:hover {
+      filter: brightness(1.1);
+    }
+
+    .window.win {
+      background: #2ecc71;
+      border-color: #a2f7bf;
+    }
+
+    .window.lose {
+      background: #e74c3c;
+      border-color: #f8b3a0;
+    }
+
+    .place-bet:disabled {
+      background: #555 !important;
+      color: #999 !important;
+      cursor: not-allowed !important;
+      opacity: 0.6;
+    }
+
+    #scaffold-wrapper {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: auto;
+      z-index: 3;
+      pointer-events: none;
+      transition: top 0.4s ease-in-out;
+      /* 🟢 Fluidité ici */
+    }
+
+    #scaffold {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      position: relative;
+    }
+
+    .cord {
+      position: absolute;
+      top: 0;
+      /* 🎯 Fixe en haut */
+      width: 2px;
+      background: #ccc;
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+      transition: height 0.4s ease-in-out;
+      z-index: 4;
+    }
+
+    #cord-left {
+      left: 7px;
+    }
+
+    #cord-right {
+      right: 7px;
+    }
+
+    #window-washer {
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      /* ❌ Supprimer ce centrage pour que "left" fonctionne */
+      /* transform: translateX(-50%); */
+      transition: left 0.4s ease-in-out;
+      /* 👈 même durée que le chariot */
+      width: 25px;
+      height: auto;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    @keyframes wipeArm {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(-15deg);
+      }
+    }
+
+    @keyframes wipeMotion {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      50% {
+        transform: rotate(-15deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    .wash-animating #hand-and-tool {
+      transform-origin: right center;
+      animation: wipeMotion 0.6s ease-in-out 2;
+    }
+
+    /* Animation en boucle infinie */
+    .idle-washing #hand-and-tool {
+      transform-origin: right center;
+      animation: wipeMotion 1.2s ease-in-out infinite;
+    }
+
+    @keyframes wipeMotion {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      50% {
+        transform: rotate(-15deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    #scaffold-wrapper.no-transition {
+      transition: none !important;
+    }
+  </style>
+
+  <!-- SCRIPT -->
+  <script>
+    const totalFloors = 8;
+    let currentFloor = 1;
+    let gameStarted = false;
+    let hasProgressed = false;
+    let difficulty = 'medium';
+
+    const difficultyMap = {
+      easy: 4,
+      medium: 3,
+      hard: 2,
+      insane: 3,
+      master: 4
+    };
+
+    const chances = {
+      easy: [3, 4],
+      medium: [2, 3],
+      hard: [1, 2],
+      insane: [1, 3],
+      master: [1, 4]
+    };
+
+    function testSuccess(difficulty) {
+      const [successes, total] = chances[difficulty];
+      return Math.random() < successes / total;
+    }
+
+    function updateElevator() {
+      document.getElementById('floorLevel').textContent = currentFloor;
+    }
+
+    function updateButtons() {
+      const betBtn = document.getElementById('placeBetBtn');
+      const cashOutBtn = document.getElementById('cashOutBtn');
+      const difficultySelect = document.getElementById('towerDifficulty');
+
+      if (!gameStarted) {
+        betBtn.style.display = 'inline-block';
+        cashOutBtn.style.display = 'none';
+        betBtn.disabled = false;
+        difficultySelect.disabled = false; // ✅ autorisé
+      } else {
+        betBtn.style.display = 'none';
+        cashOutBtn.style.display = 'inline-block';
+        cashOutBtn.disabled = !hasProgressed;
+        difficultySelect.disabled = true; // ✅ bloqué pendant le jeu
+      }
+    }
+
+    function updateCordsToFloor(floor) {
+      const towerBody = document.querySelector('.tower-body');
+      const floorHeight = towerBody.clientHeight / totalFloors;
+      const offset = 20; // ⚠️ tu dois aussi le mettre ici
+      const y = (totalFloors - floor) * floorHeight + offset;
+
+      document.getElementById('cord-left').style.height = y + 'px';
+      document.getElementById('cord-right').style.height = y + 'px';
+    }
+
+    function resetGame() {
+      gameStarted = false;
+      hasProgressed = false;
+      currentFloor = 1;
+      moveScaffoldToFloor(0); // démarre 1 étage en dessous
+      updateCordsToFloor(0);
+      renderTower();
+      updateButtons();
+    }
+
+    function moveScaffoldToFloor(floor) {
+      const towerBody = document.querySelector('.tower-body');
+      const scaffoldWrapper = document.getElementById('scaffold-wrapper');
+      const floorHeight = towerBody.clientHeight / totalFloors;
+      const offset = 20;
+
+      // 🧠 Correction : chariot plus bas avant le 1er clic
+      const visualFloor = floor === 1 && !gameStarted ? 0.3 : floor;
+
+      const scaffoldY = (totalFloors - visualFloor) * floorHeight + offset;
+      scaffoldWrapper.style.top = scaffoldY + 'px';
+
+      const ropeHeight = scaffoldY + 8;
+      document.getElementById('cord-left').style.height = ropeHeight + 'px';
+      document.getElementById('cord-right').style.height = ropeHeight + 'px';
+    }
+
+    function moveWasherToWindow(winElement) {
+      const washer = document.getElementById('window-washer');
+      const scaffold = document.getElementById('scaffold-wrapper');
+
+      const winRect = winElement.getBoundingClientRect();
+      const scaffoldRect = scaffold.getBoundingClientRect();
+
+      // Calculer position X relative au scaffold
+      const relativeX = winRect.left + winRect.width / 2 - scaffoldRect.left;
+
+      // Déplacer le laveur horizontalement
+      washer.style.left = relativeX - 8 + 'px';
+    }
+
+    function renderTower() {
+      const grid = document.getElementById('window-grid');
+      const gap = 12;
+      const numWindows = difficultyMap[difficulty];
+      const towerBody = document.querySelector('.tower-body');
+      const styles = window.getComputedStyle(towerBody);
+      const paddingLeft = parseFloat(styles.paddingLeft);
+      const paddingRight = parseFloat(styles.paddingRight);
+      const borderLeft = parseFloat(styles.borderLeftWidth);
+      const borderRight = parseFloat(styles.borderRightWidth);
+      const containerWidth = towerBody.clientWidth - paddingLeft - paddingRight - borderLeft - borderRight;
+      const totalGap = gap * (numWindows - 1);
+      const windowWidth = (containerWidth - totalGap) / numWindows;
+      const windowHeight = 40;
+
+      grid.innerHTML = '';
+
+      for (let i = 0; i < totalFloors; i++) {
+        const floorLevel = totalFloors - i;
+        const row = document.createElement('div');
+        row.className = 'floor-row';
+        row.style.gridTemplateColumns = 'repeat(' + numWindows + ', 1fr)';
+
+        for (let j = 0; j < numWindows; j++) {
+          const win = document.createElement('div');
+          win.className = 'window';
+          win.style.width = windowWidth + 'px';
+          win.style.height = windowHeight + 'px';
+          win.dataset.floor = floorLevel;
+
+          win.addEventListener('click', () => {
+            if (!gameStarted) return;
+            if (parseInt(win.dataset.floor) !== currentFloor) return;
+            if (win.classList.contains('clicked')) return; // 🔒 déjà cliqué
+
+
+            win.classList.add('clicked');
+            moveWasherToWindow(win);
+            document.getElementById('window-washer').classList.remove('idle-washing');
+            animateWasherArm();
+
+            const isWin = testSuccess(difficulty);
+            win.classList.add(isWin ? 'win' : 'lose');
+
+            setTimeout(() => {
+              if (isWin) {
+                currentFloor++;
+
+                if (currentFloor > totalFloors) {
+                  alert("🎉 Tu as gagné !");
+                  resetGame();
+                } else {
+                  moveScaffoldToFloor(currentFloor - 1);     // 🔼 vertical
+                  updateCordsToFloor(currentFloor - 1);       // 🔼 cordes
+                  moveWasherToWindow(win); // 🔄 déplacement horizontal
+
+                  if (currentFloor > 1) hasProgressed = true;
+                  updateElevator();
+                  document.getElementById('window-washer').classList.add('idle-washing');
+                  updateButtons();
+                }
+              } else {
+                alert("💥 Tu t'es fait virer !");
+                hasProgressed = true;
+                document.getElementById('window-washer').classList.add('idle-washing');
+                updateButtons();
+                resetGame();
+              }
+            }, 300);
+          });
+
+          row.appendChild(win);
+        }
+
+        grid.appendChild(row);
+      }
+
+      updateElevator();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const select = document.getElementById('towerDifficulty');
+      if (select) {
+        difficulty = select.value;
+        select.addEventListener('change', () => {
+          difficulty = select.value;
+          renderTower();
+        });
+      }
+
+      document.getElementById('placeBetBtn').addEventListener('click', () => {
+        if (gameStarted) return;
+        gameStarted = true;
+        currentFloor = 1;
+        renderTower();
+        updateElevator();
+        updateButtons();
+      });
+
+      document.getElementById('cashOutBtn').addEventListener('click', () => {
+        if (!hasProgressed) return;
+        alert("💰 Tu as encaissé tes gains !");
+        resetGame();
+      });
+
+      loadWasherSVG(() => {
+        waitForImagesToLoad(() => {
+          const scaffold = document.getElementById('scaffold-wrapper');
+          scaffold.classList.add('no-transition');       // ⛔ désactive l'animation
+          moveScaffoldToFloor(0);                        // ✅ place sans anim
+
+          setTimeout(() => {
+            scaffold.classList.remove('no-transition');  // ✅ réactive l'animation pour la suite
+          }, 50); // ⏱️ petite pause pour éviter que la transition se joue après coup
+
+          updateCordsToFloor(0);
+          document.getElementById('loader').style.display = 'none';
+          document.getElementById('towerContainer').style.visibility = 'visible';
+          renderTower();
+          updateButtons();
+        });
+      });
+    });
+  </script>
+
+  <script>
+    function loadWasherSVG(callback) {
+      fetch('/images/washer.svg')
+        .then(res => res.text())
+        .then(svg => {
+          const washer = document.getElementById('window-washer');
+          washer.innerHTML = svg;
+          washer.classList.add('idle-washing');
+          if (callback) callback();
+        });
+    }
+
+    function animateWasherArm() {
+      const washer = document.getElementById('window-washer');
+      washer.classList.add('wash-animating');
+
+      // Supprimer la classe après la durée de l’animation pour pouvoir la rejouer
+      setTimeout(() => {
+        washer.classList.remove('wash-animating');
+      }, 1200); // = 0.6s * 2 (2 répétitions)
+    }
+
+    function waitForImagesToLoad(callback) {
+      const images = document.querySelectorAll('img');
+      let loaded = 0;
+
+      if (images.length === 0) return callback();
+
+      images.forEach(img => {
+        if (img.complete) {
+          loaded++;
+          if (loaded === images.length) callback();
+        } else {
+          img.addEventListener('load', () => {
+            loaded++;
+            if (loaded === images.length) callback();
+          });
+        }
+      });
+    }
+  </script>
+  `
+  }) %>

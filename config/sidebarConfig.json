@@ -3,7 +3,9 @@
     "name": "Jeux",
     "icon": "dices",
     "slug": "game",
-    "pages": []
+    "pages": [
+      { "label" : "Dice", "route": "dice"}
+    ]
   },
   {
     "name": "Portefeuille",

@@ -7,6 +7,9 @@
       lucide.createIcons();
     });
   </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet">
 </head>
 
 <h2
@@ -17,14 +20,31 @@
 <section class="promotions-wrapper">
   <div class="promo-inner">
     <div class="promotions-scroll-container fixed-width" id="promoScroll">
-      <% const promos=[ { label: "Offre d'inscription" , title: "Votre premier dépôt est doublé !" ,
-        desc: "Votre 1er dépôt doublé jusqu'à 250 €" , img: "/images/promo-w1.png" }, { label: "Promotion" ,
-        title: "Surpasse les autres au classement" , desc: "Jusqu'à 3 000 € en jeu chaque semaine" ,
-        img: "/images/promo-w2.png" }, { label: "Tirage au sort" , title: "Chaque mise peut tout changer" ,
-        desc: "10 000 € à gagner chaque mois !" , img: "/images/giveaway.png" }, ]; %>
+      <% 
+      const promos = [
+          {
+            id: "inscription",
+            label: "Offre d'inscription",
+            title: "Votre premier dépôt est doublé !",
+            desc: "Votre 1er dépôt doublé jusqu'à 500 €",
+          },
+          {
+            id: "tirage",
+            label: "Tirage au sort",
+            title: "Chaque mise change tout !",
+            desc: "10 000 € à gagner chaque mois.",
+          },
+          {
+            id: "classement",
+            label: "Promotion",
+            title: "Surpasse les autres au classement !",
+            desc: "Jusqu'à 3 000 € en jeu chaque semaine.",
+          },
+        ];
+      %>
 
-        <% promos.forEach(promo => { %>
-          <div class="promo-card">
+        <% promos.forEach(promo=> { %>
+          <div class="promo-card promo-id-<%= promo.id %>">
             <div class="promo-text">
               <span class="promo-label">
                 <%= promo.label %>
@@ -36,9 +56,6 @@
                 <%= promo.desc %>
               </p>
               <button class="promo-btn">Voir</button>
-            </div>
-            <div class="promo-img">
-              <img src="<%= promo.img %>" alt="Promotion">
             </div>
           </div>
           <% }) %>

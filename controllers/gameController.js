@@ -5,54 +5,61 @@ const { getCryptoPriceInEur } = require("../services/cryptoService");
 const roundIfNeeded = require("../utils/roundIfNeeded");
 
 exports.playDice = async (req, res) => {
-    const email = req.session.email;
+    const email = req.session?.user?.email;
     const { bet, crypto, faces } = req.body;
 
     if (!email) return res.status(401).json({ error: "Non connecté" });
-    if (!bet || !crypto || !Array.isArray(faces)) {
-        return res.status(400).json({ error: "Paramètres invalides" });
-    }
+    // if (!bet || !crypto || !Array.isArray(faces)) {
+    //     return res.status(400).json({ error: "Paramètres invalides" });
+    // }
 
-    const diceRoll = Math.floor(Math.random() * 6) + 1;
-    const win = faces.includes(diceRoll);
-    const multiplier = (6 / faces.length) * 0.99;
-    const rawGain = bet * multiplier;
-    const totalGain = win ? roundIfNeeded(rawGain) : 0;
-    const gain = win ? roundIfNeeded(totalGain - bet) : 0;
+    // const diceRoll = Math.floor(Math.random() * 6) + 1;
+    // const win = faces.includes(diceRoll);
+    // const multiplier = (6 / faces.length) * 0.99;
+    // const rawGain = bet * multiplier;
+    // const totalGain = win ? roundIfNeeded(rawGain) : 0;
+    // const gain = win ? roundIfNeeded(totalGain - bet) : 0;
 
-    const currentPriceEur = await getCryptoPriceInEur(crypto);
+    // const currentPriceEur = await getCryptoPriceInEur(crypto);
 
-    getUser(email, (err, solde) => {
-        if (err || !solde) return res.status(500).json({ error: "Erreur utilisateur" });
+    // getUser(email, (err, solde) => {
+    //     if (err || !solde) return res.status(500).json({ error: "Erreur utilisateur" });
 
-        const userSolde = solde[crypto];
-        if (userSolde === undefined) return res.status(400).json({ error: "Crypto inconnue" });
+    //     const userSolde = solde[crypto];
+    //     if (userSolde === undefined) return res.status(400).json({ error: "Crypto inconnue" });
 
-        if (userSolde < bet) return res.status(400).json({ error: "Solde insuffisant" });
+    //     if (userSolde < bet) return res.status(400).json({ error: "Solde insuffisant" });
 
-        updateBalance({
-            email,
-            currency: crypto,
-            computeOrValue: current => roundIfNeeded(current - bet + totalGain),
-            type: "games",
-            game: "dice",
-            bet,
-            callback: (err2) => {
-                if (err2) return res.status(500).json({ error: "Erreur maj solde" });
+    //     updateBalance({
+    //         email,
+    //         currency: crypto,
+    //         computeOrValue: current => roundIfNeeded(current - bet + totalGain),
+    //         type: "games",
+    //         game: "dice",
+    //         bet,
+    //         callback: (err2) => {
+    //             if (err2) return res.status(500).json({ error: "Erreur maj solde" });
 
-                const type = win ? "gain" : "perte";
-                const montant = win ? gain : bet;
-                logTransaction(email, crypto, montant, type, () => { }, "dice", bet, bet * currentPriceEur);
+    //             const type = win ? "gain" : "perte";
+    //             const montant = win ? gain : bet;
+    //             logTransaction(email, crypto, montant, type, () => { }, "dice", bet, bet * currentPriceEur);
 
-                res.json({
-                    result: diceRoll,
-                    win,
-                    gain,
-                    multiplier,
-                    totalGain,
-                });
-            }
-        });
+    //             res.json({
+    //                 result: diceRoll,
+    //                 win,
+    //                 gain,
+    //                 multiplier,
+    //                 totalGain,
+    //             });
+    //         }
+    //     });
+    // });
+    return res.json({
+        result: 4,             // 🎲 face sortie du dé (1 à 6)
+        gain: 0,          // 💰 gain obtenu (peut être 0 si perdu)
+        multiplier: 1,      // 📈 multiplicateur appliqué
+        newSolde: 0,  // 💼 nouveau solde utilisateur
+        sound: true            // 🔊 (optionnel) pour déclencher les sons client
     });
 };
 
@@ -154,4 +161,4 @@ exports.detectiveCashout = (req, res) => {
         req.session.detective = null;
         res.json({ success: true, gain: netGain });
     });
-};
+}; 

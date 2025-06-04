@@ -1,6 +1,6 @@
 {
   "global": true,
-  "dice": true,
+  "dice": false,
   "detective": true,
   "login": true,
   "register": true,
