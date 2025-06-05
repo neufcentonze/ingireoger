@@ -22,24 +22,27 @@
     <div class="promotions-scroll-container fixed-width" id="promoScroll">
       <% 
       const promos = [
-          {
+           {
             id: "inscription",
-            label: "Offre d'inscription",
-            title: "Votre premier dépôt est doublé !",
-            desc: "Votre 1er dépôt doublé jusqu'à 500 €",
+             slug: "depot-double",
+             label: "Offre d'inscription",
+             title: "Votre premier dépôt est doublé !",
+             desc: "Votre 1er dépôt doublé jusqu'à 500 €",
           },
           {
             id: "tirage",
+            slug: "tirage-mensuel",
             label: "Tirage au sort",
             title: "Chaque mise change tout !",
             desc: "10 000 € à gagner chaque mois.",
-          },
-          {
+       },
+       {
             id: "classement",
+            slug: "classement",
             label: "Promotion",
             title: "Surpasse les autres au classement !",
             desc: "Jusqu'à 3 000 € en jeu chaque semaine.",
-          },
+        },
         ];
       %>
 
@@ -55,7 +58,8 @@
               <p>
                 <%= promo.desc %>
               </p>
-              <button class="promo-btn">Voir</button>
+              <a href="/promotions/<%= promo.slug %>" class="promo-btn">Voir</a>
+
             </div>
           </div>
           <% }) %>
