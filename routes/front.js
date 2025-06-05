@@ -4,6 +4,30 @@ const db = require('../db/index'); // adapte si besoin
 const games = require('../views/Jeux/games');
 
 
+const promos = [
+  {
+    id: 1,
+    label: "Offre d'inscription",
+    title: "Votre premier dépôt est doublé !",
+    desc: "Votre 1er dépôt doublé jusqu'à 500 €",
+    slug: "depot-double"
+  },
+  {
+    id: 2,
+    label: "Tirage au sort",
+    title: "Chaque mise change tout !",
+    desc: "10 000 € à gagner chaque mois.",
+    slug: "tirage-mensuel"
+  },
+  {
+    id: 3,
+    label: "Promotion",
+    title: "Surpasse les autres au classement !",
+    desc: "Jusqu'à 3 000 € en jeu chaque semaine.",
+    slug: "classement"
+  }
+];
+
 
 router.get('/', (req, res) => {
   const userEmail = req.session?.user?.email;
@@ -18,7 +42,8 @@ router.get('/', (req, res) => {
       userBalance: "0.00000000",
       balances: { btc: 0, eth: 0, sol: 0, ltc: 0 },
       successMessage: null,
-      games
+      games,
+      promos
     });
   }
 
@@ -52,6 +77,13 @@ router.get('/', (req, res) => {
       userBalance: balances.btc,
       games
     });
+  });
+});
+
+router.get('/promotions', (req, res) => {
+  res.render('promotions', {
+    title: 'Promotions',
+    showFooter: true
   });
 });
 

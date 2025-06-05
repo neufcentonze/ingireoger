@@ -1,0 +1,243 @@
+<section class="promo-draw-fullpage">
+    <!-- Bandeau Principal -->
+    <div class="promo-hero" style="background-image: url('/images/promo-w2.png');">
+        <div class="hero-overlay">
+            <h1 class="hero-title">Tirage Mensuel</h1>
+            <h2 class="hero-subtitle">10 000 € à gagner chaque mois</h2>
+            <p class="hero-note">Chaque mise vous rapproche du jackpot</p>
+        </div>
+    </div>
+
+    <!-- Comment participer -->
+    <div class="promo-steps-box">
+        <h3 class="steps-title">Comment participer au tirage ?</h3>
+        <div class="steps-list">
+            <div class="step">
+                <div class="step-number">1</div>
+                <p>Créez un compte sur Djelo</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <p>Effectuez une mise sur n’importe quel jeu</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                 <p>Chaque euro misé <span style="color: #00d084">→<br>1 Ticket de tirage</span></p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <p>
+                    Un gagnant est tiré au sort dans<br>
+                    <span id="tirage-countdown" style="font-weight: bold; color: #00d084;">00j 00h 00m 00s</span>
+                </p>
+            </div>
+        </div>
+        <a href="/game" class="btn-green-full">Tenter ma chance</a>
+    </div>
+
+    <!-- Conditions -->
+    <div class="promo-conditions">
+        <h2 class="conditions-title">Conditions du tirage</h2>
+        <ul>
+            <li>Promotion ouverte à tous les utilisateurs inscrits.</li>
+            <li>Chaque euro misé équivaut à 1 ticket de participation.</li>
+            <li>Le tirage a lieu chaque 1er du mois pour le mois précédent.</li>
+            <li>Les jeux de démonstration ne sont pas pris en compte.</li>
+        </ul>
+    </div>
+</section>
+
+<style>
+    .promo-draw-fullpage {
+        font-family: 'Inter', sans-serif;
+        color: white;
+        max-width: 1200px;
+        margin: auto;
+        padding: 2rem 1rem;
+    }
+
+    .promo-hero {
+        background-size: cover;
+        background-position: center;
+        border-radius: 16px;
+        position: relative;
+        height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-overlay {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 2rem;
+        text-align: center;
+        border-radius: 12px;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.5rem;
+        color: #00d084;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-note {
+        color: #ccc;
+        font-size: 0.95rem;
+    }
+
+    .promo-steps-box {
+        background: #1a1a1a;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .steps-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .steps-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .step {
+        background: #2a2a2a;
+        border-radius: 10px;
+        padding: 1rem;
+        width: 200px;
+        text-align: left;
+        position: relative;
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+        background: #00d084;
+        color: black;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        position: absolute;
+        top: -16px;
+        left: -16px;
+    }
+
+    .btn-green-full {
+        background-color: #00d084;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s;
+    }
+
+    .btn-green-full:hover {
+        background-color: #00b76a;
+    }
+
+    .promo-conditions {
+        margin-top: 2rem;
+        background: #111;
+        border-radius: 12px;
+        padding: 2rem;
+    }
+
+    .conditions-title {
+        font-size: 1.4rem;
+        color: #00d084;
+        margin-bottom: 1rem;
+    }
+
+    .promo-conditions ul {
+        padding-left: 1.2rem;
+        color: #ccc;
+    }
+
+    .promo-conditions li {
+        margin-bottom: 0.5rem;
+        line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .promo-hero {
+            height: auto;
+            padding: 2rem 1rem;
+        }
+
+        .hero-overlay {
+            padding: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: 1.8rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+        }
+
+        .promo-steps-box {
+            padding: 1.5rem;
+        }
+
+        .steps-list {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .step {
+            width: 100%;
+        }
+
+        .promo-conditions {
+            padding: 1.5rem;
+        }
+    }
+</style>
+<script>
+    function getNextFirstOfMonth() {
+        const now = new Date();
+        const year = now.getMonth() === 11 ? now.getFullYear() + 1 : now.getFullYear();
+        const month = (now.getMonth() + 1) % 12;
+        return new Date(year, month, 1, 0, 0, 0); // 1er du mois prochain à 00:00
+    }
+
+    function updateCountdown() {
+        const target = getNextFirstOfMonth();
+        const now = new Date();
+        const diff = target - now;
+
+        if (diff <= 0) {
+            document.getElementById("tirage-countdown").textContent = "00j 00h 00m 00s";
+            return;
+        }
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / (3600 * 24));
+        const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        document.getElementById("tirage-countdown").textContent =
+            `${days}j ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown(); // initial run
+</script>

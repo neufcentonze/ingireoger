@@ -1,0 +1,208 @@
+<section class="promo-rank-fullpage">
+  <!-- Bandeau principal -->
+  <div class="promo-hero" style="background-image: url('/images/promo-w3.png');">
+    <div class="hero-overlay">
+      <h1 class="hero-title">Classement Hebdomadaire</h1>
+      <h2 class="hero-subtitle">3 000 € à gagner chaque semaine</h2>
+      <p class="hero-note">Montez dans le classement avec chaque mise</p>
+    </div>
+  </div>
+
+  <!-- Étapes -->
+  <div class="promo-steps-box">
+    <h3 class="steps-title">Comment grimper au classement ?</h3>
+    <div class="steps-list">
+      <div class="step">
+        <div class="step-number">1</div>
+        <p>Inscrivez-vous sur Djelo</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <p>Pariez sur vos jeux préférés</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <p>Chaque euro misé <span class="step-arrow">&rarr;</span> 1 point classement</p>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <p>Les meilleurs joueurs sont récompensés chaque dimanche</p>
+      </div>
+    </div>
+    <a href="/game" class="btn-green-full">Voir les jeux</a>
+  </div>
+
+  <!-- Conditions -->
+  <div class="promo-conditions">
+    <h2 class="conditions-title">Règles du classement</h2>
+    <ul>
+      <li>Un classement est établi chaque semaine (lundi 00h au dimanche 23h59).</li>
+      <p>Chaque euro misé → <br><span style="color:#00d084">1 point classement</span></p>
+      <li>Les 10 premiers du classement reçoivent une récompense.</li>
+      <li>Les jeux gratuits ne comptent pas.</li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .promo-rank-fullpage {
+    font-family: 'Inter', sans-serif;
+    color: white;
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem 1rem;
+  }
+
+  .promo-hero {
+    background-size: cover;
+    background-position: center;
+    border-radius: 16px;
+    position: relative;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    text-align: center;
+    border-radius: 12px;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+    color: #00d084;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-note {
+    color: #ccc;
+    font-size: 0.95rem;
+  }
+
+  .promo-steps-box {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .steps-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .steps-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .step {
+    background: #2a2a2a;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 200px;
+    text-align: left;
+    position: relative;
+  }
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    background: #00d084;
+    color: black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    position: absolute;
+    top: -16px;
+    left: -16px;
+  }
+
+  .step-arrow {
+    color: #00d084;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0 0.25rem;
+  }
+
+  .btn-green-full {
+    background-color: #00d084;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+
+  .btn-green-full:hover {
+    background-color: #00b76a;
+  }
+
+  .promo-conditions {
+    margin-top: 2rem;
+    background: #111;
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .conditions-title {
+    font-size: 1.4rem;
+    color: #00d084;
+    margin-bottom: 1rem;
+  }
+
+  .promo-conditions ul {
+    padding-left: 1.2rem;
+    color: #ccc;
+  }
+
+  .promo-conditions li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .promo-hero {
+      height: auto;
+      padding: 2rem 1rem;
+    }
+    .hero-overlay {
+      padding: 1.5rem;
+    }
+    .hero-title {
+      font-size: 1.8rem;
+    }
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+    .promo-steps-box {
+      padding: 1.5rem;
+    }
+    .steps-list {
+      flex-direction: column;
+      align-items: center;
+    }
+    .step {
+      width: 100%;
+    }
+    .promo-conditions {
+      padding: 1.5rem;
+    }
+  }
+</style>

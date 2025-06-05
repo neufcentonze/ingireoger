@@ -1,0 +1,204 @@
+<section class="promo-depot-fullpage">
+  <!-- Bandeau Principal -->
+  <div class="promo-hero" style="background-image: url('/images/promo-w1.png');">
+    <div class="hero-overlay">
+      <h1 class="hero-title">Premier dépôt doublé</h1>
+      <h2 class="hero-subtitle">100 % bonus jusqu'à 500 €</h2>
+      <p class="hero-note">Offre réservée uniquement au premier dépôt</p>
+    </div>
+  </div>
+
+  <!-- Comment recevoir l'offre -->
+  <div class="promo-steps-box">
+    <h3 class="steps-title">Comment recevoir votre bonus ?</h3>
+    <div class="steps-list">
+      <div class="step">
+        <div class="step-number">1</div>
+        <p>Créez un compte sur Djelo</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <p>Effectuez un dépôt de 20 € minimum</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <p>Votre bonus est crédité automatiquement</p>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <p>Commencez à jouer et profitez !</p>
+      </div>
+    </div>
+    <a href="/wallet/deposit" class="btn-green-full">Activer votre bonus</a>
+  </div>
+
+  <!-- Conditions -->
+  <div class="promo-conditions">
+    <h2 class="conditions-title">Conditions de l'offre</h2>
+    <ul>
+      <li>Offre réservée aux nouveaux joueurs.</li>
+      <li>Montant minimum de dépôt : 20 €.</li>
+      <li>Bonus de 100 % jusqu'à 500 € immédiatement crédité.</li>
+      <li>Mise obligatoire : 35× le montant du bonus pour le retirer.</li>
+      <li>Durée de validité du bonus : 7 jours.</li>
+      <li>Un seul bonus par utilisateur, adresse IP ou foyer.</li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .promo-depot-fullpage {
+    font-family: 'Inter', sans-serif;
+    color: white;
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem 1rem;
+  }
+
+  .promo-hero {
+    background-size: cover;
+    background-position: center;
+    border-radius: 16px;
+    position: relative;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    text-align: center;
+    border-radius: 12px;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+    color: #00d084;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-note {
+    color: #ccc;
+    font-size: 0.95rem;
+  }
+
+  .promo-steps-box {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .steps-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .steps-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .step {
+    background: #2a2a2a;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 200px;
+    text-align: left;
+    position: relative;
+  }
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    background: #00d084;
+    color: black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    position: absolute;
+    top: -16px;
+    left: -16px;
+  }
+
+  .btn-green-full {
+    background-color: #00d084;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+
+  .btn-green-full:hover {
+    background-color: #00b76a;
+  }
+
+  .promo-conditions {
+    margin-top: 2rem;
+    background: #111;
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .conditions-title {
+    font-size: 1.4rem;
+    color: #00d084;
+    margin-bottom: 1rem;
+  }
+
+  .promo-conditions ul {
+    padding-left: 1.2rem;
+    color: #ccc;
+  }
+
+  .promo-conditions li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .promo-hero {
+      height: auto;
+      padding: 2rem 1rem;
+    }
+    .hero-overlay {
+      padding: 1.5rem;
+    }
+    .hero-title {
+      font-size: 1.8rem;
+    }
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+    .promo-steps-box {
+      padding: 1.5rem;
+    }
+    .steps-list {
+      flex-direction: column;
+      align-items: center;
+    }
+    .step {
+      width: 100%;
+    }
+    .promo-conditions {
+      padding: 1.5rem;
+    }
+  }
+</style>
