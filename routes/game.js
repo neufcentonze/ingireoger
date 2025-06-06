@@ -64,34 +64,6 @@ router.get("/dice", (req, res) => {
     });
 });
 
-router.get("/gwenix", (req, res) => {
-    const userEmail = req.session?.user?.email;
-    const currentSymbol = (req.session.currentSymbol || 'btc').toLowerCase();
-    const allRates = symbols.reduce((acc, sym) => {
-        acc[sym] = cryptoRates.getRate(sym);
-        return acc;
-    }, {});
-    const rate = allRates[currentSymbol] || 1;
-    const baseRenderData = {
-        layout: "layouts/front-layout",
-        currentSymbol,
-        rate,
-        allRates,
-        title: "Tower Promotion",
-        game: "tower",
-        showFooter: false,
-    };
-
-    if (!userEmail) {
-        return res.render("jeux/gwenix", {
-            ...baseRenderData,
-            isLoggedIn: false,
-            userBalance: "0.00000000",
-            balances: { btc: 0, eth: 0, sol: 0, ltc: 0 },
-        });
-    }
-})
-
 router.get("/tower", (req, res) => {
     const userEmail = req.session?.user?.email;
     const currentSymbol = (req.session.currentSymbol || 'btc').toLowerCase();
@@ -142,6 +114,75 @@ router.get("/tower", (req, res) => {
         });
     });
 });
+
+
+// Inout Games
+const availableGames = [
+  { slug: "plinko", title: "Plinko", url: "" },
+  { slug: "hamster-run", title: "Hamster Run", url: "" },
+  { slug: "chicken-road", title: "Chicken Road", url: "" },
+  { slug: "chicken-road2", title: "Chicken Road 2", url: "" },
+  { slug: "coinflip", title: "Coinflip", url: "" },
+  { slug: "crash", title: "Crash", url: "" },
+  { slug: "dice", title: "Dice", url: "" },
+  { slug: "forest-fortune", title: "Forest Fortune", url: "" },
+  { slug: "keno", title: "Keno", url: "" },
+  { slug: "limbo", title: "Limbo", url: "" },
+  { slug: "penalty", title: "Penalty", url: "" },
+  { slug: "stairs", title: "Stairs", url: "" },
+  { slug: "sugar-daddy", title: "Sugar Daddy", url: "" },
+  { slug: "tower", title: "Tower", url: "" },
+  { slug: "wheel", title: "Wheel", url: "" },
+];
+
+router.get("/:gameSlug", (req, res) => {
+  const { gameSlug } = req.params;
+  const game = availableGames.find(g => g.slug === gameSlug);
+
+  if (!game) {
+    return res.status(404).render("404", { message: "Jeu introuvable" });
+  }
+
+  const userEmail = req.session?.user?.email;
+  const currentSymbol = (req.session.currentSymbol || 'btc').toLowerCase();
+  const allRates = symbols.reduce((acc, sym) => {
+    acc[sym] = cryptoRates.getRate(sym);
+    return acc;
+  }, {});
+  const rate = allRates[currentSymbol] || 1;
+
+  const baseRenderData = {
+    layout: "layouts/front-layout",
+    currentSymbol,
+    rate,
+    allRates,
+    title: game.title,
+    game: game.slug,
+    showFooter: false,
+  };
+
+  const renderPath = `jeux/${game.slug}`;
+
+  if (!userEmail) {
+    return res.render(renderPath, {
+      ...baseRenderData,
+      isLoggedIn: false,
+      userBalance: "0.00000000",
+      balances: { btc: 0, eth: 0, sol: 0, ltc: 0 },
+    });
+  }
+
+  // Si l’utilisateur est connecté :
+  const user = req.session.user;
+  return res.render(renderPath, {
+    ...baseRenderData,
+    isLoggedIn: true,
+    userBalance: user.balances?.[currentSymbol] || "0.00000000",
+    balances: user.balances || {},
+  });
+});
+
+
 
 // 🎲 Lancer une partie de Dice
 router.post("/play-dice", checkFeature("dice"), gameController.playDice);

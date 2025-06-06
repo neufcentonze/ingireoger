@@ -76,6 +76,7 @@ app.use('/wallet', require('./routes/wallet'));
 app.use('/reglages', require('./routes/reglages'));
 app.use('/webhook', require('./webhooks'));
 app.use('/promotions',require('./routes/promotion'));
+app.use('/', require('./routes/legal'));
 app.use("/admin", require("./routes/admin"));
 app.use("/", require("./routes/tracker"));
 app.use('/', require('./routes/front'));

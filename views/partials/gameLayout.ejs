@@ -101,7 +101,7 @@
 
                 <% } %>
 
-                    <% if (game==='tower' ) { %>
+                    <% if (game ==='tower') { %>
                         <div class="game-option tower-difficulty">
                             <label for="towerDifficulty">Difficulté</label>
                             <select id="towerDifficulty">
@@ -281,13 +281,25 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const btn = document.querySelector('.place-bet');
-        if (!btn) return;
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('placeBetBtn');
+
+        if (!btn) {
+            console.warn("Bouton non trouvé !");
+            return;
+        }
 
         btn.addEventListener('click', () => {
-            const event = new CustomEvent('placeBetClicked');
-            window.dispatchEvent(event);
+            console.log("Parier cliqué");
+            window.dispatchEvent(new CustomEvent('placeBetClicked'));
+        });
+
+        window.addEventListener('placeBetClicked', () => {
+            console.log("TETE"); // ← test log
+            const placeholder = document.getElementById('gamePlaceholder');
+            const iframe = document.getElementById('gameIframe');
+            if (placeholder) placeholder.style.display = 'none';
+            if (iframe) iframe.style.display = 'block';
         });
     });
 </script>

@@ -4,7 +4,10 @@
     "icon": "dices",
     "slug": "game",
     "pages": [
-      { "label" : "Dice", "route": "dice"}
+      {
+        "label": "Dice",
+        "route": "dice"
+      }
     ]
   },
   {
@@ -12,9 +15,18 @@
     "icon": "wallet",
     "slug": "wallet",
     "pages": [
-      { "label": "Dépôt", "route": "deposit" },
-      { "label": "Historique", "route": "history" },
-      { "label": "Retrait", "route": "withdraw" }
+      {
+        "label": "Dépôt",
+        "route": "deposit"
+      },
+      {
+        "label": "Historique",
+        "route": "history"
+      },
+      {
+        "label": "Retrait",
+        "route": "withdraw"
+      }
     ]
   },
   {
@@ -27,7 +39,20 @@
     "name": "Promotion",
     "icon": "award",
     "slug": "promotion",
-    "pages": []
+    "pages": [
+      {
+        "label": "Dépot Doublé",
+        "route": "depot-double"
+      },
+      {
+        "label": "Tirage Mensuel",
+        "route": "tirage-mensuel"
+      },
+      {
+        "label": "Classement",
+        "route": "classement"
+      }
+    ]
   },
   {
     "name": "Réglage",

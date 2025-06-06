@@ -81,7 +81,7 @@ function setupSocket(server, sessionMiddleware) {
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                 betAmount: `${bet.toFixed(4)} ${currency}`,
                 multiplier: `${isWin ? multiplier.toFixed(2) : "0.00"}x`,
-                payout: `${isWin ? payout.toFixed(4) : `-${bet.toFixed(4)}`} ${currency}`,
+                payout: `${isWin ? `+${payout.toFixed(4)}` : `-${bet.toFixed(4)}`} ${currency}`,
                 isWin: isWin
             };
 

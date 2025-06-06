@@ -158,10 +158,8 @@ body {
     }
 
     .game-zone {
-        min-height: 55vh;
         flex: 0 0 auto;
         order: 1;
-        padding-top: 25rem;
     }
 
     .game-footer {

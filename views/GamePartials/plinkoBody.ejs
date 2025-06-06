@@ -1,0 +1,60 @@
+<style>
+  .iframe-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* 🔥 prend toute la hauteur de .game-zone */
+    width: 100%;
+  }
+
+  .game-iframe,
+  .game-placeholder {
+    width: 95%;
+    height: 100%;
+    object-fit: cover; /* ou contain si tu préfères voir tout sans crop */
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .game-iframe {
+    border: none;
+    display: none;
+  }
+</style>
+
+<div class="iframe-wrapper">
+  <img id="gamePlaceholder" class="game-placeholder" src="/images/games/plinko-preview.png" alt="Preview du jeu Plinko Aztec" />
+  <iframe id="gameIframe" class="game-iframe" allow="autoplay; fullscreen" loading="lazy"></iframe>
+</div>
+
+<script>
+  const GAME_NAME = "<%= game %>";
+
+  window.addEventListener('placeBetClicked', async () => {
+    try {
+      const res = await fetch('/get-game-url', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ game: GAME_NAME })
+      });
+
+      const data = await res.json();
+      if (!data.url) throw new Error("URL de jeu manquante");
+
+      const placeholder = document.getElementById('gamePlaceholder');
+      const iframe = document.getElementById('gameIframe');
+
+      if (placeholder) placeholder.style.display = 'none';
+      if (iframe) {
+        iframe.src = data.url;
+        iframe.style.display = 'block';
+      }
+
+    } catch (err) {
+      console.error("Erreur chargement iframe:", err);
+      alert("Une erreur est survenue lors du chargement du jeu.");
+    }
+  });
+</script>

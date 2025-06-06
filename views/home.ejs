@@ -8,8 +8,13 @@
     });
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet">
+
+  <% const tendancesGames=games.filter(game=> game.type === 'tendances');
+    const classiqueGames = games.filter(game => game.type === 'classique');
+    const originalsGames = games.filter(game => game.type === 'originals');
+    %>
 </head>
 
 <h2
@@ -20,31 +25,21 @@
 <section class="promotions-wrapper">
   <div class="promo-inner">
     <div class="promotions-scroll-container fixed-width" id="promoScroll">
-      <% 
-      const promos = [
-           {
-            id: "inscription",
-             slug: "depot-double",
-             label: "Offre d'inscription",
-             title: "Votre premier dépôt est doublé !",
-             desc: "Votre 1er dépôt doublé jusqu'à 500 €",
-          },
-          {
-            id: "tirage",
-            slug: "tirage-mensuel",
-            label: "Tirage au sort",
-            title: "Chaque mise change tout !",
-            desc: "10 000 € à gagner chaque mois.",
-       },
-       {
-            id: "classement",
-            slug: "classement",
-            label: "Promotion",
-            title: "Surpasse les autres au classement !",
-            desc: "Jusqu'à 3 000 € en jeu chaque semaine.",
-        },
-        ];
-      %>
+      <% const promos=[ 
+      { 
+        id: "inscription" , slug: "depot-double" , label: "Offre d'inscription" ,
+        title: "Votre premier dépôt est doublé !" , desc: "Votre 1er dépôt doublé jusqu'à 500 €" , 
+      },
+      { 
+        id: "tirage" ,
+        slug: "tirage-mensuel" , label: "Tirage au sort" , title: "Chaque mise change tout !" ,
+        desc: "10 000 € à gagner chaque mois." , 
+      },
+      { 
+        id: "classement" , slug: "classement" , label: "Promotion" ,
+        title: "Surpasse les autres au classement !" , desc: "Jusqu'à 3 000 € en jeu chaque semaine." , 
+      },     
+      ]; %>
 
         <% promos.forEach(promo=> { %>
           <div class="promo-card promo-id-<%= promo.id %>">
@@ -74,19 +69,54 @@
 <h2
   style="color: #fff; margin-left: 20px; display: flex; align-items: center; font-size: 18px; margin-top: 10px; margin-bottom: -5px;">
   <i data-lucide="flame" style="margin-right: 10px; height: 20px;"></i>
-  Djelo Games
+  Tendances
 </h2>
 <section class="games-wrapper">
   <div class="game-inner">
     <div class="games-carousel" id="gameScroll">
-      <% games.forEach(game=> { %>
+      <% tendancesGames.forEach(game => { %>
         <div class="game-card" style="position: relative;">
           <a href="/game/<%= game.name %>" draggable="false">
             <img src="<%= game.image %>" alt="<%= game.name %>" draggable="false">
           </a>
-          <h3 style="color: #fff; margin-left: 1px; font-size: 14px; text-align: left;">
-            <%= game.name %>
-          </h3>
+        </div>
+        <% }) %>
+    </div>
+  </div>
+</section>
+
+<h2
+  style="color: #fff; margin-left: 20px; display: flex; align-items: center; font-size: 18px; margin-top: 10px; margin-bottom: -5px;">
+  <i data-lucide="gamepad-2" style="margin-right: 10px; height: 20px;"></i>
+  Classique
+</h2>
+<section class="games-wrapper">
+  <div class="game-inner">
+    <div class="games-carousel" id="gameScroll">
+      <% classiqueGames.forEach(game => { %>
+        <div class="game-card" style="position: relative;">
+          <a href="/game/<%= game.name %>" draggable="false">
+            <img src="<%= game.image %>" alt="<%= game.name %>" draggable="false">
+          </a>
+        </div>
+        <% }) %>
+    </div>
+  </div>
+</section>
+
+<h2
+  style="color: #fff; margin-left: 20px; display: flex; align-items: center; font-size: 18px; margin-top: 10px; margin-bottom: -5px;">
+  <i data-lucide="aperture" style="margin-right: 10px; height: 20px;"></i>
+  Originals
+</h2>
+<section class="games-wrapper">
+  <div class="game-inner">
+    <div class="games-carousel" id="gameScroll">
+      <% originalsGames.forEach(game => { %>
+        <div class="game-card" style="position: relative;">
+          <a href="/game/<%= game.name %>" draggable="false">
+            <img src="<%= game.image %>" alt="<%= game.name %>" draggable="false">
+          </a>
         </div>
         <% }) %>
     </div>
@@ -104,9 +134,9 @@
   <div class="table-header">
     <div>Jeu</div>
     <div class="mobile-hide">Utilisateur</div>
-    <div class="mobile-hide">Temps</div>
+    <div class="mobile-hide">Heure</div>
     <div class="mobile-hide">Pari</div>
-    <div>Multi</div>
+    <div>Multiplicateur</div>
     <div>Paiement</div>
   </div>
 </div>
@@ -133,12 +163,12 @@
 
   document.getElementById('leftArrow').addEventListener('click', () => {
     const container = document.getElementById('promoScroll');
-    container.scrollBy({ left: -300, behavior: 'smooth' });
+    container.scrollBy({ left: -600, behavior: 'smooth' });
   });
 
   document.getElementById('rightArrow').addEventListener('click', () => {
     const container = document.getElementById('promoScroll');
-    container.scrollBy({ left: 300, behavior: 'smooth' });
+    container.scrollBy({ left: 600, behavior: 'smooth' });
   });
 
   document.addEventListener('DOMContentLoaded', () => {
